@@ -23,6 +23,6 @@
 hs_err_pid*
 
 # ignore these directories!
-openjfx-11.0.2_windows-x64_bin-sdk/
-out/
-.idea/
+openjfx-11.0.2_windows-x64_bin-sdk/**
+out/**
+.idea/**

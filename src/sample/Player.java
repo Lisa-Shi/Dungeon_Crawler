@@ -11,6 +11,7 @@ public class Player {
     private List<Weapon> weaponList;
     //index of weapon in the weapon list
     private int holdingWeapon;
+    private boolean death;
 
     public Player(String inputName, Weapon initialWeapon, int initialX, int initialY){
         name = inputName;
@@ -18,6 +19,12 @@ public class Player {
         weaponList.add(initialWeapon);
         x = initialX;
         y = initialY;
+        death = false;
+    }
+
+    public void move(int deltaX, deltaY){
+        x += deltaX;
+        y += deltaY;
     }
 
     public void obtainNewWeapon(Weapon newWeapon){

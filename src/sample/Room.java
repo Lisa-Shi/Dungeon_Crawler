@@ -6,7 +6,11 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.SceneAntialiasing;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -22,7 +26,10 @@ public class Room extends Stage {
 
     private double t = 0;
 
-    private Sprite player = new Sprite(300, 750, 40, 40, "player", Color.BLUE);
+    // load the image
+    private final Image playerImage = new Image(getClass().getResource("testimg.png").toExternalForm());
+
+    private Sprite player = new Sprite(300, 750, 40, 40, "player", playerImage);
 
     // SEE: https://www.youtube.com/watch?v=FVo1fm52hz0
     public Room() {
@@ -30,6 +37,7 @@ public class Room extends Stage {
 
     public void start(Stage stage) throws Exception {
         Scene scene = new Scene(createContent());
+        Canvas c = new Canvas(scene.getWidth(), scene.getHeight());
 
         pane.getChildren().add(player);
 
@@ -59,7 +67,7 @@ public class Room extends Stage {
     }
 
     private Parent createContent() {
-        pane.setPrefSize(600, 800);
+        pane.setPrefSize(800, 800);
 
         AnimationTimer timer = new AnimationTimer() {
             @Override
@@ -76,11 +84,25 @@ public class Room extends Stage {
     }
 
     private void nextLevel() {
+
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                int tileWidth = 64;
+                int tileHeight = 64;
+
+                Sprite s = new Sprite(90 + i * tileWidth, 90 + j * tileHeight, tileWidth, tileHeight, "floor_type", new Image(getClass().getResource("spr_dungeon_tile.png").toExternalForm()));
+                pane.getChildren().add(s);
+            }
+        }
+
+        /*
         for (int i = 0; i < 5; i++) {
-            Sprite s = new Sprite(90 + i*100, 150, 30, 30, "enemy", Color.RED);
+            Sprite s = new Sprite(90 + i*100, 150, 30, 30, "enemy", playerImage);
 
             pane.getChildren().add(s);
         }
+
+        */
     }
 
     private List<Sprite> sprites() {
@@ -135,19 +157,22 @@ public class Room extends Stage {
     }
 
     private void shoot(Sprite who) {
-        Sprite s = new Sprite((int) who.getTranslateX() + 20, (int)who.getTranslateY(), 5, 20, who.type + "bullet", Color.BLACK);
+        Sprite s = new Sprite((int) who.getTranslateX() + 20, (int)who.getTranslateY(), 5, 20, who.type + "bullet", playerImage);
 
         pane.getChildren().add(s);
     }
 
-    private static class Sprite extends Rectangle {
+    private static class Sprite extends ImageView {
         boolean dead = false;
         final String type;
 
-        Sprite(int x, int y, int w, int h, String type, Color color) {
-            super(w, h, color);
+        Sprite(int x, int y, int w, int h, String type, Image img) {
+            super(img);
 
             this.type = type;
+            this.setFitWidth(w);
+            this.setFitHeight(h);
+
             setTranslateX(x);
             setTranslateY(y);
         }

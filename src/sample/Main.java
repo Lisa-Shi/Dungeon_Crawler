@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.SceneAntialiasing;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -14,7 +15,7 @@ public class Main extends Application {
 
 
         primaryStage.setTitle("Dungeon Crawler");
-        primaryStage.setScene(new Scene(root, 600, 800));
+        primaryStage.setScene(new Scene(root, 600, 800, false, SceneAntialiasing.DISABLED));
 
 
         //primaryStage.show();

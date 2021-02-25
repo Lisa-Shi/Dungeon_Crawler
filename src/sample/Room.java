@@ -1,35 +1,29 @@
 package sample;
 
-import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.SceneAntialiasing;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class Room extends Stage {
     private Pane pane = new Pane();
 
     private double t = 0;
 
-    // load the image
-    private final Image playerImage = new Image(getClass().getResource("testimg.png").toExternalForm());
+    private boolean playerIsMovingLeft;
+    private boolean playerIsMovingRight;
+    private boolean playerIsMovingUp;
+    private boolean playerIsMovingDown;
 
-    private Sprite player = new Sprite(300, 750, 40, 40, "player", playerImage);
+    // load the image
+    private Player player = new Player("Test Player", new Weapon("Test Weapon", "A test weapon.", 3, 5), 200, 200);
 
     // SEE: https://www.youtube.com/watch?v=FVo1fm52hz0
     public Room() {
@@ -39,27 +33,16 @@ public class Room extends Stage {
         Scene scene = new Scene(createContent());
         Canvas c = new Canvas(scene.getWidth(), scene.getHeight());
 
-        pane.getChildren().add(player);
+        pane.getChildren().add(player.getSprite());
 
         scene.setOnKeyPressed(e -> {
+
             switch (e.getCode()) {
-                case A:
-                    player.moveLeft();
-                    break;
-                case D:
-                    player.moveRight();
-                    break;
-                case W:
-                    //player.moveUp();
-                    break;
-                case S:
-                    //player.moveDown();
-                    break;
-                case SPACE:
-                    shoot(player);
-                    break;
             }
         });
+
+        scene.setOnKeyPressed(keyPressed);
+        scene.setOnKeyReleased(keyReleased);
 
         stage.setScene(scene);
 
@@ -78,12 +61,30 @@ public class Room extends Stage {
 
         timer.start();
 
-        nextLevel();
+        generateDungeon();
 
         return pane;
     }
 
-    private void nextLevel() {
+    public void update() {
+        if (playerIsMovingUp) {
+            player.getPhysics().pushUp(Main.DEFAULT_CONTROL_PLAYER_FORCE);
+        }
+        if (playerIsMovingDown) {
+            player.getPhysics().pushDown(Main.DEFAULT_CONTROL_PLAYER_FORCE);
+        }
+        if (playerIsMovingLeft) {
+            player.getPhysics().pushLeft(Main.DEFAULT_CONTROL_PLAYER_FORCE);
+        }
+        if (playerIsMovingRight) {
+            player.getPhysics().pushRight(Main.DEFAULT_CONTROL_PLAYER_FORCE);
+        }
+
+        player.update();
+
+    }
+
+    private void generateDungeon() {
 
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
@@ -94,103 +95,45 @@ public class Room extends Stage {
                 pane.getChildren().add(s);
             }
         }
-
-        /*
-        for (int i = 0; i < 5; i++) {
-            Sprite s = new Sprite(90 + i*100, 150, 30, 30, "enemy", playerImage);
-
-            pane.getChildren().add(s);
-        }
-
-        */
     }
 
-    private List<Sprite> sprites() {
-        return pane.getChildren().stream().map(n -> (Sprite) n).collect(Collectors.toList());
-    }
+    // Thanks to https://stackoverflow.com/questions/39007382/moving-two-rectangles-with-keyboard-in-javafx
 
-    private void update() {
-        t += 0.016;
-
-        sprites().forEach(s -> {
-            switch (s.type) {
-                case "enemybullet":
-                    s.moveDown();
-
-                    if (s.getBoundsInParent().intersects(player.getBoundsInParent())) {
-                        player.dead = true;
-                        s.dead = true;
-                    }
-                    break;
-
-                case "playerbullet":
-                    s.moveUp();
-
-                    sprites().stream().filter(e -> e.type.equals("enemy")).forEach(enemy -> {
-                        if (s.getBoundsInParent().intersects(enemy.getBoundsInParent())) {
-                            enemy.dead = true;
-                            s.dead = true;
-                        }
-                    });
-
-                    break;
-
-                case "enemy":
-                    if (t > 2) {
-                        if (Math.random() < 0.3) {
-                            shoot(s);
-                        }
-                    }
-
-                    break;
+    private EventHandler<KeyEvent> keyPressed = new EventHandler<KeyEvent>() {
+        @Override
+        public void handle(KeyEvent event) {
+            if (event.getCode() == KeyCode.A) {
+                playerIsMovingLeft = true;
             }
-        });
-
-        pane.getChildren().removeIf(n -> {
-            Sprite s = (Sprite) n;
-            return s.dead;
-        });
-
-        if (t > 2) {
-            t = 0;
+            if (event.getCode() == KeyCode.D) {
+                playerIsMovingRight = true;
+            }
+            if (event.getCode() == KeyCode.W) {
+                playerIsMovingUp = true;
+            }
+            if (event.getCode() == KeyCode.S) {
+                playerIsMovingDown = true;
+            }
         }
-    }
+    };
+    private EventHandler<KeyEvent> keyReleased = new EventHandler<KeyEvent>() {
 
-    private void shoot(Sprite who) {
-        Sprite s = new Sprite((int) who.getTranslateX() + 20, (int)who.getTranslateY(), 5, 20, who.type + "bullet", playerImage);
-
-        pane.getChildren().add(s);
-    }
-
-    private static class Sprite extends ImageView {
-        boolean dead = false;
-        final String type;
-
-        Sprite(int x, int y, int w, int h, String type, Image img) {
-            super(img);
-
-            this.type = type;
-            this.setFitWidth(w);
-            this.setFitHeight(h);
-
-            setTranslateX(x);
-            setTranslateY(y);
+        @Override
+        public void handle(KeyEvent event) {
+            if (event.getCode() == KeyCode.A) {
+                playerIsMovingLeft = false;
+            }
+            if (event.getCode() == KeyCode.D) {
+                playerIsMovingRight = false;
+            }
+            if (event.getCode() == KeyCode.W) {
+                playerIsMovingUp = false;
+            }
+            if (event.getCode() == KeyCode.S) {
+                playerIsMovingDown = false;
+            }
         }
 
-        public void moveLeft() {
-            setTranslateX(getTranslateX() - 5);
-        }
+    };
 
-        public void moveRight() {
-            setTranslateX(getTranslateX() + 5);
-        }
-
-        public void moveUp() {
-            setTranslateY(getTranslateY() - 5);
-        }
-
-        public void moveDown() {
-            setTranslateY(getTranslateY() + 5);
-        }
-    }
 }

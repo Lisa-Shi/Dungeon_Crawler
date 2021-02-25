@@ -26,6 +26,10 @@ public class PhysicsController {
 
         Vector2D frictionalForce = velocity.norm().opposite().multiply(frictionalForceMagnitude);
 
+        if (velocity.len() > 10) {
+            velocity = velocity.relen(10);
+        }
+
         if (velocity.len() < frictionalForce.len()) {
             velocity = new Vector2D(0, 0);
         } else {

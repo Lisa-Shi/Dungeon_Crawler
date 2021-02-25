@@ -38,6 +38,9 @@ public class Vector2D {
             return new Vector2D(0, 0);
         }
     }
+    public Vector2D relen(double newLen) {
+        return norm().multiply(newLen);
+    }
 
     // Getters
     public double getX() {

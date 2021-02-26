@@ -1,171 +1,85 @@
 package sample;
 
-import javafx.animation.Animation;
-import javafx.animation.AnimationTimer;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
 
-import java.util.List;
-import java.util.stream.Collectors;
+public class Room implements Physical {
+    // Variables
+    private int width;
+    private int height;
+    private Sprite[][] sprites;
+    private Vector2D[] exitLocations;
+    private PhysicsController physics;
 
-public class Room extends Stage {
-    private Pane pane = new Pane();
+    // Constructors
+    public Room(int width, int height, Vector2D[] exitLocations) {
+        this.width = width;
+        this.height = height;
+        this.exitLocations = exitLocations;
 
-    private double t = 0;
+        // Sprites array so sprites can be moved around
+        this.sprites = new Sprite[width][height];
 
-    private Sprite player = new Sprite(300, 750, 40, 40, "player", Color.BLUE);
-
-    // SEE: https://www.youtube.com/watch?v=FVo1fm52hz0
-    public Room() {
+        // Physics so the camera works properly
+        this.physics = new PhysicsController(0, 0);
     }
 
-    public void start(Stage stage) throws Exception {
-        Scene scene = new Scene(createContent());
+    // Methods
+    public void draw(Pane pane) {
+        for (int r = 0; r < width; r++) {
+            for (int c = 0; c < height; c++) {
+                int tileWidth = 64;
+                int tileHeight = 64;
 
-        pane.getChildren().add(player);
+                String spriteToDraw = "spr_dungeon_tile.png";
 
-        scene.setOnKeyPressed(e -> {
-            switch (e.getCode()) {
-                case A:
-                    player.moveLeft();
-                    break;
-                case D:
-                    player.moveRight();
-                    break;
-                case W:
-                    //player.moveUp();
-                    break;
-                case S:
-                    //player.moveDown();
-                    break;
-                case SPACE:
-                    shoot(player);
-                    break;
-            }
-        });
+                for (int exitIndex = 0; exitIndex < exitLocations.length; exitIndex++) {
+                    Vector2D targetExit = exitLocations[exitIndex];
 
-        stage.setScene(scene);
-
-        stage.show();
-    }
-
-    private Parent createContent() {
-        pane.setPrefSize(600, 800);
-
-        AnimationTimer timer = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                update();
-            }
-        };
-
-        timer.start();
-
-        nextLevel();
-
-        return pane;
-    }
-
-    private void nextLevel() {
-        for (int i = 0; i < 5; i++) {
-            Sprite s = new Sprite(90 + i*100, 150, 30, 30, "enemy", Color.RED);
-
-            pane.getChildren().add(s);
-        }
-    }
-
-    private List<Sprite> sprites() {
-        return pane.getChildren().stream().map(n -> (Sprite) n).collect(Collectors.toList());
-    }
-
-    private void update() {
-        t += 0.016;
-
-        sprites().forEach(s -> {
-            switch (s.type) {
-                case "enemybullet":
-                    s.moveDown();
-
-                    if (s.getBoundsInParent().intersects(player.getBoundsInParent())) {
-                        player.dead = true;
-                        s.dead = true;
+                    // If found exit where player is, replace sprite
+                    if (targetExit.getX() == r && targetExit.getY() == c) {
+                        spriteToDraw = "spr_dungeon_exit.png";
                     }
-                    break;
+                }
 
-                case "playerbullet":
-                    s.moveUp();
+                Sprite s = new Sprite(90 + r * tileWidth, 90 + c * tileHeight, tileWidth, tileHeight, "floor_type", new Image(getClass().getResource(spriteToDraw).toExternalForm()));
+                pane.getChildren().add(s);
 
-                    sprites().stream().filter(e -> e.type.equals("enemy")).forEach(enemy -> {
-                        if (s.getBoundsInParent().intersects(enemy.getBoundsInParent())) {
-                            enemy.dead = true;
-                            s.dead = true;
-                        }
-                    });
-
-                    break;
-
-                case "enemy":
-                    if (t > 2) {
-                        if (Math.random() < 0.3) {
-                            shoot(s);
-                        }
-                    }
-
-                    break;
+                sprites[r][c] = s;
             }
-        });
+        }
+    }
+    public void update(Camera camera) {
+        // Room moves with the camera
+        physics.update();
 
-        pane.getChildren().removeIf(n -> {
-            Sprite s = (Sprite) n;
-            return s.dead;
-        });
-
-        if (t > 2) {
-            t = 0;
+        for (int r = 0; r < sprites.length; r++) {
+            for (int c = 0; c < sprites[r].length; c++) {
+                Sprite s = sprites[r][c];
+                s.setTranslateX(physics.getPosition().getX() + 64 * r - camera.getPhysics().getPosition().getX() + camera.getOffsetX());
+                s.setTranslateY(physics.getPosition().getY() + 64 * c - camera.getPhysics().getPosition().getY() + camera.getOffsetY());
+            }
         }
     }
 
-    private void shoot(Sprite who) {
-        Sprite s = new Sprite((int) who.getTranslateX() + 20, (int)who.getTranslateY(), 5, 20, who.type + "bullet", Color.BLACK);
 
-        pane.getChildren().add(s);
+
+    // Getters
+    public Vector2D getExitLocation(int index) {
+        return exitLocations[index];
+    }
+    public Vector2D[] getExitLocations() {
+        return exitLocations;
+    }
+    public int getWidth() {
+        return width;
+    }
+    public int getHeight() {
+        return height;
     }
 
-    private static class Sprite extends Rectangle {
-        boolean dead = false;
-        final String type;
-
-        Sprite(int x, int y, int w, int h, String type, Color color) {
-            super(w, h, color);
-
-            this.type = type;
-            setTranslateX(x);
-            setTranslateY(y);
-        }
-
-        public void moveLeft() {
-            setTranslateX(getTranslateX() - 5);
-        }
-
-        public void moveRight() {
-            setTranslateX(getTranslateX() + 5);
-        }
-
-        public void moveUp() {
-            setTranslateY(getTranslateY() - 5);
-        }
-
-        public void moveDown() {
-            setTranslateY(getTranslateY() + 5);
-        }
+    @Override
+    public PhysicsController getPhysics() {
+        return physics;
     }
 }

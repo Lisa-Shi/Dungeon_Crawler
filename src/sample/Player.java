@@ -4,18 +4,11 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Player {
-    private int x;
-    private int y;
+public class Player implements Physical {
+
+    // Variables
     private String name;
     private List<Weapon> weaponList;
-<<<<<<< Updated upstream
-    //index of weapon in the weapon list
-    private int holdingWeapon;
-    private boolean death;
-
-    public Player(String inputName, Weapon initialWeapon, int initialX, int initialY){
-=======
     private int difficulty;
     private int holdingWeapon; // index of weapon in the weapon list
 
@@ -23,24 +16,37 @@ public class Player {
     private Sprite sprite;
 
 
+    public Player() {
+        this("user1", new Weapon("w1", "about1", 1, 1), 1);
+    }
+
     public Player(String name, Weapon initialWeapon, int difficulty) {
         this(name, initialWeapon, 0,0);
         this.difficulty = difficulty;
     }
   
     public Player(String inputName, Weapon initialWeapon, double initialX, double initialY) {
->>>>>>> Stashed changes
         name = inputName;
+        this.difficulty  = difficulty;
         weaponList = new ArrayList<>();
         weaponList.add(initialWeapon);
-        x = initialX;
-        y = initialY;
-        death = false;
+        sprite = new Sprite((int) initialX, (int) initialY, 40, 40, "player", Main.PLAYER_IMAGE);
+
+        this.physics = new PhysicsController(initialX, initialY);
     }
 
-    public void move(int deltaX, deltaY){
-        x += deltaX;
-        y += deltaY;
+    public void update(Camera camera) {
+        physics.update();
+        sprite.setTranslateX(physics.getPosition().getX() - camera.getPhysics().getPosition().getX() + camera.getOffsetX() - 40 / 2);
+        sprite.setTranslateY(physics.getPosition().getY() - camera.getPhysics().getPosition().getY() + camera.getOffsetY() - 40 / 2);
+    }
+
+    // Getters/Setters
+    public PhysicsController getPhysics() {
+        return physics;
+    }
+    public Sprite getSprite() {
+        return sprite;
     }
 
     public void obtainNewWeapon(Weapon newWeapon){
@@ -55,29 +61,12 @@ public class Player {
         return weaponList;
     }
 
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-<<<<<<< Updated upstream
     public int getHoldingWeapon() {
         return holdingWeapon;
-=======
-    public String getName(){
-        return name;
     }
 
-    public int getDifficulty(){ return difficulty;  }
-
-    public boolean isLegal(){
-        if( name.equals("") || difficulty == -1 ){
-            return false;
-        }
-        return true;
->>>>>>> Stashed changes
+    public void setName(String name) {
+        this.name = name;
     }
+
 }

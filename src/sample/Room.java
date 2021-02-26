@@ -1,139 +1,85 @@
 package sample;
 
-import javafx.animation.AnimationTimer;
-import javafx.event.EventHandler;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 
-public class Room extends Stage {
-    private Pane pane = new Pane();
+public class Room implements Physical {
+    // Variables
+    private int width;
+    private int height;
+    private Sprite[][] sprites;
+    private Vector2D[] exitLocations;
+    private PhysicsController physics;
 
-    private double t = 0;
+    // Constructors
+    public Room(int width, int height, Vector2D[] exitLocations) {
+        this.width = width;
+        this.height = height;
+        this.exitLocations = exitLocations;
 
-    private boolean playerIsMovingLeft;
-    private boolean playerIsMovingRight;
-    private boolean playerIsMovingUp;
-    private boolean playerIsMovingDown;
+        // Sprites array so sprites can be moved around
+        this.sprites = new Sprite[width][height];
 
-    // load the image
-    private Player player = new Player("Test Player", new Weapon("Test Weapon", "A test weapon.", 3, 5), 200, 200);
-
-    // SEE: https://www.youtube.com/watch?v=FVo1fm52hz0
-    public Room() {
+        // Physics so the camera works properly
+        this.physics = new PhysicsController(0, 0);
     }
 
-    public void start(Stage stage) throws Exception {
-        Scene scene = new Scene(createContent());
-        Canvas c = new Canvas(scene.getWidth(), scene.getHeight());
-
-        pane.getChildren().add(player.getSprite());
-
-        scene.setOnKeyPressed(e -> {
-
-            switch (e.getCode()) {
-            }
-        });
-
-        scene.setOnKeyPressed(keyPressed);
-        scene.setOnKeyReleased(keyReleased);
-
-        stage.setScene(scene);
-
-        stage.show();
-    }
-
-    private Parent createContent() {
-        pane.setPrefSize(800, 800);
-
-        AnimationTimer timer = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                update();
-            }
-        };
-
-        timer.start();
-
-        generateDungeon();
-
-        return pane;
-    }
-
-    public void update() {
-        if (playerIsMovingUp) {
-            player.getPhysics().pushUp(Main.DEFAULT_CONTROL_PLAYER_FORCE);
-        }
-        if (playerIsMovingDown) {
-            player.getPhysics().pushDown(Main.DEFAULT_CONTROL_PLAYER_FORCE);
-        }
-        if (playerIsMovingLeft) {
-            player.getPhysics().pushLeft(Main.DEFAULT_CONTROL_PLAYER_FORCE);
-        }
-        if (playerIsMovingRight) {
-            player.getPhysics().pushRight(Main.DEFAULT_CONTROL_PLAYER_FORCE);
-        }
-
-        player.update();
-
-    }
-
-    private void generateDungeon() {
-
-        for (int i = 0; i < 15; i++) {
-            for (int j = 0; j < 15; j++) {
+    // Methods
+    public void draw(Pane pane) {
+        for (int r = 0; r < width; r++) {
+            for (int c = 0; c < height; c++) {
                 int tileWidth = 64;
                 int tileHeight = 64;
 
-                Sprite s = new Sprite(90 + i * tileWidth, 90 + j * tileHeight, tileWidth, tileHeight, "floor_type", new Image(getClass().getResource("spr_dungeon_tile.png").toExternalForm()));
+                String spriteToDraw = "spr_dungeon_tile.png";
+
+                for (int exitIndex = 0; exitIndex < exitLocations.length; exitIndex++) {
+                    Vector2D targetExit = exitLocations[exitIndex];
+
+                    // If found exit where player is, replace sprite
+                    if (targetExit.getX() == r && targetExit.getY() == c) {
+                        spriteToDraw = "spr_dungeon_exit.png";
+                    }
+                }
+
+                Sprite s = new Sprite(90 + r * tileWidth, 90 + c * tileHeight, tileWidth, tileHeight, "floor_type", new Image(getClass().getResource(spriteToDraw).toExternalForm()));
                 pane.getChildren().add(s);
+
+                sprites[r][c] = s;
+            }
+        }
+    }
+    public void update(Camera camera) {
+        // Room moves with the camera
+        physics.update();
+
+        for (int r = 0; r < sprites.length; r++) {
+            for (int c = 0; c < sprites[r].length; c++) {
+                Sprite s = sprites[r][c];
+                s.setTranslateX(physics.getPosition().getX() + 64 * r - camera.getPhysics().getPosition().getX() + camera.getOffsetX());
+                s.setTranslateY(physics.getPosition().getY() + 64 * c - camera.getPhysics().getPosition().getY() + camera.getOffsetY());
             }
         }
     }
 
-    // Thanks to https://stackoverflow.com/questions/39007382/moving-two-rectangles-with-keyboard-in-javafx
 
-    private EventHandler<KeyEvent> keyPressed = new EventHandler<KeyEvent>() {
-        @Override
-        public void handle(KeyEvent event) {
-            if (event.getCode() == KeyCode.A) {
-                playerIsMovingLeft = true;
-            }
-            if (event.getCode() == KeyCode.D) {
-                playerIsMovingRight = true;
-            }
-            if (event.getCode() == KeyCode.W) {
-                playerIsMovingUp = true;
-            }
-            if (event.getCode() == KeyCode.S) {
-                playerIsMovingDown = true;
-            }
-        }
-    };
-    private EventHandler<KeyEvent> keyReleased = new EventHandler<KeyEvent>() {
 
-        @Override
-        public void handle(KeyEvent event) {
-            if (event.getCode() == KeyCode.A) {
-                playerIsMovingLeft = false;
-            }
-            if (event.getCode() == KeyCode.D) {
-                playerIsMovingRight = false;
-            }
-            if (event.getCode() == KeyCode.W) {
-                playerIsMovingUp = false;
-            }
-            if (event.getCode() == KeyCode.S) {
-                playerIsMovingDown = false;
-            }
-        }
+    // Getters
+    public Vector2D getExitLocation(int index) {
+        return exitLocations[index];
+    }
+    public Vector2D[] getExitLocations() {
+        return exitLocations;
+    }
+    public int getWidth() {
+        return width;
+    }
+    public int getHeight() {
+        return height;
+    }
 
-    };
-
+    @Override
+    public PhysicsController getPhysics() {
+        return physics;
+    }
 }

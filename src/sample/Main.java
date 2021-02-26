@@ -12,15 +12,16 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
     // Variables
+    public static int GAME_WIDTH = 800;
+    public static int GAME_HEIGHT = 800;
+
     public static double DEFAULT_FORCE = 1;
     public static double DEFAULT_FRICTIONAL_FORCE = 0.20D;
+    public static double DEFAULT_CAMERA_SLOWDOWN_FACTOR = 7; // similar to a frictional force
     public static double DEFAULT_CONTROL_PLAYER_FORCE = 0.45D;
     public static double MAX_PLAYER_SPEED = 7D;
 
     public static final Image PLAYER_IMAGE = new Image(Player.class.getResource("testimg.png").toExternalForm());
-
-    public final int WIDTH = 600;
-    public final int HEIGHT = 800;
 
     private Player player;
 
@@ -42,22 +43,22 @@ public class Main extends Application {
         config.setBottom(goRoom);
 
         //shows config
-        primaryStage.setScene(new Scene(config, WIDTH, HEIGHT));
+        primaryStage.setScene(new Scene(config, GAME_WIDTH, GAME_HEIGHT));
         primaryStage.show();
 
         //button action for moving
         goRoom.setOnAction(event -> {
             player = configScreen.createChar();
-            primaryStage.setScene(new Scene(root, WIDTH, HEIGHT, false, SceneAntialiasing.DISABLED));
+            primaryStage.setScene(new Scene(root, GAME_WIDTH, GAME_HEIGHT, false, SceneAntialiasing.DISABLED));
 
-            Room r = new Room();
+            GameStage r = new GameStage();
+          
             try {
                 r.start(primaryStage);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
-
     }
 
 

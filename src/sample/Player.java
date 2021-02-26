@@ -16,18 +16,13 @@ public class Player implements Physical {
     private Sprite sprite;
 
 
-    public Player() {
-        this("user1", new Weapon("w1", "about1", 1, 1), 1);
-    }
-
     public Player(String name, Weapon initialWeapon, int difficulty) {
         this(name, initialWeapon, 0,0);
         this.difficulty = difficulty;
     }
-  
+
     public Player(String inputName, Weapon initialWeapon, double initialX, double initialY) {
         name = inputName;
-        this.difficulty  = difficulty;
         weaponList = new ArrayList<>();
         weaponList.add(initialWeapon);
         sprite = new Sprite((int) initialX, (int) initialY, 40, 40, "player", Main.PLAYER_IMAGE);
@@ -69,4 +64,17 @@ public class Player implements Physical {
         this.name = name;
     }
 
+    public String getName(){
+        return name;
+    }
+
+    public int getDifficulty(){ return difficulty;  }
+
+    /**player is legal if the name is not empty string and difficulty is not -1
+     *
+     * @return if the player object is legal
+     */
+    public boolean isLegal(){
+        return !(name.equals("") || difficulty == -1);
+    }
 }

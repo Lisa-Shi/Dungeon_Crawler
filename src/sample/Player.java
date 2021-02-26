@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Player {
+public class Player implements Physical {
 
     // Variables
     private String name;
@@ -14,19 +14,19 @@ public class Player {
     private PhysicsController physics;
     private Sprite sprite;
 
-    public Player(String inputName, Weapon initialWeapon, int initialX, int initialY) {
+    public Player(String inputName, Weapon initialWeapon, double initialX, double initialY) {
         name = inputName;
         weaponList = new ArrayList<>();
         weaponList.add(initialWeapon);
-        sprite = new Sprite(initialX, initialY, 40, 40, "player", Main.PLAYER_IMAGE);
+        sprite = new Sprite((int) initialX, (int) initialY, 40, 40, "player", Main.PLAYER_IMAGE);
 
         this.physics = new PhysicsController(initialX, initialY);
     }
 
-    public void update() {
+    public void update(Camera camera) {
         physics.update();
-        sprite.setX(physics.getPosition().getX());
-        sprite.setY(physics.getPosition().getY());
+        sprite.setTranslateX(physics.getPosition().getX() - camera.getPhysics().getPosition().getX() + camera.getOffsetX() - 40 / 2);
+        sprite.setTranslateY(physics.getPosition().getY() - camera.getPhysics().getPosition().getY() + camera.getOffsetY() - 40 / 2);
     }
 
     // Getters/Setters

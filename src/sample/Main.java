@@ -10,8 +10,12 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
     // Variables
+    public static int GAME_WIDTH = 800;
+    public static int GAME_HEIGHT = 800;
+
     public static double DEFAULT_FORCE = 1;
     public static double DEFAULT_FRICTIONAL_FORCE = 0.20D;
+    public static double DEFAULT_CAMERA_SLOWDOWN_FACTOR = 7; // similar to a frictional force
     public static double DEFAULT_CONTROL_PLAYER_FORCE = 0.45D;
     public static double MAX_PLAYER_SPEED = 7D;
 
@@ -23,7 +27,7 @@ public class Main extends Application {
 
 
         primaryStage.setTitle("Dungeon Crawler");
-        primaryStage.setScene(new Scene(root, 600, 800, false, SceneAntialiasing.DISABLED));
+        primaryStage.setScene(new Scene(root, GAME_WIDTH, GAME_HEIGHT, false, SceneAntialiasing.DISABLED));
 
 
         //primaryStage.show();

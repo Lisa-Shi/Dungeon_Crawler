@@ -8,7 +8,7 @@ public class PhysicsController {
     private Vector2D impulse;
 
     // Constructors
-    public PhysicsController(int initialX, int initialY) {
+    public PhysicsController(double initialX, double initialY) {
         this.position = new Vector2D(initialX, initialY);
         this.velocity = new Vector2D(0, 0);
         this.acceleration = new Vector2D(0, 0);
@@ -82,5 +82,16 @@ public class PhysicsController {
 
     public Vector2D getAcceleration() {
         return acceleration;
+    }
+
+    // Setters
+    public void setPosition(Vector2D position) {
+        this.position = position;
+    }
+    public void setVelocity(Vector2D velocity) {
+        this.velocity = velocity;
+    }
+    public void setAcceleration(Vector2D acceleration) {
+        this.acceleration = acceleration;
     }
 }

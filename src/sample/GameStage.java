@@ -22,15 +22,25 @@ public class GameStage extends Stage {
     private boolean playerIsMovingUp;
     private boolean playerIsMovingDown;
 
-    private Player player = new Player("Test Player", new Weapon("Test Weapon", "A test weapon.", 3, 5), 200, 200);
+    private Player player;
+    private Camera camera;
+    private Room room;
 
     // SEE: https://www.youtube.com/watch?v=FVo1fm52hz0
     public GameStage() {
+        player = new Player("Test Player", new Weapon("Test Weapon", "A test weapon.", 3, 5), 200, 200);
+        camera = new Camera(Main.GAME_WIDTH / 2, Main.GAME_HEIGHT / 2, player);
+
+        Vector2D[] exitLocations = new Vector2D[4];
+        exitLocations[0] = new Vector2D(9, 0);
+        exitLocations[1] = new Vector2D(0, 9);
+        exitLocations[2] = new Vector2D(9, 19);
+        exitLocations[3] = new Vector2D(19, 9);
+        room = new Room(20, 20, exitLocations);
     }
 
     public void start(Stage stage) throws Exception {
         Scene scene = new Scene(createContent());
-        Canvas c = new Canvas(scene.getWidth(), scene.getHeight());
 
         pane.getChildren().add(player.getSprite());
 
@@ -46,10 +56,11 @@ public class GameStage extends Stage {
         stage.setScene(scene);
 
         stage.show();
+
     }
 
     private Parent createContent() {
-        pane.setPrefSize(800, 800);
+        pane.setPrefSize(Main.GAME_WIDTH, Main.GAME_HEIGHT);
 
         AnimationTimer timer = new AnimationTimer() {
             @Override
@@ -60,7 +71,7 @@ public class GameStage extends Stage {
 
         timer.start();
 
-        generateDungeon();
+        room.draw(pane);
 
         return pane;
     }
@@ -79,21 +90,10 @@ public class GameStage extends Stage {
             player.getPhysics().pushRight(Main.DEFAULT_CONTROL_PLAYER_FORCE);
         }
 
-        player.update();
+        room.update(camera);
+        player.update(camera);
+        camera.update();
 
-    }
-
-    private void generateDungeon() {
-
-        for (int i = 0; i < 15; i++) {
-            for (int j = 0; j < 15; j++) {
-                int tileWidth = 64;
-                int tileHeight = 64;
-
-                Sprite s = new Sprite(90 + i * tileWidth, 90 + j * tileHeight, tileWidth, tileHeight, "floor_type", new Image(getClass().getResource("spr_dungeon_tile.png").toExternalForm()));
-                pane.getChildren().add(s);
-            }
-        }
     }
 
     // Thanks to https://stackoverflow.com/questions/39007382/moving-two-rectangles-with-keyboard-in-javafx

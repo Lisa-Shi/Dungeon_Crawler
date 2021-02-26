@@ -5,7 +5,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -17,19 +19,45 @@ public class Main extends Application {
 
     public static final Image PLAYER_IMAGE = new Image(Player.class.getResource("testimg.png").toExternalForm());
 
+    public final int WIDTH = 600;
+    public final int HEIGHT = 800;
+
+    private Player player;
+
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
 
 
         primaryStage.setTitle("Dungeon Crawler");
-        primaryStage.setScene(new Scene(root, 600, 800, false, SceneAntialiasing.DISABLED));
 
+        //Creates the configuration screen
+        ConfigurationScreen configScreen = new ConfigurationScreen();
 
-        //primaryStage.show();
+        //config layout
+        BorderPane config = configScreen.configLayout();
 
-        Room r = new Room();
-        r.start(primaryStage);
+        //button for moving to next scene
+        Button goRoom = new Button("Go to room");
+        config.setBottom(goRoom);
+
+        //shows config
+        primaryStage.setScene(new Scene(config, WIDTH, HEIGHT));
+        primaryStage.show();
+
+        //button action for moving
+        goRoom.setOnAction(event -> {
+            player = configScreen.createChar();
+            primaryStage.setScene(new Scene(root, WIDTH, HEIGHT, false, SceneAntialiasing.DISABLED));
+
+            Room r = new Room();
+            try {
+                r.start(primaryStage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
     }
 
 

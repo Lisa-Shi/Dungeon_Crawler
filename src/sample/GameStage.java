@@ -12,7 +12,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-public class Room extends Stage {
+public class GameStage extends Stage {
     private Pane pane = new Pane();
 
     private double t = 0;
@@ -22,11 +22,10 @@ public class Room extends Stage {
     private boolean playerIsMovingUp;
     private boolean playerIsMovingDown;
 
-    // load the image
     private Player player = new Player("Test Player", new Weapon("Test Weapon", "A test weapon.", 3, 5), 200, 200);
 
     // SEE: https://www.youtube.com/watch?v=FVo1fm52hz0
-    public Room() {
+    public GameStage() {
     }
 
     public void start(Stage stage) throws Exception {

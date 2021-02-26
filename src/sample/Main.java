@@ -28,7 +28,7 @@ public class Main extends Application {
 
         //primaryStage.show();
 
-        Room r = new Room();
+        GameStage r = new GameStage();
         r.start(primaryStage);
     }
 

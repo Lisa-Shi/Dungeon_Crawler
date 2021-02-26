@@ -35,21 +35,31 @@ public class Main extends Application {
 
         primaryStage.setTitle("Dungeon Crawler");
 
-        //Creates the configuration screen
-        ConfigurationScreen configScreen = new ConfigurationScreen();
+        //Creates the welcome screen
+        WelcomeScreen welcome = new WelcomeScreen();
 
-        //config layout
+        BorderPane welcomeLayout = welcome.welcomeLayout();
+
+        primaryStage.setScene(new Scene(welcomeLayout, GAME_WIDTH, GAME_HEIGHT));
+        primaryStage.show();
+
+        //Creates the configuration screen and layout
+        ConfigurationScreen configScreen = new ConfigurationScreen();
         BorderPane config = configScreen.configLayout();
 
-        //button for moving to next scene
+        //Button for moving to next scene
         Button goRoom = new Button("Go to room");
         config.setBottom(goRoom);
 
-        //shows config
-        primaryStage.setScene(new Scene(config, GAME_WIDTH, GAME_HEIGHT));
-        primaryStage.show();
+        //Creates config scene
+        Scene configScene = new Scene(config, GAME_WIDTH, GAME_HEIGHT);
 
-        //button action for moving
+        //Sets button to move to config scene from welcome
+        welcome.startButton.setOnAction(e -> {
+            primaryStage.setScene(configScene);
+        });
+
+        //Button action for moving
         goRoom.setOnAction(event -> {
             player = configScreen.createChar();
             if(player != null && !player.isLegal()){

@@ -1,10 +1,13 @@
 package sample;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
@@ -13,7 +16,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
     // Variables
     public static int GAME_WIDTH = 800;
-    public static int GAME_HEIGHT = 800;
+    public static int GAME_HEIGHT = 500;
 
     public static double DEFAULT_FORCE = 1;
     public static double DEFAULT_FRICTIONAL_FORCE = 0.20D;
@@ -49,14 +52,24 @@ public class Main extends Application {
         //button action for moving
         goRoom.setOnAction(event -> {
             player = configScreen.createChar();
-            primaryStage.setScene(new Scene(root, GAME_WIDTH, GAME_HEIGHT, false, SceneAntialiasing.DISABLED));
+            if(player != null && !player.isLegal()){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                if(player.getName().equals("")) {
+                    alert.setContentText("please enter a name");
+                }else if(player.getDifficulty() == -1){
+                    alert.setContentText("please select difficulty");
+                }
+                alert.showAndWait();
+            }else {
+                primaryStage.setScene(new Scene(root, GAME_WIDTH, GAME_HEIGHT, false, SceneAntialiasing.DISABLED));
 
-            GameStage r = new GameStage();
-          
-            try {
-                r.start(primaryStage);
-            } catch (Exception e) {
-                e.printStackTrace();
+                GameStage r = new GameStage();
+
+                try {
+                    r.start(primaryStage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

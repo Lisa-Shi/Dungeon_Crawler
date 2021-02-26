@@ -54,7 +54,6 @@ public class ConfigurationScreen {
         wOptions[0] = "1name";
         wOptions[1] = "2name";
         wOptions[2] = "3name";
-
         HBox wHb = new HBox();
         //Setting weapon for the player
         weaponToggles = selectToggleB(wOptions, wHb);

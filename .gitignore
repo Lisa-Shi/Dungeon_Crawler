@@ -23,6 +23,7 @@
 hs_err_pid*
 
 run_checkstyle.py
+cs2340_checks.xml
 
 # ignore these directories!
 openjfx-11.0.2_windows-x64_bin-sdk/**

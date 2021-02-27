@@ -33,8 +33,7 @@ public class Vector2D {
 
         if (len > 0) {
             return new Vector2D(x / len, y / len);
-        }
-        else {
+        } else {
             return new Vector2D(0, 0);
         }
     }

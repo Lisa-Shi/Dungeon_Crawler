@@ -4,12 +4,13 @@ import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 public class GameStage extends Stage {
@@ -28,7 +29,8 @@ public class GameStage extends Stage {
 
     // SEE: https://www.youtube.com/watch?v=FVo1fm52hz0
     public GameStage() {
-        player = new Player("Test Player", new Weapon("Test Weapon", "A test weapon.", 3, 5), 200, 200);
+        player = new Player("Test Player", new Weapon("Test Weapon",
+                "A test weapon.", 3, 5), 200, 200);
         camera = new Camera(Main.GAME_WIDTH / 2, Main.GAME_HEIGHT / 2, player);
 
         Vector2D[] exitLocations = new Vector2D[4];
@@ -44,11 +46,18 @@ public class GameStage extends Stage {
 
         pane.getChildren().add(player.getSprite());
 
-        scene.setOnKeyPressed(e -> {
+        HBox infoBar = new HBox();
 
-            switch (e.getCode()) {
-            }
-        });
+
+        Text text = new Text();
+        text.setFont(new Font(20));
+        text.setText("$" + player.getMoney());
+        text.setX(0);
+        text.setY(20);
+        text.setTextAlignment(TextAlignment.LEFT);
+
+        infoBar.getChildren().add(text);
+        pane.getChildren().add(infoBar);
 
         scene.setOnKeyPressed(keyPressed);
         scene.setOnKeyReleased(keyReleased);

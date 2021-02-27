@@ -7,7 +7,7 @@ public class Weapon {
     private int ammoRemaining;
     private int maxAmmo;
 
-    public Weapon(String weaponName, String weaponDescription, int weaponDamage, int maximumAmmo){
+    public Weapon(String weaponName, String weaponDescription, int weaponDamage, int maximumAmmo) {
         damage = weaponDamage;
         name = weaponName;
         description = weaponDescription;
@@ -23,7 +23,7 @@ public class Weapon {
         ammoRemaining = ammoRemaining - byAmount;
     }
 
-    public void refillAmmo(){
+    public void refillAmmo() {
         ammoRemaining = maxAmmo;
     }
 

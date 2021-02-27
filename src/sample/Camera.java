@@ -22,7 +22,8 @@ public class Camera implements Physical {
 
         Vector2D toFollowingVector = followingPosition.subtract(camPosition);
 
-        physics.setVelocity(new Vector2D((toFollowingVector.getX()) / Main.DEFAULT_CAMERA_SLOWDOWN_FACTOR,
+        physics.setVelocity(
+                new Vector2D((toFollowingVector.getX()) / Main.DEFAULT_CAMERA_SLOWDOWN_FACTOR,
                             (toFollowingVector.getY()) / Main.DEFAULT_CAMERA_SLOWDOWN_FACTOR));
 
         physics.update();

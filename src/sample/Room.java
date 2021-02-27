@@ -28,8 +28,8 @@ public class Room implements Physical {
     public void draw(Pane pane) {
         for (int r = 0; r < width; r++) {
             for (int c = 0; c < height; c++) {
-                int tileWidth = 64;
-                int tileHeight = 64;
+                int tileWidth = Main.TILE_WIDTH;
+                int tileHeight = Main.TILE_HEIGHT;
 
                 String spriteToDraw = "spr_dungeon_tile.png";
 
@@ -42,7 +42,10 @@ public class Room implements Physical {
                     }
                 }
 
-                Sprite s = new Sprite(90 + r * tileWidth, 90 + c * tileHeight, tileWidth, tileHeight, "floor_type", new Image(getClass().getResource(spriteToDraw).toExternalForm()));
+                Sprite s = new Sprite(r * tileWidth, c * tileHeight, tileWidth, tileHeight,
+                        "floor_type",
+                        new Image(getClass().getResource(spriteToDraw).toExternalForm()));
+
                 pane.getChildren().add(s);
 
                 sprites[r][c] = s;
@@ -56,8 +59,10 @@ public class Room implements Physical {
         for (int r = 0; r < sprites.length; r++) {
             for (int c = 0; c < sprites[r].length; c++) {
                 Sprite s = sprites[r][c];
-                s.setTranslateX(physics.getPosition().getX() + 64 * r - camera.getPhysics().getPosition().getX() + camera.getOffsetX());
-                s.setTranslateY(physics.getPosition().getY() + 64 * c - camera.getPhysics().getPosition().getY() + camera.getOffsetY());
+                s.setTranslateX(physics.getPosition().getX() + Main.TILE_WIDTH * r
+                        - camera.getPhysics().getPosition().getX() + camera.getOffsetX());
+                s.setTranslateY(physics.getPosition().getY() + Main.TILE_HEIGHT * c
+                        - camera.getPhysics().getPosition().getY() + camera.getOffsetY());
             }
         }
     }

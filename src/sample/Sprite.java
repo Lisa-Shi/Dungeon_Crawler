@@ -4,8 +4,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class Sprite extends ImageView {
-    boolean dead = false;
-    final String type;
+    private boolean dead = false;
+    private final String type;
 
     Sprite(int x, int y, int w, int h, String type, Image img) {
         super(img);

@@ -5,6 +5,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 
+/**
+ * set up for the configuration screen.
+ * user set up their character and select the game difficulty in this screen
+ */
 public class ConfigurationScreen {
     private int difficulty = 0;
     private String name;
@@ -13,6 +17,11 @@ public class ConfigurationScreen {
     private TextField nameInput;
     private ToggleGroup difficultyToggles;
     private ToggleGroup weaponToggles;
+
+    /**layout setup for the configuration Screen
+     * GUI objects are added to the pane in this method
+     * @return a setup pane that contains GUI objects
+     */
 
     public BorderPane configLayout() {
         //BorderPane border = new BorderPane();
@@ -27,6 +36,10 @@ public class ConfigurationScreen {
         return border;
     }
 
+    /**
+     * set up the text field for user to enter the name
+     * @return a Hbox (GUI object)
+     */
     private HBox nameField() {
         Label nameLabel = new Label("Player name: ");
         nameInput = new TextField();
@@ -36,6 +49,10 @@ public class ConfigurationScreen {
         return hb;
     }
 
+    /**
+     * set up the toggle buttons for user to select difficulty
+     * @return a group of toggle button for difficulty
+     */
     private VBox difficultyField() {
         String[] dOptions = new String[3];
         dOptions[0] = "1: easy";
@@ -49,6 +66,10 @@ public class ConfigurationScreen {
         return new VBox(groupLabel, dHb);
     }
 
+    /**
+     * set up the toggle buttons for user to select initial weapon
+     * @return a group of toggle button for weapon
+     */
     private VBox weaponField() {
         String[] wOptions = new String[3];
         wOptions[0] = "1name";
@@ -62,6 +83,13 @@ public class ConfigurationScreen {
         return new VBox(groupLabel, wHb);
     }
 
+    /**
+     * set up helper method
+     * initial a group of toggle buttons with the parameters
+     * @param buttonN list of string that will be put on the buttons
+     * @param hb hbox that contains the toggle buttons
+     * @return a group of toggle buttons
+     */
     private ToggleGroup selectToggleB(String[] buttonN, HBox hb) {
         hb.setSpacing(15);
         ToggleGroup togGroup = new ToggleGroup();
@@ -77,6 +105,10 @@ public class ConfigurationScreen {
         return togGroup;
     }
 
+    /**
+     * method will get the user input from the GUI objects and initial character for the game
+     * @return  the player object created with the user inputs
+     */
     public Player createChar() {
         //get user input from button
         name = nameInput.getText();

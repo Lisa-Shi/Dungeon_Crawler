@@ -1,5 +1,10 @@
 package sample;
 
 public interface Physical {
-    public PhysicsController getPhysics();
+    /**
+     * Gets physics information of object
+     *
+     * @return physics information
+     */
+    PhysicsController getPhysics();
 }

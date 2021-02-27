@@ -11,20 +11,28 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class Main extends Application {
     // Variables
-    public static int GAME_WIDTH = 800;
-    public static int GAME_HEIGHT = 500;
+    public static final int GAME_WIDTH = 800;
+    public static final int GAME_HEIGHT = 800;
 
-    public static double DEFAULT_FORCE = 1;
-    public static double DEFAULT_FRICTIONAL_FORCE = 0.20D;
-    public static double DEFAULT_CAMERA_SLOWDOWN_FACTOR = 7; // similar to a frictional force
-    public static double DEFAULT_CONTROL_PLAYER_FORCE = 0.45D;
-    public static double MAX_PLAYER_SPEED = 7D;
+    public static final double DEFAULT_FORCE = 1;
+    public static final double DEFAULT_FRICTIONAL_FORCE = 0.20D;
+    public static final double DEFAULT_CAMERA_SLOWDOWN_FACTOR = 7; // similar to a frictional force
+    public static final double DEFAULT_CONTROL_PLAYER_FORCE = 0.45D;
+    public static final double MAX_PLAYER_SPEED = 7D;
 
-    public static final Image PLAYER_IMAGE = new Image(Player.class.getResource("testimg.png").toExternalForm());
+    public static final int PLAYER_WIDTH = 40;
+    public static final int PLAYER_HEIGHT = 40;
+
+    public static final int TILE_WIDTH = 64;
+    public static final int TILE_HEIGHT = 64;
+
+    public static final Image PLAYER_IMAGE =
+            new Image(Player.class.getResource("testimg.png").toExternalForm());
 
     private Player player;
 
@@ -34,22 +42,34 @@ public class Main extends Application {
 
 
         primaryStage.setTitle("Dungeon Crawler");
+        primaryStage.setScene(new Scene(root, GAME_WIDTH, GAME_HEIGHT,
+                false, SceneAntialiasing.DISABLED));
 
-        //Creates the configuration screen
+        //Creates the welcome screen
+        WelcomeScreen welcome = new WelcomeScreen();
+
+        BorderPane welcomeLayout = welcome.welcomeLayout();
+
+        primaryStage.setScene(new Scene(welcomeLayout, GAME_WIDTH, GAME_HEIGHT));
+        primaryStage.show();
+
+        //Creates the configuration screen and layout
         ConfigurationScreen configScreen = new ConfigurationScreen();
-
-        //config layout
         BorderPane config = configScreen.configLayout();
 
-        //button for moving to next scene
+        //Button for moving to next scene
         Button goRoom = new Button("Go to room");
         config.setBottom(goRoom);
 
-        //shows config
-        primaryStage.setScene(new Scene(config, GAME_WIDTH, GAME_HEIGHT));
-        primaryStage.show();
+        //Creates config scene
+        Scene configScene = new Scene(config, GAME_WIDTH, GAME_HEIGHT);
 
-        //button action for moving
+        //Sets button to move to config scene from welcome
+        welcome.startButton.setOnAction(e -> {
+            primaryStage.setScene(configScene);
+        });
+
+        //Button action for moving
         goRoom.setOnAction(event -> {
             player = configScreen.createChar();
             if(player != null && !player.isLegal()){
@@ -61,7 +81,7 @@ public class Main extends Application {
                 }
                 alert.showAndWait();
             }else {
-                primaryStage.setScene(new Scene(root, GAME_WIDTH, GAME_HEIGHT, false, SceneAntialiasing.DISABLED));
+                primaryStage.setScene(new Scene(new Pane(), GAME_WIDTH, GAME_HEIGHT, false, SceneAntialiasing.DISABLED));
 
                 GameStage r = new GameStage();
 

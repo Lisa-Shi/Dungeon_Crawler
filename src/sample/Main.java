@@ -1,11 +1,16 @@
 package sample;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -28,6 +33,8 @@ public class Main extends Application {
     public static final Image PLAYER_IMAGE =
             new Image(Player.class.getResource("testimg.png").toExternalForm());
 
+    private Player player;
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
@@ -37,11 +44,53 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root, GAME_WIDTH, GAME_HEIGHT,
                 false, SceneAntialiasing.DISABLED));
 
+        //Creates the welcome screen
+        WelcomeScreen welcome = new WelcomeScreen();
 
-        //primaryStage.show();
+        BorderPane welcomeLayout = welcome.welcomeLayout();
 
-        GameStage r = new GameStage();
-        r.start(primaryStage);
+        primaryStage.setScene(new Scene(welcomeLayout, GAME_WIDTH, GAME_HEIGHT));
+        primaryStage.show();
+
+        //Creates the configuration screen and layout
+        ConfigurationScreen configScreen = new ConfigurationScreen();
+        BorderPane config = configScreen.configLayout();
+
+        //Button for moving to next scene
+        Button goRoom = new Button("Go to room");
+        config.setBottom(goRoom);
+
+        //Creates config scene
+        Scene configScene = new Scene(config, GAME_WIDTH, GAME_HEIGHT);
+
+        //Sets button to move to config scene from welcome
+        welcome.startButton.setOnAction(e -> {
+            primaryStage.setScene(configScene);
+        });
+
+        //Button action for moving
+        goRoom.setOnAction(event -> {
+            player = configScreen.createChar();
+            if(player != null && !player.isLegal()){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                if(player.getName().equals("")) {
+                    alert.setContentText("please enter a name");
+                }else if(player.getDifficulty() == -1){
+                    alert.setContentText("please select difficulty");
+                }
+                alert.showAndWait();
+            }else {
+                primaryStage.setScene(new Scene(root, GAME_WIDTH, GAME_HEIGHT, false, SceneAntialiasing.DISABLED));
+
+                GameStage r = new GameStage();
+
+                try {
+                    r.start(primaryStage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
 

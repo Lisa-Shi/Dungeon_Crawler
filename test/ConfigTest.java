@@ -1,4 +1,3 @@
-import javafx.scene.input.KeyCode;
 import org.testfx.assertions.api.Assertions;
 import sample.Main;
 import javafx.stage.Stage;
@@ -6,8 +5,6 @@ import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 import org.testfx.matcher.base.NodeMatchers;
 import sample.Player;
-import java.awt.*;
-import java.util.ArrayList;
 
 import static org.testfx.api.FxAssert.verifyThat;
 

@@ -116,4 +116,12 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
+    /**
+     * reture player. for testing purposes only
+     * @return player
+     */
+    public Player getPlayer(){
+        return player;
+    }
 }

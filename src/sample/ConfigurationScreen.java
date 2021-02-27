@@ -67,6 +67,7 @@ public class ConfigurationScreen {
     private HBox nameField() {
         Label nameLabel = new Label("Player name: ");
         nameInput = new TextField();
+        nameInput.setId("nameInput");
         HBox hb = new HBox();
         hb.getChildren().addAll(nameLabel, nameInput);
         hb.setSpacing(15);

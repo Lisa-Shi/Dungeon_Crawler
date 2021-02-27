@@ -12,6 +12,13 @@ public class Room implements Physical {
     private PhysicsController physics;
 
     // Constructors
+    /**
+     * Constructs a dungeon room
+     *
+     * @param width width of the room in tiles
+     * @param height height of the room in tiles
+     * @param exitLocations List of vectors, which represent locations of individual exits
+     */
     public Room(int width, int height, Vector2D[] exitLocations) {
         this.width = width;
         this.height = height;
@@ -25,6 +32,13 @@ public class Room implements Physical {
     }
 
     // Methods
+    /**
+     * Places the sprites that will be manipulated into the inputted pane
+     * for the first time (do not call more than once if pane, etc. is not
+     * reset)
+     *
+     * @param pane Pane to draw the room within
+     */
     public void draw(Pane pane) {
         for (int r = 0; r < width; r++) {
             for (int c = 0; c < height; c++) {
@@ -43,7 +57,6 @@ public class Room implements Physical {
                 }
 
                 Sprite s = new Sprite(r * tileWidth, c * tileHeight, tileWidth, tileHeight,
-                        "floor_type",
                         new Image(getClass().getResource(spriteToDraw).toExternalForm()));
 
                 pane.getChildren().add(s);
@@ -52,6 +65,12 @@ public class Room implements Physical {
             }
         }
     }
+    /**
+     * Updates physics of the room relative to its old physics and the
+     * camera physics
+     *
+     * @param camera Camera to extract physics information from
+     */
     public void update(Camera camera) {
         // Room moves with the camera
         physics.update();
@@ -70,19 +89,39 @@ public class Room implements Physical {
 
 
     // Getters
+    /**
+     * Gets a specific exit location
+     *
+     * @param index index to get exit location from
+     * @return exit location at specified index
+     */
     public Vector2D getExitLocation(int index) {
         return exitLocations[index];
     }
+    /**
+     * NOTE: Exit locations are represented by a list of vectors.
+     * @return list of vectors representing exit locations
+     */
     public Vector2D[] getExitLocations() {
         return exitLocations;
     }
+    /**
+     * @return room width
+     */
     public int getWidth() {
         return width;
     }
+    /**
+     * @return room height
+     */
     public int getHeight() {
         return height;
     }
 
+    /**
+     * @return physics of the room (important
+     * for smooth camera physics)
+     */
     @Override
     public PhysicsController getPhysics() {
         return physics;

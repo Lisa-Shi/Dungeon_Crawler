@@ -27,7 +27,10 @@ public class GameStage extends Stage {
     private Camera camera;
     private Room room;
 
-    // SEE: https://www.youtube.com/watch?v=FVo1fm52hz0
+    /**
+     * Constructs the Stage where the main game takes place
+     * Adapted from https://www.youtube.com/watch?v=FVo1fm52hz0
+     */
     public GameStage() {
         player = new Player("Test Player", new Weapon("Test Weapon",
                 "A test weapon.", 3, 5), 200, 200);
@@ -41,6 +44,13 @@ public class GameStage extends Stage {
         room = new Room(20, 20, exitLocations);
     }
 
+    /**
+     * Finishes setting up the room where the main game
+     * takes place
+     *
+     * @param stage Stage to set up main game on
+     * @throws Exception
+     */
     public void start(Stage stage) throws Exception {
         Scene scene = new Scene(createContent());
 
@@ -68,6 +78,12 @@ public class GameStage extends Stage {
 
     }
 
+    /**
+     * Sets up the parent Pane object where the main game
+     * takes place
+     *
+     * @return the created parent
+     */
     private Parent createContent() {
         pane.setPrefSize(Main.GAME_WIDTH, Main.GAME_HEIGHT);
 
@@ -85,6 +101,10 @@ public class GameStage extends Stage {
         return pane;
     }
 
+    /**
+     * Updates room physics, player movement from keyboard input,
+     * etc.
+     */
     public void update() {
         if (playerIsMovingUp) {
             player.getPhysics().pushUp(Main.DEFAULT_CONTROL_PLAYER_FORCE);
@@ -105,8 +125,13 @@ public class GameStage extends Stage {
 
     }
 
-    // Thanks to https://stackoverflow.com/questions/39007382/moving-two-rectangles-with-keyboard-in-javafx
 
+    /**
+     * Derived from https://stackoverflow.com/questions/39007382/moving-two-rectangles-with-keyboard-in-javafx
+     * Register key press to start moving player in direction specified
+     *
+     * @return the event information
+     */
     private EventHandler<KeyEvent> keyPressed = new EventHandler<KeyEvent>() {
         @Override
         public void handle(KeyEvent event) {
@@ -124,6 +149,12 @@ public class GameStage extends Stage {
             }
         }
     };
+    /**
+     * Derived from https://stackoverflow.com/questions/39007382/moving-two-rectangles-with-keyboard-in-javafx
+     * Register key release to stop moving player in direction specified
+     *
+     * @return the event information
+     */
     private EventHandler<KeyEvent> keyReleased = new EventHandler<KeyEvent>() {
 
         @Override

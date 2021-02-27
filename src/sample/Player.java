@@ -76,7 +76,7 @@ public class Player implements Physical {
     }
     public void setMoney(int money) {
         this.money = money;
-
+    }
     public void setName(String name) {
         this.name = name;
     }

@@ -11,6 +11,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -80,7 +81,7 @@ public class Main extends Application {
                 }
                 alert.showAndWait();
             }else {
-                primaryStage.setScene(new Scene(root, GAME_WIDTH, GAME_HEIGHT, false, SceneAntialiasing.DISABLED));
+                primaryStage.setScene(new Scene(new Pane(), GAME_WIDTH, GAME_HEIGHT, false, SceneAntialiasing.DISABLED));
 
                 GameStage r = new GameStage();
 

@@ -1,8 +1,12 @@
 package sample;
 
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -32,10 +36,12 @@ public class WelcomeScreen {
             Stage stage = (Stage)exitButton.getScene().getWindow();
             stage.close();
         });
-        buttonBox.getChildren().addAll(startButton, exitButton);
-
         border.setTop(title);
-        border.setBottom(buttonBox);
+
+        //builds buttons to be in bottom L/R corners
+        HBox bottom = LRNavigate.buildBox(exitButton, startButton);
+        bottom.setPadding(new Insets(10));
+        border.setBottom(bottom);
 
         return border;
 

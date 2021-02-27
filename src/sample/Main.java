@@ -16,6 +16,8 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
     // Variables
+    private Stage mainWindow;
+
     public static final int GAME_WIDTH = 800;
     public static final int GAME_HEIGHT = 800;
 
@@ -38,62 +40,78 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+        mainWindow = primaryStage;
+        //Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
 
+        mainWindow.setTitle("Dungeon Crawler");
+        //primaryStage.setScene(new Scene(root, GAME_WIDTH, GAME_HEIGHT,
+                //false, SceneAntialiasing.DISABLED));
+        goWelcome();
+    }
 
-        primaryStage.setTitle("Dungeon Crawler");
-        primaryStage.setScene(new Scene(root, GAME_WIDTH, GAME_HEIGHT,
-                false, SceneAntialiasing.DISABLED));
-
+    /**
+     * Sets the stage to welcome scene
+     */
+    private void goWelcome() {
         //Creates the welcome screen
         WelcomeScreen welcome = new WelcomeScreen();
 
         BorderPane welcomeLayout = welcome.welcomeLayout();
-
-        primaryStage.setScene(new Scene(welcomeLayout, GAME_WIDTH, GAME_HEIGHT));
-        primaryStage.show();
-
-        //Creates the configuration screen and layout
-        ConfigurationScreen configScreen = new ConfigurationScreen();
-        BorderPane config = configScreen.configLayout();
-
-        //Button for moving to next scene
-        Button goRoom = new Button("Go to room");
-        config.setBottom(goRoom);
-
-        //Creates config scene
-        Scene configScene = new Scene(config, GAME_WIDTH, GAME_HEIGHT);
+        mainWindow.setScene(new Scene(welcomeLayout, GAME_WIDTH, GAME_HEIGHT));
+        mainWindow.show();
 
         //Sets button to move to config scene from welcome
         welcome.startButton.setOnAction(e -> {
-            primaryStage.setScene(configScene);
+            goConfigScreen();
         });
+    }
 
-        //Button action for moving
+    /**
+     * Sets the stage to configuration scene
+     */
+    private void goConfigScreen() {
+        //Creates the configuration screen and layout
+        ConfigurationScreen configScene = new ConfigurationScreen(GAME_WIDTH, GAME_HEIGHT);
+
+        //display scene
+        Scene scene = configScene.getScene();
+        mainWindow.setScene(scene);
+        mainWindow.show();
+
+        //Button for moving
+        Button goRoom = configScene.getGoRoom();
+        Button goBack = configScene.getGoBack();
+
+        //Button action for moving to Room
         goRoom.setOnAction(event -> {
-            player = configScreen.createChar();
-            if(player != null && !player.isLegal()){
+            //initialize player
+            player = configScene.createChar();
+            if (player != null && !player.isLegal()){
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                if(player.getName().equals("")) {
+                if (player.getName().equals("")) {
                     alert.setContentText("please enter a name");
-                }else if(player.getDifficulty() == -1){
+                } else if(player.getDifficulty() == -1){
                     alert.setContentText("please select difficulty");
                 }
                 alert.showAndWait();
-            }else {
-                primaryStage.setScene(new Scene(new Pane(), GAME_WIDTH, GAME_HEIGHT, false, SceneAntialiasing.DISABLED));
-
-                GameStage r = new GameStage();
-
-                try {
-                    r.start(primaryStage);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            } else {
+                goToRoom();
             }
         });
     }
 
+    /**
+     * Sets the stage to room
+     */
+    private void goToRoom() {
+        mainWindow.setScene(new Scene(new Pane(), GAME_WIDTH, GAME_HEIGHT, false, SceneAntialiasing.DISABLED));
+        GameStage r = new GameStage();
+        try {
+            r.start(mainWindow);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void main(String[] args) {
         launch(args);

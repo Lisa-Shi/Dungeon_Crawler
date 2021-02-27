@@ -1,3 +1,4 @@
+import javafx.scene.input.KeyCode;
 import org.testfx.assertions.api.Assertions;
 import sample.Main;
 import javafx.stage.Stage;
@@ -29,6 +30,7 @@ public class ConfigTest extends ApplicationTest {
         //need to setID to FX object in the screen classes
         clickOn("#nameInput").write("name");
         clickOn("Go to room");
+
         verifyThat("please select difficulty", NodeMatchers.isNotNull());
     }
     @Test
@@ -38,9 +40,6 @@ public class ConfigTest extends ApplicationTest {
         clickOn("1: easy");
         clickOn("Go to room");
         Player temp = new Player("name", null, 1);
-        ArrayList<String> list = new ArrayList<>();
-        list.add("name");
-        list.add("difficulty");
-        Assertions.assertThat(game.getPlayer()).isEqualToComparingOnlyGivenFields(list);
+        Assertions.assertThat(game.getPlayer()).isEqualToComparingOnlyGivenFields(temp, "name", "difficulty");
     }
 }

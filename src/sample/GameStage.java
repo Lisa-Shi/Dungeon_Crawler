@@ -30,10 +30,11 @@ public class GameStage extends Stage {
     /**
      * Constructs the Stage where the main game takes place
      * Adapted from https://www.youtube.com/watch?v=FVo1fm52hz0
+     *
+     * @param player the player user will be controlling in the game
      */
-    public GameStage() {
-        player = new Player("Test Player", new Weapon("Test Weapon",
-                "A test weapon.", 3, 5), 200, 200);
+    public GameStage(Player player) {
+        this.player = player;
         camera = new Camera(Main.GAME_WIDTH / 2, Main.GAME_HEIGHT / 2, player);
 
         Vector2D[] exitLocations = new Vector2D[4];

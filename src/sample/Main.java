@@ -91,18 +91,20 @@ public class Main extends Application {
                 }
                 alert.showAndWait();
             } else {
-                goToRoom();
+                goToRoom(player);
             }
         });
     }
 
     /**
      * Sets the stage to room
+     *
+     * @param player character that user will be controlling in the game
      */
-    private void goToRoom() {
+    private void goToRoom(Player player) {
         mainWindow.setScene(new Scene(new Pane(),
                 GAME_WIDTH, GAME_HEIGHT, false, SceneAntialiasing.DISABLED));
-        GameStage r = new GameStage();
+        GameStage r = new GameStage(player);
         try {
             r.start(mainWindow);
         } catch (Exception e) {

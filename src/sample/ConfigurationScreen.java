@@ -152,7 +152,7 @@ public class ConfigurationScreen {
         if (weapon != -1) {
             playerW = wOptions[weapon - 1];
         }
-        return new Player(name, playerW, difficulty);
+        return new Player(name, playerW, 0, 0, difficulty);
     }
 
     /**

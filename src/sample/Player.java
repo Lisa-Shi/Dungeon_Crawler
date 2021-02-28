@@ -25,10 +25,7 @@ public class Player implements Physical {
      * @param difficulty Difficulty player is playing on
      *
      */
-    public Player(String name, Weapon initialWeapon, int difficulty) {
-        this(name, initialWeapon, 0, 0);
-        this.difficulty = difficulty;
-    }
+
 
     /**
      * Constructs the Player object that the user will control
@@ -38,9 +35,10 @@ public class Player implements Physical {
      * @param initialWeapon Weapon player starts game with
      * @param initialX x-location player starts at
      * @param initialY y-location player starts at
-     *
+     * @param difficulty difficulty for the game
      */
-    public Player(String name, Weapon initialWeapon, double initialX, double initialY) {
+    public Player(String name, Weapon initialWeapon,
+                  double initialX, double initialY,  int difficulty) {
         this.name = name;
         weaponList = new ArrayList<>();
         weaponList.add(initialWeapon);
@@ -48,6 +46,14 @@ public class Player implements Physical {
                 Main.PLAYER_HEIGHT, Main.PLAYER_IMAGE);
 
         this.physics = new PhysicsController(initialX, initialY);
+        this.difficulty = difficulty;
+        if (difficulty == 1) {
+            money = 100;
+        } else if (difficulty == 2) {
+            money = 60;
+        } else {
+            money = 20;
+        }
     }
 
     /**

@@ -117,7 +117,7 @@ public class Main extends Application {
     }
 
     /**
-     * reture player. for testing purposes only
+     * Returns player. (for testing purposes only)
      * @return player
      */
     public Player getPlayer() {

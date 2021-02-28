@@ -26,7 +26,7 @@ public class Player implements Physical {
      *
      */
     public Player(String name, Weapon initialWeapon, int difficulty) {
-        this(name, initialWeapon, 0,0);
+        this(name, initialWeapon, 0, 0);
         this.difficulty = difficulty;
     }
 
@@ -69,7 +69,7 @@ public class Player implements Physical {
      *
      * @return if the player object is legal
      */
-    public boolean isLegal(){
+    public boolean isLegal() {
         return !(name.equals("") || difficulty == -1);
     }
 
@@ -125,14 +125,16 @@ public class Player implements Physical {
     /**
      * @return Player's name
      */
-    public String getName(){
+    public String getName() {
         return name;
     }
 
     /**
      * @return Difficult player is playing on
      */
-    public int getDifficulty(){ return difficulty;  }
+    public int getDifficulty() {
+        return difficulty;
+    }
 
 
     // Setters

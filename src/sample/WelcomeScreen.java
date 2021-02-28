@@ -1,20 +1,18 @@
 package sample;
 
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class WelcomeScreen {
 
-    public Button startButton;
-    public Button exitButton;
+    private Button startButton;
+    private Button exitButton;
 
     /**
      * Creates border pane for the welcome screen.
@@ -33,7 +31,7 @@ public class WelcomeScreen {
         startButton = new Button("Start Game");
         exitButton = new Button("Exit");
         exitButton.setOnAction(e -> {
-            Stage stage = (Stage)exitButton.getScene().getWindow();
+            Stage stage = (Stage) exitButton.getScene().getWindow();
             stage.close();
         });
         border.setTop(title);
@@ -45,5 +43,24 @@ public class WelcomeScreen {
 
         return border;
 
+    }
+
+    /**
+     * getter for exit button
+     *
+     * @return exit Button
+     */
+
+    public Button getExitButton() {
+        return exitButton;
+    }
+
+    /**
+     * getter for start button
+     *
+     * @return start button
+     */
+    public Button getStartButton() {
+        return startButton;
     }
 }

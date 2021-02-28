@@ -1,10 +1,6 @@
 package sample;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.control.Alert;
@@ -45,13 +41,13 @@ public class Main extends Application {
 
         mainWindow.setTitle("Dungeon Crawler");
         //primaryStage.setScene(new Scene(root, GAME_WIDTH, GAME_HEIGHT,
-                //false, SceneAntialiasing.DISABLED));
+        //false, SceneAntialiasing.DISABLED));
         goWelcome();
     }
 
     /**
-     * Sets the stage to welcome scene
-     */
+    *Sets the stage to welcome scene
+    */
     private void goWelcome() {
         //Creates the welcome screen
         WelcomeScreen welcome = new WelcomeScreen();
@@ -61,7 +57,7 @@ public class Main extends Application {
         mainWindow.show();
 
         //Sets button to move to config scene from welcome
-        welcome.startButton.setOnAction(e -> {
+        welcome.getStartButton().setOnAction(e -> {
             goConfigScreen();
         });
     }
@@ -86,11 +82,11 @@ public class Main extends Application {
         goRoom.setOnAction(event -> {
             //initialize player
             player = configScene.createChar();
-            if (player != null && !player.isLegal()){
+            if (player != null && !player.isLegal()) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 if (player.getName().equals("")) {
                     alert.setContentText("please enter a name");
-                } else if(player.getDifficulty() == -1){
+                } else if (player.getDifficulty() == -1) {
                     alert.setContentText("please select difficulty");
                 }
                 alert.showAndWait();
@@ -104,7 +100,8 @@ public class Main extends Application {
      * Sets the stage to room
      */
     private void goToRoom() {
-        mainWindow.setScene(new Scene(new Pane(), GAME_WIDTH, GAME_HEIGHT, false, SceneAntialiasing.DISABLED));
+        mainWindow.setScene(new Scene(new Pane(),
+                GAME_WIDTH, GAME_HEIGHT, false, SceneAntialiasing.DISABLED));
         GameStage r = new GameStage();
         try {
             r.start(mainWindow);
@@ -121,7 +118,7 @@ public class Main extends Application {
      * reture player. for testing purposes only
      * @return player
      */
-    public Player getPlayer(){
+    public Player getPlayer() {
         return player;
     }
 }

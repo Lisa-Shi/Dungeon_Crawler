@@ -49,9 +49,8 @@ public class GameStage extends Stage {
      * takes place
      *
      * @param stage Stage to set up main game on
-     * @throws Exception
      */
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         Scene scene = new Scene(createContent());
 
         pane.getChildren().add(player.getSprite());

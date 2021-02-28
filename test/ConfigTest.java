@@ -11,7 +11,7 @@ import static org.testfx.api.FxAssert.verifyThat;
 public class ConfigTest extends ApplicationTest {
     private Main game;
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
         game = new Main();
         game.start(primaryStage);
         clickOn("Start Game");
@@ -37,6 +37,7 @@ public class ConfigTest extends ApplicationTest {
         clickOn("1: easy");
         clickOn("Go to room");
         Player temp = new Player("name", null, 1);
-        Assertions.assertThat(game.getPlayer()).isEqualToComparingOnlyGivenFields(temp, "name", "difficulty");
+        Assertions.assertThat(game.getPlayer())
+                .isEqualToComparingOnlyGivenFields(temp, "name", "difficulty");
     }
 }

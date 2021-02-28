@@ -3,7 +3,7 @@ package sample;
 /**
  * for the weapon in drungeon Crawler
  */
-public class Weapon{
+public class Weapon {
     private String name;
     private String description;
     private int damage;
@@ -84,7 +84,7 @@ public class Weapon{
      * toString
      * @return the string that represents the weapon
      */
-    public String toString(){
+    public String toString() {
         return name;
     }
 
@@ -93,7 +93,7 @@ public class Weapon{
      * @param x the comparing weapon
      * @return true if they are equal, otherwise false
      */
-    public boolean equals(Weapon x){
+    public boolean equals(Weapon x) {
         return x.getName().equals(name) && x.getDamage() == damage;
     }
 

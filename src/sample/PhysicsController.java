@@ -95,7 +95,7 @@ public class PhysicsController {
     /**
      * Apply temporary force to the left
      *
-     * @params force Magnitude of the force to apply
+     * @param force Magnitude of the force to apply
      */
     public void pushLeft(double force) {
         push(new Vector2D(-1 * force, 0));
@@ -103,7 +103,7 @@ public class PhysicsController {
     /**
      * Apply temporary force to the right
      *
-     * @params force Magnitude of the force to apply
+     * @param force Magnitude of the force to apply
      */
     public void pushRight(double force) {
         push(new Vector2D(1 * force, 0));
@@ -111,7 +111,7 @@ public class PhysicsController {
     /**
      * Apply temporary force up
      *
-     * @params force Magnitude of the force to apply
+     * @param force Magnitude of the force to apply
      */
     public void pushUp(double force) {
         push(new Vector2D(0, -1 * force));
@@ -119,7 +119,7 @@ public class PhysicsController {
     /**
      * Apply temporary force down
      *
-     * @params force Magnitude of the force to apply
+     * @param force Magnitude of the force to apply
      */
     public void pushDown(double force) {
         push(new Vector2D(0, 1 * force));

@@ -1,11 +1,9 @@
 package sample;
 
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 
@@ -27,17 +25,18 @@ public class ConfigurationScreen {
     private Button goBack;
     private Button goRoom;
 
-    /**layout setup for the configuration Screen
-     * GUI objects are added to the pane in this method
-     * @return a setup pane that contains GUI objects
-     */
+
     public ConfigurationScreen(int width, int height) {
         this.width = width;
         this.height = height;
-        goBack = new Button ("Back");
-        goRoom = new Button ("Go to room");
+        goBack = new Button("Back");
+        goRoom = new Button("Go to room");
     }
-
+    /**layout setup for the configuration Screen
+     * GUI objects are added to the pane in this method
+     *
+     * @return a setup pane that contains GUI objects
+     */
     public Scene getScene() {
         //BorderPane border = new BorderPane();
         HBox nameIn = nameField();
@@ -142,14 +141,14 @@ public class ConfigurationScreen {
         //get user input from button
         name = nameInput.getText();
         ToggleButton selectD = (ToggleButton) difficultyToggles.getSelectedToggle();
-        difficulty = selectD == null ? -1 :Integer.parseInt(selectD.getText().charAt(0) + "");
+        difficulty = selectD == null ? -1 : Integer.parseInt(selectD.getText().charAt(0) + "");
         ToggleButton selectW = (ToggleButton) weaponToggles.getSelectedToggle();
-        weapon = selectW == null ? -1 :Integer.parseInt(selectW.getText().charAt(0) + "");
+        weapon = selectW == null ? -1 : Integer.parseInt(selectW.getText().charAt(0) + "");
         Weapon playerW = null;
         Weapon[] wOptions = new Weapon[3];
-        wOptions[0] = new Weapon("1name","1about",1,1);
-        wOptions[1] = new Weapon("2name","2about",1,1);
-        wOptions[2] = new Weapon("3name","3about",1,1);
+        wOptions[0] = new Weapon("1name", "1about", 1, 1);
+        wOptions[1] = new Weapon("2name", "2about", 1, 1);
+        wOptions[2] = new Weapon("3name", "3about", 1, 1);
         if (weapon != -1) {
             playerW = wOptions[weapon - 1];
         }

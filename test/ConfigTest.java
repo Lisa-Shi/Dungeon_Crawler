@@ -31,6 +31,15 @@ public class ConfigTest extends ApplicationTest {
         verifyThat("please select difficulty", NodeMatchers.isNotNull());
     }
     @Test
+    public void testNoWeapon() {
+        //Should still allow players to play even without weapon selection
+        clickOn("#nameInput").write("Hello");
+        clickOn("2: medium");
+        clickOn("Go to room");
+
+        Assertions.assertThat(game.getPlayer().getWeaponList().isEmpty());
+    }
+    @Test
     public void testValid() {
         //need to setID to FX object in the screen classes
         clickOn("#nameInput").write("name");

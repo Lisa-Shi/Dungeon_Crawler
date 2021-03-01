@@ -69,6 +69,11 @@ public class Player implements Physical {
                 + camera.getOffsetX() - Main.PLAYER_WIDTH / 2);
         sprite.setTranslateY(physics.getPosition().getY() - camera.getPhysics().getPosition().getY()
                 + camera.getOffsetY() - Main.PLAYER_HEIGHT / 2);
+
+        if (physics.getVelocity().len() > Main.MAX_PLAYER_SPEED) {
+            Vector2D relenVel = physics.getVelocity().relen(Main.MAX_PLAYER_SPEED);
+            physics.setVelocity(relenVel);
+        }
     }
 
     /**player is legal if the name is not empty string and difficulty is not -1

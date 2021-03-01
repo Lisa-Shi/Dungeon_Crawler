@@ -14,8 +14,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="lib" level="project" />
-    <orderEntry type="library" name="org.testfx:testfx-core:4.0.15-alpha" level="project" />
-    <orderEntry type="library" name="org.testfx:testfx-junit:4.0.15-alpha" level="project" />
     <orderEntry type="module-library" exported="">
       <library name="JUnit4">
         <CLASSES>
@@ -26,8 +24,10 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="testfx-core-4.0.0-20150226.214553-8-javadoc" level="application" />
-    <orderEntry type="library" name="org.testfx:testfx-core:4.0.16-alpha" level="project" />
-    <orderEntry type="library" name="org.loadui:testFx:3.1.2" level="project" />
+    <orderEntry type="library" exported="" name="testfx-core-4.0.0-20150226.214553-8-javadoc" level="application" />
+    <orderEntry type="library" exported="" name="org.testfx:testfx-core:4.0.16-alpha" level="project" />
+    <orderEntry type="library" exported="" name="org.loadui:testFx:3.1.2" level="project" />
+    <orderEntry type="library" name="org.testfx:testfx-core:4.0.15-alpha" level="application" />
+    <orderEntry type="library" name="org.testfx:testfx-junit:4.0.15-alpha" level="application" />
   </component>
 </module>

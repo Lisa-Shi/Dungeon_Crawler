@@ -24,8 +24,7 @@ public class WelcomeScreen {
         BorderPane border = new BorderPane();
 
         Label title = new Label("Dungeon Crawler");
-        Font titleFont = new Font("Times New Roman", 25);
-        title.setFont(titleFont);
+        title.setId("title"); //adds css styling
 
         VBox buttonBox = new VBox();
         startButton = new Button("Start Game");

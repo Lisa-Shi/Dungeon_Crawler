@@ -1,0 +1,29 @@
+.button {
+   -fx-background-color: rgb(61, 64, 91);
+   -fx-text-fill: rgb(244, 241, 222);
+   -fx-font-size: 20;
+}
+
+.toggle-button {
+    -fx-background-color: rgb(129, 178, 154);
+    -fx-text-fill: rgb(244, 241, 222);
+    -fx-font-size: 20;
+}
+.toggle-button:selected {
+    -fx-background-color: rgb(103, 142, 123);
+}
+
+.label {
+   -fx-text-fill: teal;
+   -fx-font-size: 20;
+}
+
+.button>.explanation {
+    -fx-font-size: 20;
+}
+
+#title {
+    -fx-font-size: 50;
+    -fx-font-family: "Times New Roman";
+}
+

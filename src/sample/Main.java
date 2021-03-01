@@ -57,9 +57,7 @@ public class Main extends Application {
         mainWindow.show();
 
         //Sets button to move to config scene from welcome
-        welcome.getStartButton().setOnAction(e -> {
-            goConfigScreen();
-        });
+        welcome.getStartButton().setOnAction(e -> goConfigScreen());
     }
 
     /**

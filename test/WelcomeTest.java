@@ -24,12 +24,4 @@ public class WelcomeTest extends ApplicationTest {
         verifyThat("Go to room", NodeMatchers.isVisible());
         verifyThat("Back", NodeMatchers.isVisible());
     }
-
-    /**
-     * Tests to see if exit button closes application. (Incomplete)
-     */
-    @Test
-    public void testExitButton() {
-        clickOn("Exit").sleep(5000);
-    }
 }

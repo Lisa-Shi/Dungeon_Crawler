@@ -30,3 +30,4 @@ openjfx-11.0.2_windows-x64_bin-sdk/**
 out/**
 .idea/**
 .DS_Store
+/test/Test_writeUp/~$_testWriteUp.docx

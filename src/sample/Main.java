@@ -84,6 +84,8 @@ public class Main extends Application {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 if (player.getName().equals("")) {
                     alert.setContentText("please enter a name");
+                } else if (player.getName().trim().equals("")){
+                    alert.setContentText("invalid name");
                 } else if (player.getDifficulty() == -1) {
                     alert.setContentText("please select difficulty");
                 }

@@ -1,5 +1,6 @@
 package sample;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
@@ -12,6 +13,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+
+import java.io.FileWriter;
 
 public class GameStage extends Stage {
     private Pane pane = new Pane();
@@ -43,6 +46,16 @@ public class GameStage extends Stage {
         exitLocations[2] = new Vector2D(9, 19);
         exitLocations[3] = new Vector2D(19, 9);
         room = new Room(20, 20, exitLocations);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            FileWriter file = new FileWriter("src\\rooms\\"+player.getName()+"_layout.txt");
+            String json = objectMapper.writeValueAsString(room);
+            file.write(json);
+            file.close();
+        }catch (Exception e){
+            System.out.println("IO EXCEPTION");
+        }
     }
 
     /**

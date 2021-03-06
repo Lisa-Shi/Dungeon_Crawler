@@ -30,5 +30,6 @@
     <orderEntry type="library" name="org.testfx:testfx-junit:4.0.15-alpha" level="application" />
     <orderEntry type="library" name="org.testfx:testfx-junit:4.0.15-alpha1" level="project" />
     <orderEntry type="library" name="org.testfx:testfx-core:4.0.15-alpha" level="project" />
+    <orderEntry type="library" name="com.fasterxml.jackson.core:jackson-databind:2.7.4" level="project" />
   </component>
 </module>

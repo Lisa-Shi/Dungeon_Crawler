@@ -1,19 +1,14 @@
 package sample;
 
-import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
 public class Monster implements Physical{
     //monster needs a name too. give some respect to the monster :)
-    @SerializedName("name")
     public String name;
-    @SerializedName("demage")
     private int demage;
     private PhysicsController physics;
-    @SerializedName("x")
     private int x;
-    @SerializedName("y")
     private int y;
     private Sprite sprite;
 

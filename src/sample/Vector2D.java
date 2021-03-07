@@ -123,7 +123,7 @@ public class Vector2D {
         }
         return false;
     }
-    
+
     @Override
     public int hashCode(){
         return (int)(this.x *100) * 101 + (int)(this.y * 100) * 179;

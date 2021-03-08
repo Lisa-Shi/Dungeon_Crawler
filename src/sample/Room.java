@@ -3,12 +3,16 @@ package sample;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 
+import java.util.LinkedList;
+
 public class Room implements Physical {
     // Variables
     private int width;
     private int height;
-    private Sprite[][] sprites;
-    private Exit[] exits;
+    private LinkedList<Physical> physicals;
+    private LinkedList<Collideable> collideables;
+    private LinkedList<Drawable> drawables;
+    private LinkedList<Exit> exits;
     private PhysicsController physics;
 
     // Constructors
@@ -17,18 +21,18 @@ public class Room implements Physical {
      *
      * @param width width of the room in tiles
      * @param height height of the room in tiles
-     * @param exits List of vectors, which represent locations of individual exits
      */
-    public Room(int width, int height, Exit[] exits) {
+    public Room(int width, int height) {
         this.width = width;
         this.height = height;
-        this.exits = exits;
-
-        // Sprites array so sprites can be moved around
-        this.sprites = new Sprite[width][height];
 
         // Physics so the camera works properly
         this.physics = new PhysicsController(0, 0);
+
+        this.physicals = new LinkedList<>();
+        this.collideables = new LinkedList<>();
+        this.exits = new LinkedList<>();
+        this.drawables = new LinkedList<>();
     }
 
     // Methods
@@ -39,30 +43,19 @@ public class Room implements Physical {
      *
      * @param pane Pane to draw the room within
      */
-    public void draw(Pane pane) {
+    public void finalize(Pane pane) {
         for (int r = 0; r < width; r++) {
             for (int c = 0; c < height; c++) {
-                int tileWidth = Main.TILE_WIDTH;
-                int tileHeight = Main.TILE_HEIGHT;
-
-                String spriteToDraw = "spr_dungeon_tile.png";
-
-                for (int exitIndex = 0; exitIndex < exits.length; exitIndex++) {
-                    Vector2D targetExit = exits[exitIndex].getLocation();
-
-                    // If found exit where player is, replace sprite
-                    if (targetExit.getX() == r && targetExit.getY() == c) {
-                        spriteToDraw = "spr_dungeon_exit.png";
-                    }
-                }
-
-                Sprite s = new Sprite(r * tileWidth, c * tileHeight, tileWidth, tileHeight,
-                        new Image(getClass().getResource(spriteToDraw).toExternalForm()));
-
-                pane.getChildren().add(s);
-
-                sprites[r][c] = s;
+                Tile tile = new Tile(this, r, c);
+                physicals.add(0, tile);
+                drawables.add(0, tile);
             }
+        }
+        addAllSprites(pane);
+    }
+    private void addAllSprites(Pane pane) {
+        for (Drawable drawable : drawables) {
+            pane.getChildren().add(drawable.getSprite());
         }
     }
     /**
@@ -75,36 +68,14 @@ public class Room implements Physical {
         // Room moves with the camera
         physics.update();
 
-        for (int r = 0; r < sprites.length; r++) {
-            for (int c = 0; c < sprites[r].length; c++) {
-                Sprite s = sprites[r][c];
-                s.setTranslateX(physics.getPosition().getX() + Main.TILE_WIDTH * r
-                        - camera.getPhysics().getPosition().getX() + camera.getOffsetX());
-                s.setTranslateY(physics.getPosition().getY() + Main.TILE_HEIGHT * c
-                        - camera.getPhysics().getPosition().getY() + camera.getOffsetY());
-            }
+        for (Physical physical : physicals) {
+            physical.update(camera);
         }
     }
 
 
 
     // Getters
-    /**
-     * Gets a specific exit location
-     *
-     * @param index index to get exit location from
-     * @return exit location at specified index
-     */
-    public Exit getExit(int index) {
-        return exits[index];
-    }
-    /**
-     * NOTE: Exit locations are represented by a list of vectors.
-     * @return list of vectors representing exit locations
-     */
-    public Exit[] getExits() {
-        return exits;
-    }
     /**
      * @return room width
      */
@@ -116,6 +87,14 @@ public class Room implements Physical {
      */
     public int getHeight() {
         return height;
+    }
+
+    // Setters
+    public void addExit(Exit exit) {
+        physicals.add(exit);
+        collideables.add(exit);
+        exits.add(exit);
+        drawables.add(exit);
     }
 
     /**

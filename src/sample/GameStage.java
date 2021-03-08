@@ -37,12 +37,14 @@ public class GameStage extends Stage {
         this.player = player;
         camera = new Camera(Main.GAME_WIDTH / 2, Main.GAME_HEIGHT / 2, player);
 
-        Exit[] exitLocations = new Exit[4];
-        exitLocations[0] = new Exit(new Vector2D(9, 0), null);
-        exitLocations[1] = new Exit(new Vector2D(0, 9), null);
-        exitLocations[2] = new Exit(new Vector2D(9, 19), null);
-        exitLocations[3] = new Exit(new Vector2D(19, 9), null);
-        room = new Room(20, 20, exitLocations);
+        room = new Room(20, 20);
+
+        room.addExit(new Exit(room, 9, 0, null));
+        room.addExit(new Exit(room, 0, 9, null));
+        room.addExit(new Exit(room, 9, 19, null));
+        room.addExit(new Exit(room, 19, 9, null));
+
+        //room.finalize(pane);
     }
 
     /**
@@ -96,7 +98,7 @@ public class GameStage extends Stage {
 
         timer.start();
 
-        room.draw(pane);
+        room.finalize(pane);
 
         return pane;
     }
@@ -121,7 +123,7 @@ public class GameStage extends Stage {
 
         room.update(camera);
         player.update(camera);
-        camera.update();
+        camera.update(null);
 
     }
 

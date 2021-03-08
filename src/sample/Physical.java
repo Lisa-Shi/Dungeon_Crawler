@@ -6,5 +6,6 @@ public interface Physical {
      *
      * @return physics information
      */
+    void update(Camera camera);
     PhysicsController getPhysics();
 }

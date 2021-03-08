@@ -23,8 +23,8 @@ public class Main extends Application {
     public static final double DEFAULT_CONTROL_PLAYER_FORCE = 0.45D;
     public static final double MAX_PLAYER_SPEED = 9D;
 
-    public static final int PLAYER_WIDTH = 40;
-    public static final int PLAYER_HEIGHT = 40;
+    public static final double PLAYER_WIDTH = 40;
+    public static final double PLAYER_HEIGHT = 40;
 
     public static final int TILE_WIDTH = 64;
     public static final int TILE_HEIGHT = 64;

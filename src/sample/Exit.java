@@ -1,21 +1,51 @@
 package sample;
 
-public class Exit {
+import javafx.scene.image.Image;
+
+public class Exit implements Physical, Collideable, Drawable {
     // Variables
-    private Vector2D location;
+    private PhysicsControllerRelative physics;
     private Room linkedRoom;
+    private CollisionBox collisionBox;
+    private Sprite sprite;
 
     // Constructors
-    public Exit(Vector2D location, Room linkedRoom) {
-        this.location = location;
+    public Exit(Room inRoom, double initialX, double initialY, Room linkedRoom) {
         this.linkedRoom = linkedRoom;
+
+        this.physics = new PhysicsControllerRelative(initialX * Main.TILE_WIDTH, initialY * Main.TILE_HEIGHT, inRoom);
+        this.collisionBox = new CollisionBoxRectangle(inRoom.getPhysics(), Main.TILE_WIDTH, Main.TILE_HEIGHT);
+
+        this.sprite = new Sprite((int) initialX * Main.TILE_WIDTH, (int) initialY * Main.TILE_HEIGHT, Main.TILE_WIDTH, Main.TILE_HEIGHT,
+                new Image(getClass().getResource("spr_dungeon_exit.png").toExternalForm()));
+    }
+
+    // Methods
+    public void update(Camera camera) {
+        physics.update();
+        sprite.setTranslateX(physics.getPosition().getX() - camera.getPhysics().getPosition().getX()
+                + camera.getOffsetX() - Main.PLAYER_WIDTH / 2);
+        sprite.setTranslateY(physics.getPosition().getY() - camera.getPhysics().getPosition().getY()
+                + camera.getOffsetY() - Main.PLAYER_HEIGHT / 2);
     }
 
     // Getters
-    public Vector2D getLocation() {
-        return location;
-    }
     public Room getLinkedRoom() {
         return linkedRoom;
+    }
+
+    @Override
+    public PhysicsController getPhysics() {
+        return physics;
+    }
+
+    @Override
+    public CollisionBox getCollisionBox() {
+        return collisionBox;
+    }
+
+    @Override
+    public Sprite getSprite() {
+        return sprite;
     }
 }

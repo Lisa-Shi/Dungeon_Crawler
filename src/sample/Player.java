@@ -3,7 +3,7 @@ package sample;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Player implements Physical {
+public class Player implements Physical, Collideable, Drawable {
 
     // Variables
     private String name;
@@ -12,6 +12,8 @@ public class Player implements Physical {
     private int holdingWeapon; // index of weapon in the weapon list
 
     private PhysicsController physics;
+    private CollisionBoxRectangle collisionBox;
+
     private Sprite sprite;
     private int money;
 
@@ -42,8 +44,8 @@ public class Player implements Physical {
         this.name = name;
         weaponList = new ArrayList<>();
         weaponList.add(initialWeapon);
-        sprite = new Sprite((int) initialX, (int) initialY, Main.PLAYER_WIDTH,
-                Main.PLAYER_HEIGHT, Main.PLAYER_IMAGE);
+        sprite = new Sprite((int) initialX, (int) initialY, (int) Main.PLAYER_WIDTH,
+                (int) Main.PLAYER_HEIGHT, Main.PLAYER_IMAGE);
 
         this.physics = new PhysicsController(initialX, initialY);
         this.difficulty = difficulty;
@@ -54,6 +56,8 @@ public class Player implements Physical {
         } else {
             money = 20;
         }
+
+        this.collisionBox = new CollisionBoxRectangle(physics, Main.PLAYER_WIDTH, Main.PLAYER_HEIGHT);
     }
 
     /**
@@ -90,6 +94,13 @@ public class Player implements Physical {
      */
     public PhysicsController getPhysics() {
         return physics;
+    }
+    /**
+     * @return Collision box
+     */
+    @Override
+    public CollisionBox getCollisionBox() {
+        return null;
     }
     /**
      * @return Sprite associated with the player

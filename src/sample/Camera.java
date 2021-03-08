@@ -30,7 +30,7 @@ public class Camera implements Physical {
     /**
      * Update the camera's sprite position and physics.
      */
-    public void update() {
+    public void update(Camera camera) {
         Vector2D camPosition = physics.getPosition();
         Vector2D followingPosition = following.getPhysics().getPosition();
 

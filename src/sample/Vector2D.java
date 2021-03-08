@@ -87,6 +87,12 @@ public class Vector2D {
         return norm().multiply(newLen);
     }
 
+    // toString()
+    @Override
+    public String toString() {
+        return "<" + x + ", " + y + ">";
+    }
+
     // Getters
     /**
      * @return x-component of vector

@@ -70,10 +70,7 @@ public class Player implements Physical, Collideable, Drawable {
      */
     public void update(Camera camera) {
         physics.update();
-        sprite.setTranslateX(physics.getPosition().getX() - camera.getPhysics().getPosition().getX()
-                + camera.getOffsetX() - Main.PLAYER_WIDTH / 2);
-        sprite.setTranslateY(physics.getPosition().getY() - camera.getPhysics().getPosition().getY()
-                + camera.getOffsetY() - Main.PLAYER_HEIGHT / 2);
+        updateSprite(camera);
 
         if (physics.getVelocity().len() > Main.MAX_PLAYER_SPEED) {
             Vector2D relenVel = physics.getVelocity().relen(Main.MAX_PLAYER_SPEED);
@@ -82,29 +79,44 @@ public class Player implements Physical, Collideable, Drawable {
     }
     public void update(Camera camera, LinkedList<Collideable> collideables) {
         Vector2D moveVel = physics.getVelocity();
-        Vector2D backtrackVel = moveVel.opposite().multiply(1 / 100D);
+        Vector2D backtrackVel = moveVel.opposite().multiply(0.01D);
 
         update(camera);
+        raytraceCollision(backtrackVel, collideables);
 
-        raytraceCollision(0, backtrackVel, collideables);
+        updateSprite(camera);
     }
-    private void raytraceCollision(int backtracks, Vector2D backtrackVel, LinkedList<Collideable> collideables) {
-        // Base case = max number of backtracks reached
-        if (backtracks >= 100) {
-            return;
-        }
+    private void updateSprite(Camera camera) {
+        sprite.setTranslateX(physics.getPosition().getX() - camera.getPhysics().getPosition().getX()
+                + camera.getOffsetX() - Main.PLAYER_WIDTH / 2);
+        sprite.setTranslateY(physics.getPosition().getY() - camera.getPhysics().getPosition().getY()
+                + camera.getOffsetY() - Main.PLAYER_HEIGHT / 2);
+    }
+    private void raytraceCollision(Vector2D backtrackVel, LinkedList<Collideable> collideables) {
+        int backtracks = 0;
+        boolean hasCollided = false;
 
-        // Move player back to test if safe from collisions
-        if (backtracks >= 1) {
-            physics.setPosition(physics.getPosition().add(backtrackVel));
-        }
+        do {
+            hasCollided = false;
 
-        // Test if there are any collisions, and continue moving player back
-        for (Collideable collideable : collideables) {
-            if (getCollisionBox().collidedWith(collideable.getCollisionBox())) {
-                raytraceCollision(backtracks + 1, backtrackVel, collideables);
-                break;
+            // Test if there are any collisions, and continue moving player back
+            for (Collideable collideable : collideables) {
+                if (getCollisionBox().collidedWith(collideable.getCollisionBox())) {
+                    hasCollided = true;
+                    break;
+                }
             }
+
+            if (hasCollided) {
+                // Move player back to test if safe from collisions
+                physics.setPosition(physics.getPosition().add(backtrackVel));
+                backtracks++;
+            }
+        } while (hasCollided);
+
+        if (backtracks >= 1) {
+            physics.setVelocity(physics.getVelocity().multiply(0));
+            physics.setAcceleration(physics.getAcceleration().multiply(0));
         }
     }
 

@@ -122,7 +122,7 @@ public class GameStage extends Stage {
         }
 
         room.update(camera);
-        player.update(camera);
+        player.update(camera, room.getCollideables());
         camera.update(null);
 
         // Check for collisions

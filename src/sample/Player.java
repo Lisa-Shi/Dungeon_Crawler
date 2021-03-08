@@ -1,6 +1,7 @@
 package sample;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Player implements Physical, Collideable, Drawable {
@@ -77,6 +78,33 @@ public class Player implements Physical, Collideable, Drawable {
         if (physics.getVelocity().len() > Main.MAX_PLAYER_SPEED) {
             Vector2D relenVel = physics.getVelocity().relen(Main.MAX_PLAYER_SPEED);
             physics.setVelocity(relenVel);
+        }
+    }
+    public void update(Camera camera, LinkedList<Collideable> collideables) {
+        Vector2D moveVel = physics.getVelocity();
+        Vector2D backtrackVel = moveVel.opposite().multiply(1 / 100D);
+
+        update(camera);
+
+        raytraceCollision(0, backtrackVel, collideables);
+    }
+    private void raytraceCollision(int backtracks, Vector2D backtrackVel, LinkedList<Collideable> collideables) {
+        // Base case = max number of backtracks reached
+        if (backtracks >= 100) {
+            return;
+        }
+
+        // Move player back to test if safe from collisions
+        if (backtracks >= 1) {
+            physics.setPosition(physics.getPosition().add(backtrackVel));
+        }
+
+        // Test if there are any collisions, and continue moving player back
+        for (Collideable collideable : collideables) {
+            if (getCollisionBox().collidedWith(collideable.getCollisionBox())) {
+                raytraceCollision(backtracks + 1, backtrackVel, collideables);
+                break;
+            }
         }
     }
 

@@ -17,13 +17,12 @@ public class Tile implements Physical, Drawable {
                 new Image(getClass().getResource("spr_dungeon_tile.png").toExternalForm()));
     }
 
-    @Override
     public void update(Camera camera) {
         physics.update();
         sprite.setTranslateX(physics.getPosition().getX() - camera.getPhysics().getPosition().getX()
-                + camera.getOffsetX() - Main.PLAYER_WIDTH / 2);
+                + camera.getOffsetX() - Main.TILE_WIDTH / 2);
         sprite.setTranslateY(physics.getPosition().getY() - camera.getPhysics().getPosition().getY()
-                + camera.getOffsetY() - Main.PLAYER_HEIGHT / 2);
+                + camera.getOffsetY() - Main.TILE_HEIGHT / 2);
     }
 
     // Getters

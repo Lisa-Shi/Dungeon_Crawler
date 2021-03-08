@@ -125,6 +125,12 @@ public class GameStage extends Stage {
         player.update(camera);
         camera.update(null);
 
+        // Check for collisions
+        for (Collideable collideable : room.getCollideables()) {
+            if (player.getCollisionBox().collidedWith(collideable.getCollisionBox())) {
+                //System.out.println("Collision detected with " + collideable);
+            }
+        }
     }
 
 

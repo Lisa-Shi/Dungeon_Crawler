@@ -64,6 +64,7 @@ public class Room implements Physical {
      *
      * @param camera Camera to extract physics information from
      */
+    @Override
     public void update(Camera camera) {
         // Room moves with the camera
         physics.update();
@@ -87,6 +88,14 @@ public class Room implements Physical {
      */
     public int getHeight() {
         return height;
+    }
+
+    public LinkedList<Physical> getPhysicals() {
+        return physicals;
+    }
+
+    public LinkedList<Collideable> getCollideables() {
+        return collideables;
     }
 
     // Setters

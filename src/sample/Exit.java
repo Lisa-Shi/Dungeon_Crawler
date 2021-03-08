@@ -14,7 +14,7 @@ public class Exit implements Physical, Collideable, Drawable {
         this.linkedRoom = linkedRoom;
 
         this.physics = new PhysicsControllerRelative(initialX * Main.TILE_WIDTH, initialY * Main.TILE_HEIGHT, inRoom);
-        this.collisionBox = new CollisionBoxRectangle(inRoom.getPhysics(), Main.TILE_WIDTH, Main.TILE_HEIGHT);
+        this.collisionBox = new CollisionBoxRectangle(physics, Main.TILE_WIDTH, Main.TILE_HEIGHT);
 
         this.sprite = new Sprite((int) initialX * Main.TILE_WIDTH, (int) initialY * Main.TILE_HEIGHT, Main.TILE_WIDTH, Main.TILE_HEIGHT,
                 new Image(getClass().getResource("spr_dungeon_exit.png").toExternalForm()));
@@ -24,9 +24,9 @@ public class Exit implements Physical, Collideable, Drawable {
     public void update(Camera camera) {
         physics.update();
         sprite.setTranslateX(physics.getPosition().getX() - camera.getPhysics().getPosition().getX()
-                + camera.getOffsetX() - Main.PLAYER_WIDTH / 2);
+                + camera.getOffsetX() - Main.TILE_WIDTH / 2);
         sprite.setTranslateY(physics.getPosition().getY() - camera.getPhysics().getPosition().getY()
-                + camera.getOffsetY() - Main.PLAYER_HEIGHT / 2);
+                + camera.getOffsetY() - Main.TILE_HEIGHT / 2);
     }
 
     // Getters

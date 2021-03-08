@@ -100,7 +100,7 @@ public class Player implements Physical, Collideable, Drawable {
      */
     @Override
     public CollisionBox getCollisionBox() {
-        return null;
+        return collisionBox;
     }
     /**
      * @return Sprite associated with the player

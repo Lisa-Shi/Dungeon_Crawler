@@ -8,7 +8,7 @@ public class Room implements Physical {
     private int width;
     private int height;
     private Sprite[][] sprites;
-    private Vector2D[] exitLocations;
+    private Exit[] exits;
     private PhysicsController physics;
 
     // Constructors
@@ -17,12 +17,12 @@ public class Room implements Physical {
      *
      * @param width width of the room in tiles
      * @param height height of the room in tiles
-     * @param exitLocations List of vectors, which represent locations of individual exits
+     * @param exits List of vectors, which represent locations of individual exits
      */
-    public Room(int width, int height, Vector2D[] exitLocations) {
+    public Room(int width, int height, Exit[] exits) {
         this.width = width;
         this.height = height;
-        this.exitLocations = exitLocations;
+        this.exits = exits;
 
         // Sprites array so sprites can be moved around
         this.sprites = new Sprite[width][height];
@@ -47,8 +47,8 @@ public class Room implements Physical {
 
                 String spriteToDraw = "spr_dungeon_tile.png";
 
-                for (int exitIndex = 0; exitIndex < exitLocations.length; exitIndex++) {
-                    Vector2D targetExit = exitLocations[exitIndex];
+                for (int exitIndex = 0; exitIndex < exits.length; exitIndex++) {
+                    Vector2D targetExit = exits[exitIndex].getLocation();
 
                     // If found exit where player is, replace sprite
                     if (targetExit.getX() == r && targetExit.getY() == c) {
@@ -95,15 +95,15 @@ public class Room implements Physical {
      * @param index index to get exit location from
      * @return exit location at specified index
      */
-    public Vector2D getExitLocation(int index) {
-        return exitLocations[index];
+    public Exit getExit(int index) {
+        return exits[index];
     }
     /**
      * NOTE: Exit locations are represented by a list of vectors.
      * @return list of vectors representing exit locations
      */
-    public Vector2D[] getExitLocations() {
-        return exitLocations;
+    public Exit[] getExits() {
+        return exits;
     }
     /**
      * @return room width

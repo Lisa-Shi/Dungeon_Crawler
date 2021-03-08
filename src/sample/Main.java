@@ -18,7 +18,7 @@ public class Main extends Application {
     public static final int GAME_HEIGHT = 800;
 
     public static final double DEFAULT_FORCE = 1;
-    public static final double DEFAULT_FRICTIONAL_FORCE = 0.20D;
+    public static final double DEFAULT_FRICTIONAL_FORCE = 0.18D;
     public static final double DEFAULT_CAMERA_SLOWDOWN_FACTOR = 7; // similar to a frictional force
     public static final double DEFAULT_CONTROL_PLAYER_FORCE = 0.45D;
     public static final double MAX_PLAYER_SPEED = 9D;

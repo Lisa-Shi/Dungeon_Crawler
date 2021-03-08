@@ -37,11 +37,11 @@ public class GameStage extends Stage {
         this.player = player;
         camera = new Camera(Main.GAME_WIDTH / 2, Main.GAME_HEIGHT / 2, player);
 
-        Vector2D[] exitLocations = new Vector2D[4];
-        exitLocations[0] = new Vector2D(9, 0);
-        exitLocations[1] = new Vector2D(0, 9);
-        exitLocations[2] = new Vector2D(9, 19);
-        exitLocations[3] = new Vector2D(19, 9);
+        Exit[] exitLocations = new Exit[4];
+        exitLocations[0] = new Exit(new Vector2D(9, 0), null);
+        exitLocations[1] = new Exit(new Vector2D(0, 9), null);
+        exitLocations[2] = new Exit(new Vector2D(9, 19), null);
+        exitLocations[3] = new Exit(new Vector2D(19, 9), null);
         room = new Room(20, 20, exitLocations);
     }
 

@@ -10,6 +10,13 @@ public class CollisionBoxRectangle extends CollisionBox {
         super(physics);
         this.width = width;
         this.height = height;
+
+        // Add vertices
+        addVertex(getTopLeftLocation());
+        addVertex(getTopRightLocation());
+        addVertex(getBottomRightLocation());
+        addVertex(getBottomLeftLocation());
+        generateBox();
     }
 
     // Methods
@@ -24,11 +31,6 @@ public class CollisionBoxRectangle extends CollisionBox {
         }
 
         return false;
-    }
-    @Override
-    public boolean collidedWith(CollisionBox other) {
-        return (other.containsPoint(getTopLeftLocation()) || other.containsPoint(getTopRightLocation())
-                || other.containsPoint(getBottomLeftLocation()) || other.containsPoint(getBottomRightLocation()));
     }
 
     // Getters

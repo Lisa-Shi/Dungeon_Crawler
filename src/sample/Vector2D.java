@@ -63,6 +63,15 @@ public class Vector2D {
         return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
     }
     /**
+     * Solves for the squared length of a vector
+     * Allows for a dot product optimization
+     *
+     * @return scalar result of operation
+     */
+    public double squaredLen() {
+       return x * x + y * y;
+    }
+    /**
      * Normalizes a vector (finds its unit vector)
      *
      * @return the unit vector
@@ -77,6 +86,14 @@ public class Vector2D {
         }
     }
     /**
+     * Finds a normal vector to the vector
+     *
+     * @return a normal vector
+     */
+    public Vector2D normal() {
+        return new Vector2D(-getY(), getX());
+    }
+    /**
      * Scales a vector up to an inputted length
      *
      * @param newLen new length of the vector
@@ -85,6 +102,45 @@ public class Vector2D {
      */
     public Vector2D relen(double newLen) {
         return norm().multiply(newLen);
+    }
+    /**
+     * Gets the dot product of two vectors
+     *
+     * @param other the other vector
+     *
+     * @return dot product of the vectors (a scalar)
+     */
+    public double dot(Vector2D other) {
+        return x * other.getX() + y * other.getY();
+    }
+    /**
+     * Performs a vector projection
+     *
+     * @param other vector to project onto
+     *
+     * @return projection of the vector onto the other
+     */
+    public Vector2D projectOnto(Vector2D other) {
+        double squaredLen = squaredLen();
+
+        if (squaredLen == 0) {
+            return new Vector2D(0, 0);
+        }
+
+        return other.multiply(dot(other) / other.dot(other));
+    }
+
+    /**
+     * Gets the squared distance between vectors
+     * (Not taking the square root is an optimization, as square root
+     * functions tend to be expensive)
+     *
+     * @param otherLen the other vector
+     *
+     * @return squared distance between the vectors
+     */
+    public double distanceSquared(Vector2D otherLen) {
+        return subtract(otherLen).squaredLen();
     }
 
     // toString()

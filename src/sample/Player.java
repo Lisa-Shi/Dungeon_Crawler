@@ -78,11 +78,9 @@ public class Player implements Physical, Collideable, Drawable {
         }
     }
     public void update(Camera camera, LinkedList<Collideable> collideables) {
-        Vector2D moveVel = physics.getVelocity();
-        Vector2D backtrackVel = moveVel.opposite().multiply(0.01D);
-
         update(camera);
-        raytraceCollision(backtrackVel, collideables);
+
+        raytraceCollision(collideables);
 
         updateSprite(camera);
     }
@@ -92,9 +90,10 @@ public class Player implements Physical, Collideable, Drawable {
         sprite.setTranslateY(physics.getPosition().getY() - camera.getPhysics().getPosition().getY()
                 + camera.getOffsetY() - Main.PLAYER_HEIGHT / 2);
     }
-    private void raytraceCollision(Vector2D backtrackVel, LinkedList<Collideable> collideables) {
+    private void raytraceCollision(LinkedList<Collideable> collideables) {
         int backtracks = 0;
         boolean hasCollided = false;
+        Vector2D backtrackVel = new Vector2D(0, 0);
 
         do {
             hasCollided = false;
@@ -102,8 +101,8 @@ public class Player implements Physical, Collideable, Drawable {
             // Test if there are any collisions, and continue moving player back
             for (Collideable collideable : collideables) {
                 if (getCollisionBox().collidedWith(collideable.getCollisionBox())) {
+                    backtrackVel = backtrackVel.add(getCollisionBox().calculateCollisionVector(collideable.getCollisionBox()).multiply(0.01D));
                     hasCollided = true;
-                    break;
                 }
             }
 
@@ -115,8 +114,8 @@ public class Player implements Physical, Collideable, Drawable {
         } while (hasCollided);
 
         if (backtracks >= 1) {
-            physics.setVelocity(physics.getVelocity().multiply(0));
-            physics.setAcceleration(physics.getAcceleration().multiply(0));
+            physics.setVelocity(physics.getVelocity().projectOnto(backtrackVel.normal()));
+            physics.setAcceleration(physics.getAcceleration().projectOnto(backtrackVel.normal()));
         }
     }
 

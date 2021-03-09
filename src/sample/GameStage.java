@@ -42,6 +42,7 @@ public class GameStage extends Stage {
         room.addExit(new Exit(room, 9, 0, null));
         room.addExit(new Exit(room, 0, 9, null));
         room.addExit(new Exit(room, 9, 19, null));
+        room.addExit(new Exit(room, 10, 18, null));
         room.addExit(new Exit(room, 19, 9, null));
 
         //room.finalize(pane);
@@ -124,13 +125,6 @@ public class GameStage extends Stage {
         room.update(camera);
         player.update(camera, room.getCollideables());
         camera.update(null);
-
-        // Check for collisions
-        for (Collideable collideable : room.getCollideables()) {
-            if (player.getCollisionBox().collidedWith(collideable.getCollisionBox())) {
-                //System.out.println("Collision detected with " + collideable);
-            }
-        }
     }
 
 

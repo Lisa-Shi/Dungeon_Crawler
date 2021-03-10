@@ -1,6 +1,5 @@
 package sample;
 
-import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 
 import java.util.LinkedList;
@@ -12,7 +11,7 @@ public class Room implements Physical {
     private LinkedList<Physical> physicals;
     private LinkedList<Collideable> collideables;
     private LinkedList<Drawable> drawables;
-    private LinkedList<Exit> exits;
+    private LinkedList<ExitTile> exits;
     private PhysicsController physics;
 
     // Constructors
@@ -46,7 +45,7 @@ public class Room implements Physical {
     public void finalize(Pane pane) {
         for (int r = 0; r < width; r++) {
             for (int c = 0; c < height; c++) {
-                Tile tile = new Tile(this, r, c);
+                Tile tile = new FloorTile(this, r, c);
                 physicals.add(0, tile);
                 drawables.add(0, tile);
             }
@@ -99,11 +98,20 @@ public class Room implements Physical {
     }
 
     // Setters
-    public void addExit(Exit exit) {
-        physicals.add(exit);
-        collideables.add(exit);
-        exits.add(exit);
-        drawables.add(exit);
+    public void add(GameObject obj) {
+        if (obj instanceof Physical) {
+            // so far, all game objects are physical
+            physicals.add((Physical) obj);
+        }
+        if (obj instanceof Collideable) {
+            collideables.add((Collideable) obj);
+        }
+        if (obj instanceof ExitTile) {
+            exits.add((ExitTile) obj);
+        }
+        if (obj instanceof Drawable) {
+            drawables.add((Drawable) obj);
+        }
     }
 
     /**

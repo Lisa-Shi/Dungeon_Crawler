@@ -39,11 +39,14 @@ public class GameStage extends Stage {
 
         room = new Room(20, 20);
 
-        room.addExit(new Exit(room, 9, 0, null));
-        room.addExit(new Exit(room, 0, 9, null));
-        room.addExit(new Exit(room, 9, 19, null));
-        room.addExit(new Exit(room, 10, 18, null));
-        room.addExit(new Exit(room, 19, 9, null));
+        room.add(new ExitTile(room, 9, 0, null));
+        room.add(new ExitTile(room, 0, 9, null));
+        room.add(new ExitTile(room, 9, 19, null));
+        room.add(new ExitTile(room, 10, 18, null));
+        room.add(new ExitTile(room, 19, 9, null));
+
+        //room.add(new Diamond(room, 200, 200, 1000));
+        //room.add(new Diamond(room, 500, 200, 1000));
 
         //room.finalize(pane);
     }

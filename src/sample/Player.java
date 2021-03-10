@@ -13,7 +13,7 @@ public class Player implements Physical, Collideable, Drawable {
     private int holdingWeapon; // index of weapon in the weapon list
 
     private PhysicsController physics;
-    private CollisionBoxRectangle collisionBox;
+    private DynamicCollisionBox collisionBox;
 
     private Sprite sprite;
     private int money;
@@ -138,7 +138,7 @@ public class Player implements Physical, Collideable, Drawable {
      * @return Collision box
      */
     @Override
-    public CollisionBox getCollisionBox() {
+    public DynamicCollisionBox getCollisionBox() {
         return collisionBox;
     }
     /**

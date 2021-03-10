@@ -13,7 +13,7 @@ public class Exit implements Physical, Collideable, Drawable {
     public Exit(Room inRoom, double initialX, double initialY, Room linkedRoom) {
         this.linkedRoom = linkedRoom;
 
-        this.physics = new PhysicsControllerRelative(initialX * Main.TILE_WIDTH, initialY * Main.TILE_HEIGHT, inRoom);
+        this.physics = new PhysicsControllerRelative(initialX * Main.TILE_WIDTH, initialY * Main.TILE_HEIGHT, inRoom.getPhysics());
         this.collisionBox = new CollisionBoxRectangle(physics, Main.TILE_WIDTH, Main.TILE_HEIGHT);
 
         this.sprite = new Sprite((int) initialX * Main.TILE_WIDTH, (int) initialY * Main.TILE_HEIGHT, Main.TILE_WIDTH, Main.TILE_HEIGHT,

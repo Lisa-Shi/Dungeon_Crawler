@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public abstract class CollisionBox {
     // Variables
-    private PhysicsController physics;
+    private PhysicsControllerRelative physics;
     private ArrayList<Vector2D> vertices;
     private ArrayList<Vector2D> edges;
     private ArrayList<CollisionPoint> collisionPoints;
@@ -15,7 +15,7 @@ public abstract class CollisionBox {
 
     // Constructors
     public CollisionBox(PhysicsController physics) {
-        this.physics = physics;
+        this.physics = new PhysicsControllerRelative(physics.getPosition().getX(), physics.getPosition().getY(), physics);
         this.vertices = new ArrayList<>();
         this.edges = new ArrayList<>();
         this.collisionPoints = new ArrayList<>();
@@ -55,6 +55,7 @@ public abstract class CollisionBox {
             double edgeLength = targetEdge.len();
 
             int numCollisionPoints = (int) (edgeLength / Main.DEFAULT_COLLISION_PRECISION);
+
             double distBetweenCollisionPoints = edgeLength / (numCollisionPoints + 1);
 
             Vector2D targetEdgeNorm = targetEdge.norm();
@@ -64,27 +65,91 @@ public abstract class CollisionBox {
             }
         }
 
+        /*
+        for (int i = 0; i < vertices.size(); i++) {
+            // Vertex collision points
+            Vector2D pointPos = vertices.get(i);
+            int borderingVertexIndex = i - 1;
+            if (i - 1 == -1) {
+                borderingVertexIndex += vertices.size();
+            }
+
+            //collisionPoints.add(new CollisionPoint(pointPos, edges.get(i), edges.get(borderingVertexIndex)));
+        }
+        */
+
     }
-    public abstract boolean containsPoint(Vector2D point);
+
+    // https://stackoverflow.com/questions/1119627/how-to-test-if-a-point-is-inside-of-a-convex-polygon-in-2d-integer-coordinates
+    public boolean containsPoint(Vector2D absolutePoint) {
+        Vector2D relativePoint = absolutePoint.subtract(getPhysics().getAbsolutePosition());
+
+        int intersections = 0;
+        int pos = 0;
+        int neg = 0;
+
+        for (int i = 0; i < vertices.size(); i++) {
+            int indexOfNextVertex = i + 1;
+            if (indexOfNextVertex >= vertices.size()) {
+                indexOfNextVertex = 0;
+            }
+
+            double x1 = vertices.get(i).getX();
+            double y1 = vertices.get(i).getY();
+            double x2 = vertices.get(indexOfNextVertex).getX();
+            double y2 = vertices.get(indexOfNextVertex).getY();
+
+            double x = relativePoint.getX();
+            double y = relativePoint.getY();
+
+            double cross = (x - x1) * (y2-y1) - (y - y1) * (x2 - x1);
+
+            if (cross > 0) {
+                pos++;
+            }
+
+            if (cross < 0) {
+                neg++;
+            }
+
+            if (pos > 0 && neg > 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     public boolean collidedWith(CollisionBox other) {
         for (CollisionPoint cp : collisionPoints) {
-            if (other.containsPoint(physics.getPosition().add(cp.getPosition()))) {
+            if (other.containsPoint(physics.getAbsolutePosition().add(cp.getPosition()))) {
                 return true;
             }
         }
         return false;
     }
     public Vector2D calculateCollisionVector(CollisionBox other) {
-        Vector2D collisionVector = new Vector2D(0, 0);
+        Vector2D collisionVectorVertices = new Vector2D(0, 0);
+        Vector2D collisionVectorEdges = new Vector2D(0, 0);
+        boolean foundEdge = false;
 
         for (CollisionPoint cp : collisionPoints) {
-            if (other.containsPoint(physics.getPosition().add(cp.getPosition()))) {
-                collisionVector = collisionVector.add(cp.getNormalTowardPoint(center));
+            if (other.containsPoint(physics.getAbsolutePosition().add(cp.getPosition()))) {
+                if (cp.getOnEdges().size() == 1) {
+                    foundEdge = true;
+                    collisionVectorEdges = collisionVectorEdges.add(cp.getNormalTowardPoint(center));
+                }
+                if (!foundEdge) {
+                    collisionVectorVertices = collisionVectorVertices.add(cp.getNormalTowardPoint(center));
+                }
             }
         }
 
-        return collisionVector.norm();
+        if (foundEdge) {
+            return collisionVectorEdges.norm();
+        } else {
+            return collisionVectorVertices.norm();
+        }
     }
 
     @Override
@@ -97,7 +162,7 @@ public abstract class CollisionBox {
     }
 
     // Getters
-    public PhysicsController getPhysics() {
+    public PhysicsControllerRelative getPhysics() {
         return physics;
     }
 

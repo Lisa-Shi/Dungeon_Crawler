@@ -121,7 +121,7 @@ public class Vector2D {
      * @return projection of the vector onto the other
      */
     public Vector2D projectOnto(Vector2D other) {
-        double squaredLen = squaredLen();
+        double squaredLen = other.squaredLen();
 
         if (squaredLen == 0) {
             return new Vector2D(0, 0);

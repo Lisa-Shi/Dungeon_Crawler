@@ -12,7 +12,7 @@ public class Tile implements Physical, Drawable {
         double tileX = (int) (initialX * Main.TILE_WIDTH);
         double tileY = (int) (initialY * Main.TILE_HEIGHT);
 
-        this.physics = new PhysicsControllerRelative(tileX, tileY, room);
+        this.physics = new PhysicsControllerRelative(tileX, tileY, room.getPhysics());
         this.sprite = new Sprite((int) tileX, (int) tileY, Main.TILE_WIDTH, Main.TILE_HEIGHT,
                 new Image(getClass().getResource("spr_dungeon_tile.png").toExternalForm()));
     }

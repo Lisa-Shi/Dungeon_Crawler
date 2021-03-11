@@ -48,14 +48,17 @@ public class Main extends Application {
     }
 
     /**
-    *Sets the stage to welcome scene
-    */
+     *Sets the stage to welcome scene
+     */
     private void goWelcome() {
         //Creates the welcome screen
         WelcomeScreen welcome = new WelcomeScreen();
 
         BorderPane welcomeLayout = welcome.welcomeLayout();
-        mainWindow.setScene(new Scene(welcomeLayout, GAME_WIDTH, GAME_HEIGHT));
+        Scene scene = new Scene(welcomeLayout, GAME_WIDTH, GAME_HEIGHT);
+        scene.getStylesheets().add("stylesheet.css");
+        mainWindow.setScene(scene);
+
         mainWindow.show();
 
         //Sets button to move to config scene from welcome
@@ -77,6 +80,10 @@ public class Main extends Application {
         //Button for moving
         Button goRoom = configScene.getGoRoom();
         Button goBack = configScene.getGoBack();
+
+        goBack.setOnAction(e -> {
+            goWelcome();
+        });
 
         //Button action for moving to Room
         goRoom.setOnAction(event -> {

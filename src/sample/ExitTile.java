@@ -1,7 +1,5 @@
 package sample;
 
-import javafx.scene.image.Image;
-
 public class ExitTile extends Tile implements Collideable {
     // Variables
     private Room linkedRoom;
@@ -11,7 +9,8 @@ public class ExitTile extends Tile implements Collideable {
     public ExitTile(Room inRoom, double initialX, double initialY, Room linkedRoom) {
         super(inRoom, initialX, initialY, "spr_dungeon_exit.png");
         this.linkedRoom = linkedRoom;
-        this.collisionBox = new CollisionBoxRectangle(getPhysics(), Main.TILE_WIDTH, Main.TILE_HEIGHT);
+        this.collisionBox = new CollisionBox(getPhysics(), new RectangleWireframe(Main.TILE_WIDTH, Main.TILE_HEIGHT));
+        this.collisionBox.generate();
     }
 
     // Getters

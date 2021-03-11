@@ -6,7 +6,7 @@ public class Diamond extends GameObject implements Collideable {
 
     public Diamond(Room room, double initialX, double initialY, double sideLength) {
         super(room, initialX, initialY, (sideLength * Math.sqrt(2)/2)/2, (sideLength * Math.sqrt(2)/2)/2,"spr_dungeon_tile.png");
-        this.collisionBox = new CollisionBoxDiamond(getPhysics(), sideLength);
+        this.collisionBox = new CollisionBox(getPhysics(), new DiamondWireframe(sideLength));
     }
 
     @Override

@@ -4,48 +4,24 @@ import java.util.ArrayList;
 
 public class DynamicCollisionBox extends CollisionBox {
     // Variables
-    private ArrayList<Vector2D> edges;
     private ArrayList<CollisionPoint> collisionPoints;
-    private Vector2D center;
 
     // Constructors
-    public DynamicCollisionBox(PhysicsController physics) {
-        super(physics);
-        this.edges = new ArrayList<>();
+    public DynamicCollisionBox(PhysicsController physics, PolygonWireframe wireframe) {
+        super(physics, wireframe);
         this.collisionPoints = new ArrayList<>();
-        this.center = new Vector2D(0, 0);
     }
 
     // Misc.
-    public void generateBox() {
-        // Generate the center of the box
-        int sumX = 0;
-        int sumY = 0;
-        for (int i = 0; i < getVertices().size(); i++) {
-            sumX += getVertices().get(i).getX();
-            sumY += getVertices().get(i).getY();
-        }
-        center.setX(sumX / getVertices().size());
-        center.setY(sumY / getVertices().size());
-        getPhysics().setPosition(center);
-
-        // Generate the edges of the box
-        for (int i = 0; i < getVertices().size(); i++) {
-            // Find the bordering vertex to draw an edge to
-            int borderingVertexIndex = i + 1;
-            if (i + 1 == getVertices().size()) {
-                borderingVertexIndex = 0;
-            }
-            Vector2D borderingVertex = getVertices().get(borderingVertexIndex);
-
-            Vector2D edge = borderingVertex.subtract(getVertices().get(i));
-            edges.add(edge);
-        }
-
-        // Generate the collision points
-        for (int i = 0; i < edges.size(); i++) {
+    @Override
+    public void generate() {
+        super.generate();
+        generateEdgeCollisionPoints();
+    }
+    private void generateEdgeCollisionPoints() {
+        for (int i = 0; i < getWireframe().getEdges().size(); i++) {
             // Find number of collision points to generate on this edge
-            Vector2D targetEdge = edges.get(i);
+            Vector2D targetEdge = getWireframe().getEdges().get(i);
             double edgeLength = targetEdge.len();
 
             int numCollisionPoints = (int) (edgeLength / Main.DEFAULT_COLLISION_PRECISION);
@@ -54,24 +30,21 @@ public class DynamicCollisionBox extends CollisionBox {
 
             Vector2D targetEdgeNorm = targetEdge.norm();
             for (int j = 1; j <= numCollisionPoints; j++) {
-                Vector2D pointPos = getVertices().get(i).add(targetEdgeNorm.multiply(distBetweenCollisionPoints * j));
+                Vector2D pointPos = getWireframe().getVertices().get(i).add(targetEdgeNorm.multiply(distBetweenCollisionPoints * j));
                 collisionPoints.add(new CollisionPoint(pointPos, targetEdge));
             }
         }
-
-        /*
-        for (int i = 0; i < vertices.size(); i++) {
-            // Vertex collision points
-            Vector2D pointPos = vertices.get(i);
+    }
+    private void generateVertexCollisionPoints() {
+        for (int i = 0; i < getWireframe().getVertices().size(); i++) {
+            Vector2D pointPos = getWireframe().getVertices().get(i);
             int borderingVertexIndex = i - 1;
             if (i - 1 == -1) {
-                borderingVertexIndex += vertices.size();
+                borderingVertexIndex += getWireframe().getVertices().size();
             }
 
-            //collisionPoints.add(new CollisionPoint(pointPos, edges.get(i), edges.get(borderingVertexIndex)));
+            collisionPoints.add(new CollisionPoint(pointPos, getWireframe().getEdges().get(i), getWireframe().getEdges().get(borderingVertexIndex)));
         }
-        */
-
     }
 
     public boolean collidedWith(CollisionBox other) {
@@ -91,10 +64,10 @@ public class DynamicCollisionBox extends CollisionBox {
             if (other.containsPoint(getPhysics().getAbsolutePosition().add(cp.getPosition()))) {
                 if (cp.getOnEdges().size() == 1) {
                     foundEdge = true;
-                    collisionVectorEdges = collisionVectorEdges.add(cp.getNormalTowardPoint(center));
+                    collisionVectorEdges = collisionVectorEdges.add(cp.getNormalTowardPoint(getWireframe().getCenter()));
                 }
                 if (!foundEdge) {
-                    collisionVectorVertices = collisionVectorVertices.add(cp.getNormalTowardPoint(center));
+                    collisionVectorVertices = collisionVectorVertices.add(cp.getNormalTowardPoint(getWireframe().getCenter()));
                 }
             }
         }
@@ -104,9 +77,5 @@ public class DynamicCollisionBox extends CollisionBox {
         } else {
             return collisionVectorVertices.norm();
         }
-    }
-
-    // Methods
-    public void generateDynamicBox() {
     }
 }

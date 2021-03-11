@@ -10,6 +10,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import java.awt.*;
+
 public class Main extends Application {
     // Variables
     private Stage mainWindow;
@@ -30,6 +32,8 @@ public class Main extends Application {
     public static final int TILE_HEIGHT = 64;
 
     public static final int DEFAULT_COLLISION_PRECISION = 8;
+
+    public static final PolygonWireframe TILE_WIREFRAME = new RectangleWireframe(Main.PLAYER_WIDTH, Main.PLAYER_HEIGHT);
 
     public static final Image PLAYER_IMAGE =
             new Image(Player.class.getResource("testimg.png").toExternalForm());

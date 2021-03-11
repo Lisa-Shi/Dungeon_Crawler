@@ -1,18 +1,12 @@
 package sample;
 
-public class CollisionBoxRectangle extends DynamicCollisionBox {
-    // TODO: Refactor
-
+public class RectangleWireframe extends PolygonWireframe {
     // Constructors
-    public CollisionBoxRectangle(PhysicsController physics, double width, double height) {
-        super(physics);
-
+    public RectangleWireframe(double width, double height) {
         // Add vertices
         addVertex(new Vector2D(-width/2, -height/2));
         addVertex(new Vector2D(width/2, -height/2));
         addVertex(new Vector2D(width/2, height/2));
         addVertex(new Vector2D(-width/2, height/2));
-
-        generateBox();
     }
 }

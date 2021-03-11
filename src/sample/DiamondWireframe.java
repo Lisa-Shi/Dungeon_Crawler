@@ -1,12 +1,8 @@
 package sample;
 
-public class CollisionBoxDiamond extends CollisionBox {
-    // TODO: Refactor
-
+public class DiamondWireframe extends PolygonWireframe {
     // Constructors
-    public CollisionBoxDiamond(PhysicsController physics, double sideLength) {
-        super(physics);
-
+    public DiamondWireframe(double sideLength) {
         // Add vertices
         int diagLength = (int) (sideLength / 2D * Math.sqrt(2) / 2D);
 

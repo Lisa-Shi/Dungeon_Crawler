@@ -58,7 +58,8 @@ public class Player implements Physical, Collideable, Drawable {
             money = 20;
         }
 
-        this.collisionBox = new CollisionBoxRectangle(physics, Main.PLAYER_WIDTH, Main.PLAYER_HEIGHT);
+        this.collisionBox = new DynamicCollisionBox(physics, new RectangleWireframe(Main.PLAYER_WIDTH, Main.PLAYER_HEIGHT));
+        this.collisionBox.generate();
     }
 
     /**

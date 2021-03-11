@@ -8,7 +8,7 @@ public class ExitTile extends Tile implements Passable {
     private CollisionBox collisionBox;
 
     // Constructors
-    public ExitTile(Room inRoom, double initialX, double initialY, Room linkedRoom) {
+    public ExitTile(Room inRoom, int initialX, int initialY, Room linkedRoom) {
         super(inRoom, initialX, initialY, "spr_dungeon_exit.png");
         this.linkedRoom = linkedRoom;
         this.collisionBox = new CollisionBox(getPhysics(), new RectangleWireframe(Main.TILE_WIDTH, Main.TILE_HEIGHT), false);

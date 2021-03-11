@@ -1,5 +1,6 @@
 package sample;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
@@ -12,6 +13,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+
+import java.io.FileWriter;
 
 public class GameStage extends Stage {
     private Pane pane = new Pane();
@@ -37,12 +40,16 @@ public class GameStage extends Stage {
         this.player = player;
         camera = new Camera(Main.GAME_WIDTH / 2, Main.GAME_HEIGHT / 2, player);
 
-        room = new Room(20, 20);
+        room = new Room(20, 20, "mainroom");
 
+        /*
         room.add(new ExitTile(room, 9, 0, null));
         room.add(new ExitTile(room, 0, 9, null));
         room.add(new ExitTile(room, 9, 19, null));
         room.add(new ExitTile(room, 19, 9, null));
+         */
+
+        room.generateExits();
 
         // test code, could make shapes into functions later
         room.add(new WallTile(room, 9, 9));
@@ -54,11 +61,6 @@ public class GameStage extends Stage {
         room.add(new WallTile(room, 11, 11));
         room.add(new WallTile(room, 7, 11));
         room.add(new WallTile(room, 11, 7));
-
-        //room.add(new Diamond(room, 200, 200, 1000));
-        //room.add(new Diamond(room, 500, 200, 1000));
-
-        //room.finalize(pane);
     }
 
     /**

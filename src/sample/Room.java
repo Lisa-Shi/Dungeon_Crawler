@@ -1,17 +1,27 @@
 package sample;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
-
 import java.util.LinkedList;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.*;
 
 public class Room implements Physical {
     // Variables
+    private static int roomId = 0;
+    private int id;
     private int width;
     private int height;
+    private String name;
+
     private LinkedList<Physical> physicals;
     private LinkedList<Collideable> collideables;
     private LinkedList<Drawable> drawables;
     private LinkedList<ExitTile> exits;
+
     private PhysicsController physics;
 
     // Constructors
@@ -20,8 +30,9 @@ public class Room implements Physical {
      *
      * @param width width of the room in tiles
      * @param height height of the room in tiles
+     * @param name name of the room (for saving purposes)
      */
-    public Room(int width, int height) {
+    public Room(int width, int height, String name) {
         this.width = width;
         this.height = height;
 
@@ -32,9 +43,24 @@ public class Room implements Physical {
         this.collideables = new LinkedList<>();
         this.exits = new LinkedList<>();
         this.drawables = new LinkedList<>();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            FileWriter fileWriter = new FileWriter(name + ".txt");
+            fileWriter.write(objectMapper.writeValueAsString(this));
+            fileWriter.close();
+        }catch (IOException e){
+            System.out.println("unable to store room");
+        }
     }
 
     // Methods
+    public void generateExits() {
+        add(new ExitTile(this, (int) (Math.random() * width), 0, null));
+        add(new ExitTile(this, (int) 0, (int) (Math.random() * height), null));
+        add(new ExitTile(this, (int) width - 1, (int) (Math.random() * height), null));
+        add(new ExitTile(this, (int) (Math.random() * width), height - 1, null));
+    }
     /**
      * Places the sprites that will be manipulated into the inputted pane
      * for the first time (do not call more than once if pane, etc. is not

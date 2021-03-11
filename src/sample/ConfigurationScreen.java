@@ -1,11 +1,19 @@
 package sample;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.layout.HBox;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.stage.Screen;
+import org.w3c.dom.css.RGBColor;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 /**
  * set up for the configuration screen.
@@ -38,23 +46,36 @@ public class ConfigurationScreen {
      * @return a setup pane that contains GUI objects
      */
     public Scene getScene() {
+        //sets background color
+        Color tan = Color.rgb(242, 204, 143);
+        BackgroundFill backColor = new BackgroundFill(tan, CornerRadii.EMPTY, Insets.EMPTY);
+        Background background = new Background(backColor);
+        BorderPane border = new BorderPane();
+        border.setBackground(background);
+
+        Scene configScene = new Scene(border, width, height);
+        configScene.getStylesheets().add("stylesheet.css");
+
         //BorderPane border = new BorderPane();
         HBox nameIn = nameField();
-        VBox diffIn = difficultyField();
-        VBox weapIn = weaponField();
-        VBox center = new VBox(nameIn, diffIn, weapIn);
+        TilePane diffIn = difficultyField();
+        //diffIn.setMinWidth(width/2);
+        TilePane weapIn = weaponField();
+        //weapIn.setMinWidth(width/2);
 
         //Creating a BorderPane layout
-        BorderPane border = new BorderPane();
-        border.setCenter(center);
+        border.setTop(nameIn);
+        border.setRight(diffIn);
+        border.setLeft(weapIn);
 
-        //HBox bottom = ;
+        nameIn.setAlignment(Pos.BOTTOM_CENTER);
+        diffIn.setAlignment(Pos.CENTER);
+        weapIn.setAlignment(Pos.CENTER);
+
         HBox bottom = LRNavigate.buildBox(goBack, goRoom);
         bottom.setPadding(new Insets(10));
         border.setBottom(bottom);
 
-        //creates scene
-        Scene configScene = new Scene(border, width, height);
         return configScene;
     }
 
@@ -70,6 +91,7 @@ public class ConfigurationScreen {
         HBox hb = new HBox();
         hb.getChildren().addAll(nameLabel, nameInput);
         hb.setSpacing(15);
+        hb.setPadding(new Insets(25,0,0,0));
         return hb;
     }
 
@@ -78,17 +100,19 @@ public class ConfigurationScreen {
      *
      * @return a group of toggle button for difficulty
      */
-    private VBox difficultyField() {
+    private TilePane difficultyField() {
         String[] dOptions = new String[3];
         dOptions[0] = "1: easy";
         dOptions[1] = "2: medium";
         dOptions[2] = "3: hard";
-        HBox dHb = new HBox();
+        Label groupLabel = new Label("Select difficulty: ");
+        TilePane dHb = new TilePane(Orientation.VERTICAL);
+        dHb.getChildren().add(groupLabel);
+
         //Setting difficulty for the player
         difficultyToggles = selectToggleB(dOptions, dHb);
-        //Setting up display
-        Label groupLabel = new Label("Select difficulty: ");
-        return new VBox(groupLabel, dHb);
+
+        return dHb;
     }
 
     /**
@@ -96,17 +120,21 @@ public class ConfigurationScreen {
      *
      * @return a group of toggle button for weapon
      */
-    private VBox weaponField() {
+    private TilePane weaponField() {
         String[] wOptions = new String[3];
-        wOptions[0] = "1name";
-        wOptions[1] = "2name";
-        wOptions[2] = "3name";
-        HBox wHb = new HBox();
+        wOptions[0] = "1 weapon";
+        wOptions[1] = "2 weapon";
+        wOptions[2] = "3 weapon";
+        TilePane wHb = new TilePane(Orientation.VERTICAL);
+        Label groupLabel = new Label("Select weapon: ");
+        wHb.getChildren().add(groupLabel);
+
         //Setting weapon for the player
         weaponToggles = selectToggleB(wOptions, wHb);
         //Setting up display
-        Label groupLabel = new Label("Select weapon: ");
-        return new VBox(groupLabel, wHb);
+
+
+        return wHb;
     }
 
     /**
@@ -117,14 +145,18 @@ public class ConfigurationScreen {
      * @param hb hbox that contains the toggle buttons
      * @return a group of toggle buttons
      */
-    private ToggleGroup selectToggleB(String[] buttonN, HBox hb) {
-        hb.setSpacing(15);
+    private ToggleGroup selectToggleB(String[] buttonN, TilePane hb) {
+        hb.setVgap(15);
+        hb.setPadding(new Insets(10, 10, 10, 10));
         ToggleGroup togGroup = new ToggleGroup();
         ToggleButton[] togBut = new ToggleButton[buttonN.length];
-        for (int i = 0; i < buttonN.length; i++) {
+        for (int i = buttonN.length - 1; i >= 0; i--) {
             //adds button to toggle button array
             togBut[i] = new ToggleButton(buttonN[i]);
-            //adds button to toggle group
+
+            //allows button to be bigger
+            togBut[i].setMinSize(width/3, height/8);
+
             togBut[i].setToggleGroup(togGroup);
             //adds button to h box container
             hb.getChildren().add(togBut[i]);
@@ -172,4 +204,23 @@ public class ConfigurationScreen {
     public Button getGoRoom() {
         return goRoom;
     }
+
+    /*
+    private ImageView createImage() {
+        StackPane base;
+        try {
+            Image titleImage = new Image(new FileInputStream("file:/Resources/maxim-revin-saiph21.jpg"));
+            ImageView imageView = new ImageView(titleImage);
+            imageView.setPreserveRatio(true);
+            imageView.setFitHeight(height);
+            imageView.setFitWidth(width);
+            re
+        } catch (FileNotFoundException e) {
+            base = new StackPane();
+            base.setBackground();
+            System.out.println("Unable to load image");
+        }
+    }
+
+     */
 }

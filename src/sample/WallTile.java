@@ -5,7 +5,7 @@ public class WallTile extends Tile implements Collideable {
     private CollisionBox collisionBox;
 
     // Constructors
-    public WallTile(Room inRoom, double initialX, double initialY) {
+    public WallTile(Room inRoom, int initialX, int initialY) {
         super(inRoom, initialX, initialY, "spr_dungeon_wall.png");
         this.collisionBox = new CollisionBox(getPhysics(), new RectangleWireframe(Main.TILE_WIDTH, Main.TILE_HEIGHT));
         this.collisionBox.generate();

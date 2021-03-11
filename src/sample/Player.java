@@ -25,17 +25,6 @@ public class Player implements Physical, Collideable, Drawable {
      *
      * @param name Player name
      * @param initialWeapon Weapon player starts game with
-     * @param difficulty Difficulty player is playing on
-     *
-     */
-
-
-    /**
-     * Constructs the Player object that the user will control
-     * to explore and escape the dungeon
-     *
-     * @param name Player name
-     * @param initialWeapon Weapon player starts game with
      * @param initialX x-location player starts at
      * @param initialY y-location player starts at
      * @param difficulty difficulty for the game
@@ -137,7 +126,7 @@ public class Player implements Physical, Collideable, Drawable {
      * @return if the player object is legal
      */
     public boolean isLegal() {
-        return !(name.equals("") || difficulty == -1);
+        return !(name.equals("") || difficulty == -1 || name.trim().equals(""));
     }
 
     // Getters

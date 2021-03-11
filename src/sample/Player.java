@@ -101,7 +101,7 @@ public class Player implements Physical, Collideable, Drawable {
 
             // Test if there are any collisions, and continue moving player back
             for (Collideable collideable : collideables) {
-                if (getCollisionBox().collidedWith(collideable.getCollisionBox())) {
+                if (collideable.getCollisionBox().isSolid() && getCollisionBox().collidedWith(collideable.getCollisionBox())) {
                     backtrackVel = backtrackVel.add(getCollisionBox().calculateCollisionVector(collideable.getCollisionBox()).multiply(0.01D));
                     hasCollided = true;
                 }

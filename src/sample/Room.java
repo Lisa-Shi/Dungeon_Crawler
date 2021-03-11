@@ -43,14 +43,33 @@ public class Room implements Physical {
      * @param pane Pane to draw the room within
      */
     public void finalize(Pane pane) {
+        addFloorTiles();
+        addSurroundingWalls();
+
+        addAllSprites(pane);
+    }
+    private void addFloorTiles() {
         for (int r = 0; r < width; r++) {
             for (int c = 0; c < height; c++) {
                 Tile tile = new FloorTile(this, r, c);
-                physicals.add(0, tile);
-                drawables.add(0, tile);
+                add(tile);
             }
         }
-        addAllSprites(pane);
+    }
+    private void addSurroundingWalls() {
+        // Add walls around the dungeon
+        for (int r = 0; r < width; r++) {
+            Tile topWall = new WallTile(this, r, -1);
+            Tile bottomWall = new WallTile(this, r, height);
+            add(topWall);
+            add(bottomWall);
+        }
+        for (int c = 0; c < height; c++) {
+            Tile leftWall = new WallTile(this, -1, c);
+            Tile rightWall = new WallTile(this, width, c);
+            add(leftWall);
+            add(rightWall);
+        }
     }
     private void addAllSprites(Pane pane) {
         for (Drawable drawable : drawables) {
@@ -101,16 +120,16 @@ public class Room implements Physical {
     public void add(GameObject obj) {
         if (obj instanceof Physical) {
             // so far, all game objects are physical
-            physicals.add((Physical) obj);
+            physicals.add(0, (Physical) obj);
         }
         if (obj instanceof Collideable) {
-            collideables.add((Collideable) obj);
+            collideables.add(0, (Collideable) obj);
         }
         if (obj instanceof ExitTile) {
-            exits.add((ExitTile) obj);
+            exits.add(0, (ExitTile) obj);
         }
         if (obj instanceof Drawable) {
-            drawables.add((Drawable) obj);
+            drawables.add(0, (Drawable) obj);
         }
     }
 

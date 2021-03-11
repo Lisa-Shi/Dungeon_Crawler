@@ -1,5 +1,6 @@
 package sample;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
@@ -13,6 +14,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
+import java.io.FileWriter;
+
 public class GameStage extends Stage {
     private Pane pane = new Pane();
 
@@ -25,7 +28,7 @@ public class GameStage extends Stage {
 
     private Player player;
     private Camera camera;
-    private Room room;
+    private Room startRoom;
 
     /**
      * Constructs the Stage where the main game takes place
@@ -36,13 +39,8 @@ public class GameStage extends Stage {
     public GameStage(Player player) {
         this.player = player;
         camera = new Camera(Main.GAME_WIDTH / 2, Main.GAME_HEIGHT / 2, player);
-
         Vector2D[] exitLocations = new Vector2D[4];
-        exitLocations[0] = new Vector2D(9, 0);
-        exitLocations[1] = new Vector2D(0, 9);
-        exitLocations[2] = new Vector2D(9, 19);
-        exitLocations[3] = new Vector2D(19, 9);
-        room = new Room(20, 20, exitLocations);
+        startRoom = new Room(20, 20, 4);
     }
 
     /**
@@ -96,7 +94,7 @@ public class GameStage extends Stage {
 
         timer.start();
 
-        room.draw(pane);
+        startRoom.draw(pane);
 
         return pane;
     }
@@ -119,7 +117,7 @@ public class GameStage extends Stage {
             player.getPhysics().pushRight(Main.DEFAULT_CONTROL_PLAYER_FORCE);
         }
 
-        room.update(camera);
+        startRoom.update(camera);
         player.update(camera);
         camera.update();
 

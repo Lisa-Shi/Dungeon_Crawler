@@ -31,6 +31,8 @@ public class Main extends Application {
 
     public static final Image PLAYER_IMAGE =
             new Image(Player.class.getResource("testimg.png").toExternalForm());
+    public static final Image MONSTER_IMAGE =
+            new Image(Player.class.getResource("monsterIMG.jpg").toExternalForm());
 
     private Player player;
 
@@ -91,6 +93,8 @@ public class Main extends Application {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 if (player.getName().equals("")) {
                     alert.setContentText("please enter a name");
+                } else if (player.getName().trim().equals("")){
+                    alert.setContentText("invalid name");
                 } else if (player.getDifficulty() == -1) {
                     alert.setContentText("please select difficulty");
                 }

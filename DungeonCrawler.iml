@@ -28,26 +28,9 @@
     <orderEntry type="library" exported="" name="testfx-core-4.0.0-20150226.214553-8-javadoc" level="application" />
     <orderEntry type="library" exported="" name="org.testfx:testfx-core:4.0.16-alpha" level="project" />
     <orderEntry type="library" exported="" name="org.loadui:testFx:3.1.2" level="project" />
-    <orderEntry type="library" name="org.testfx:testfx-core:4.0.15-alpha" level="application" />
     <orderEntry type="library" name="org.testfx:testfx-junit:4.0.15-alpha" level="application" />
     <orderEntry type="library" name="org.testfx:testfx-junit:4.0.15-alpha1" level="project" />
-    <orderEntry type="library" name="org.testfx:testfx-junit:4.0.13-alpha" level="application" />
-    <orderEntry type="library" name="org.testfx:testfx-core:4.0.13-alpha" level="application" />
-    <orderEntry type="module-library" scope="TEST">
-      <library name="JUnit5.4">
-        <CLASSES>
-          <root url="jar://$MAVEN_REPOSITORY$/org/junit/jupiter/junit-jupiter/5.4.2/junit-jupiter-5.4.2.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/junit/jupiter/junit-jupiter-api/5.4.2/junit-jupiter-api-5.4.2.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/apiguardian/apiguardian-api/1.0.0/apiguardian-api-1.0.0.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/opentest4j/opentest4j/1.1.1/opentest4j-1.1.1.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/junit/platform/junit-platform-commons/1.4.2/junit-platform-commons-1.4.2.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/junit/jupiter/junit-jupiter-params/5.4.2/junit-jupiter-params-5.4.2.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/junit/jupiter/junit-jupiter-engine/5.4.2/junit-jupiter-engine-5.4.2.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/junit/platform/junit-platform-engine/1.4.2/junit-platform-engine-1.4.2.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
+    <orderEntry type="library" name="org.testfx:testfx-core:4.0.15-alpha" level="project" />
+    <orderEntry type="library" name="com.fasterxml.jackson.core:jackson-databind:2.7.4" level="project" />
   </component>
 </module>

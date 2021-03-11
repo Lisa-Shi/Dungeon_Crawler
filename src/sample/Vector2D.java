@@ -114,4 +114,18 @@ public class Vector2D {
     public void setY(double y) {
         this.y = y;
     }
+
+
+    @Override
+    public boolean equals(Object other){
+        if( other instanceof Vector2D) {
+            return ((Vector2D)other).getX() == this.x && ((Vector2D)other).getY() == this.y;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode(){
+        return (int)(this.x *100) * 101 + (int)(this.y * 100) * 179;
+    }
 }

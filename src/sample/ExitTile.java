@@ -1,6 +1,8 @@
 package sample;
 
-public class ExitTile extends Tile implements Collideable {
+import javafx.scene.control.Alert;
+
+public class ExitTile extends Tile implements Passable {
     // Variables
     private Room linkedRoom;
     private CollisionBox collisionBox;
@@ -21,5 +23,10 @@ public class ExitTile extends Tile implements Collideable {
     @Override
     public CollisionBox getCollisionBox() {
         return collisionBox;
+    }
+
+    @Override
+    public void collisionWithPlayerEvent() {
+        // Linking rooms goes here!
     }
 }

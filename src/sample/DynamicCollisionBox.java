@@ -17,6 +17,7 @@ public class DynamicCollisionBox extends CollisionBox {
     public void generate() {
         super.generate();
         generateEdgeCollisionPoints();
+        //generateVertexCollisionPoints();
     }
     private void generateEdgeCollisionPoints() {
         for (int i = 0; i < getWireframe().getEdges().size(); i++) {

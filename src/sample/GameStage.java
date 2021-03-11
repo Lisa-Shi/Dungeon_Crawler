@@ -42,8 +42,18 @@ public class GameStage extends Stage {
         room.add(new ExitTile(room, 9, 0, null));
         room.add(new ExitTile(room, 0, 9, null));
         room.add(new ExitTile(room, 9, 19, null));
-        room.add(new ExitTile(room, 10, 18, null));
         room.add(new ExitTile(room, 19, 9, null));
+
+        // test code, could make shapes into functions later
+        room.add(new WallTile(room, 9, 9));
+        room.add(new WallTile(room, 8, 9));
+        room.add(new WallTile(room, 10, 9));;
+        room.add(new WallTile(room, 9, 8));
+        room.add(new WallTile(room, 9, 10));
+        room.add(new WallTile(room, 7, 7));
+        room.add(new WallTile(room, 11, 11));
+        room.add(new WallTile(room, 7, 11));
+        room.add(new WallTile(room, 11, 7));
 
         //room.add(new Diamond(room, 200, 200, 1000));
         //room.add(new Diamond(room, 500, 200, 1000));

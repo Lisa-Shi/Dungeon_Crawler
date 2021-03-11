@@ -93,30 +93,42 @@ public class Player implements Physical, Collideable, Drawable {
     }
     private void raytraceCollision(LinkedList<Collideable> collideables) {
         int backtracks = 0;
-        boolean hasCollided = false;
+        boolean hasCollidedWithSolid = false;
         Vector2D backtrackVel = new Vector2D(0, 0);
+        LinkedList<Passable> boundaries = new LinkedList<>();
 
         do {
-            hasCollided = false;
+            hasCollidedWithSolid = false;
 
             // Test if there are any collisions, and continue moving player back
             for (Collideable collideable : collideables) {
-                if (collideable.getCollisionBox().isSolid() && getCollisionBox().collidedWith(collideable.getCollisionBox())) {
-                    backtrackVel = backtrackVel.add(getCollisionBox().calculateCollisionVector(collideable.getCollisionBox()).multiply(0.01D));
-                    hasCollided = true;
+                boolean solid = collideable.getCollisionBox().isSolid();
+                boolean collided = getCollisionBox().collidedWith(collideable.getCollisionBox());
+                if (collided) {
+                    if (solid) {
+                        backtrackVel = backtrackVel.add(getCollisionBox().calculateCollisionVector(collideable.getCollisionBox()).multiply(0.01D));
+                        hasCollidedWithSolid = true;
+                    } else {
+                        boundaries.add((Passable) collideable);
+                    }
                 }
             }
 
-            if (hasCollided) {
+            if (hasCollidedWithSolid) {
                 // Move player back to test if safe from collisions
                 physics.setPosition(physics.getPosition().add(backtrackVel));
                 backtracks++;
             }
-        } while (hasCollided);
+        } while (hasCollidedWithSolid);
 
         if (backtracks >= 1) {
             physics.setVelocity(physics.getVelocity().projectOnto(backtrackVel.normal()));
             physics.setAcceleration(physics.getAcceleration().projectOnto(backtrackVel.normal()));
+        }
+
+        // Activate boundaries
+        for (Passable boundary : boundaries) {
+            boundary.collisionWithPlayerEvent();
         }
     }
 

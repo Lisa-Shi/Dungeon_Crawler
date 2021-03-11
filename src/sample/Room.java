@@ -1,14 +1,22 @@
 package sample;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.*;
+
 public class Room implements Physical {
     // Variables
+    private static int roomId = 0;
+    private int id;
     private int width;
     private int height;
     private Sprite[][] sprites;
-    private Vector2D[] exitLocations;
+    //map of exit to roomid
+    private Map<Vector2D, Integer> exitLocations;
     private PhysicsController physics;
 
     // Constructors
@@ -17,18 +25,38 @@ public class Room implements Physical {
      *
      * @param width width of the room in tiles
      * @param height height of the room in tiles
-     * @param exitLocations List of vectors, which represent locations of individual exits
+     * @param numOfExitLocation number of exit in the room
      */
-    public Room(int width, int height, Vector2D[] exitLocations) {
+    public Room(int width, int height, int numOfExitLocation) {
         this.width = width;
         this.height = height;
-        this.exitLocations = exitLocations;
-
+        exitLocations = new HashMap<>();
+        Random ran = new Random();
+        for( int i = 0 ; i < numOfExitLocation; i++){
+            int direction = ran.nextInt(4);
+            int number = ran.nextInt(20);
+            Vector2D[] exlocation = {new Vector2D(0, number), new Vector2D(19, number)
+                    , new Vector2D(number, 0), new Vector2D(number, 19)};
+            Vector2D exit = exlocation[direction];
+            if(this.exitLocations.containsKey(exit)){
+                i--;
+            }else {
+                this.exitLocations.put(exit, 0);
+            }
+        }
+        id = roomId++;
         // Sprites array so sprites can be moved around
         this.sprites = new Sprite[width][height];
-
         // Physics so the camera works properly
         this.physics = new PhysicsController(0, 0);
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            FileWriter fileWriter = new FileWriter(roomId + ".txt");
+            fileWriter.write(objectMapper.writeValueAsString(this));
+            fileWriter.close();
+        }catch (IOException e){
+            System.out.println("unable to store room");
+        }
     }
 
     // Methods
@@ -44,23 +72,11 @@ public class Room implements Physical {
             for (int c = 0; c < height; c++) {
                 int tileWidth = Main.TILE_WIDTH;
                 int tileHeight = Main.TILE_HEIGHT;
-
-                String spriteToDraw = "spr_dungeon_tile.png";
-
-                for (int exitIndex = 0; exitIndex < exitLocations.length; exitIndex++) {
-                    Vector2D targetExit = exitLocations[exitIndex];
-
-                    // If found exit where player is, replace sprite
-                    if (targetExit.getX() == r && targetExit.getY() == c) {
-                        spriteToDraw = "spr_dungeon_exit.png";
-                    }
-                }
-
+                String spriteToDraw = exitLocations.containsKey(new Vector2D(r, c))
+                        ? "spr_dungeon_exit.png" : "spr_dungeon_tile.png";
                 Sprite s = new Sprite(r * tileWidth, c * tileHeight, tileWidth, tileHeight,
                         new Image(getClass().getResource(spriteToDraw).toExternalForm()));
-
                 pane.getChildren().add(s);
-
                 sprites[r][c] = s;
             }
         }
@@ -89,21 +105,22 @@ public class Room implements Physical {
 
 
     // Getters
-    /**
+
+    /*   /**
      * Gets a specific exit location
      *
      * @param index index to get exit location from
      * @return exit location at specified index
-     */
+
     public Vector2D getExitLocation(int index) {
-        return exitLocations[index];
-    }
+        return exitLocations.keySet().get(index);
+    }*/
     /**
      * NOTE: Exit locations are represented by a list of vectors.
      * @return list of vectors representing exit locations
      */
-    public Vector2D[] getExitLocations() {
-        return exitLocations;
+    public ArrayList<Vector2D> getExitLocations() {
+        return new ArrayList<>(exitLocations.keySet());
     }
     /**
      * @return room width

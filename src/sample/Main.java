@@ -31,6 +31,8 @@ public class Main extends Application {
 
     public static final Image PLAYER_IMAGE =
             new Image(Player.class.getResource("testimg.png").toExternalForm());
+    public static final Image MONSTER_IMAGE =
+            new Image(Player.class.getResource("monsterIMG.jpg").toExternalForm());
 
     private Player player;
 

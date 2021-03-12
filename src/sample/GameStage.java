@@ -15,6 +15,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import java.io.FileWriter;
+import java.util.Random;
 
 public class GameStage extends Stage {
     private Pane pane = new Pane();
@@ -29,6 +30,7 @@ public class GameStage extends Stage {
     private Player player;
     private Camera camera;
     private Room room;
+    private Stage stage;
 
     /**
      * Constructs the Stage where the main game takes place
@@ -40,7 +42,7 @@ public class GameStage extends Stage {
         this.player = player;
         camera = new Camera(Main.GAME_WIDTH / 2, Main.GAME_HEIGHT / 2, player);
 
-        room = new Room(20, 20, "mainroom");
+        room = new Room(20, 20);
 
         /*
         room.add(new ExitTile(room, 9, 0, null));
@@ -49,12 +51,12 @@ public class GameStage extends Stage {
         room.add(new ExitTile(room, 19, 9, null));
          */
 
-        room.generateExits();
+        room.generateExits(4);
 
         // test code, could make shapes into functions later
         room.add(new WallTile(room, 9, 9));
         room.add(new WallTile(room, 8, 9));
-        room.add(new WallTile(room, 10, 9));;
+        room.add(new WallTile(room, 10, 9));
         room.add(new WallTile(room, 9, 8));
         room.add(new WallTile(room, 9, 10));
         room.add(new WallTile(room, 7, 7));
@@ -63,6 +65,30 @@ public class GameStage extends Stage {
         room.add(new WallTile(room, 11, 7));
     }
 
+    public void enterRoom(int roomId){
+        Random ran = new Random();
+        int exitNum = ran.nextInt(4)+1;
+        room = room.nextRoom(roomId);
+        room.generateExits(exitNum);
+        pane = new Pane();
+        pane.setPrefSize(Main.GAME_WIDTH, Main.GAME_HEIGHT);
+        room.finalize(pane);
+        Scene scene = new Scene(pane);
+        pane.getChildren().add(player.getSprite());
+        HBox infoBar = new HBox();
+        Text text = new Text();
+        text.setFont(new Font(20));
+        text.setText("$" + player.getMoney());
+        text.setX(0);
+        text.setY(20);
+        text.setTextAlignment(TextAlignment.LEFT);
+        infoBar.getChildren().add(text);
+        pane.getChildren().add(infoBar);
+        scene.setOnKeyPressed(keyPressed);
+        scene.setOnKeyReleased(keyReleased);
+        stage.setScene(scene);
+        stage.show();
+    }
     /**
      * Finishes setting up the room where the main game
      * takes place
@@ -70,6 +96,7 @@ public class GameStage extends Stage {
      * @param stage Stage to set up main game on
      */
     public void start(Stage stage) {
+        this.stage = stage;
         Scene scene = new Scene(createContent());
 
         pane.getChildren().add(player.getSprite());
@@ -104,18 +131,14 @@ public class GameStage extends Stage {
      */
     private Parent createContent() {
         pane.setPrefSize(Main.GAME_WIDTH, Main.GAME_HEIGHT);
-
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
                 update();
             }
         };
-
         timer.start();
-
         room.finalize(pane);
-
         return pane;
     }
 
@@ -137,6 +160,12 @@ public class GameStage extends Stage {
             player.getPhysics().pushRight(Main.DEFAULT_CONTROL_PLAYER_FORCE);
         }
 
+        for( ExitTile exit: room.getExits()){
+            if (exit.collisionWithPlayerEvent(player)){
+                enterRoom(exit.getLinkedRoom());
+                break;
+            }
+        }
         room.update(camera);
         player.update(camera, room.getCollideables());
         camera.update(null);
@@ -147,9 +176,8 @@ public class GameStage extends Stage {
      * Derived from https://stackoverflow.com/questions/39007382/moving-two-rectangles-with-keyboard-in-javafx
      * Register key press to start moving player in direction specified
      *
-     * @return the event information
      */
-    private EventHandler<KeyEvent> keyPressed = new EventHandler<KeyEvent>() {
+    private EventHandler<KeyEvent> keyPressed = new EventHandler<>() {
         @Override
         public void handle(KeyEvent event) {
             if (event.getCode() == KeyCode.A) {
@@ -170,9 +198,8 @@ public class GameStage extends Stage {
      * Derived from https://stackoverflow.com/questions/39007382/moving-two-rectangles-with-keyboard-in-javafx
      * Register key release to stop moving player in direction specified
      *
-     * @return the event information
      */
-    private EventHandler<KeyEvent> keyReleased = new EventHandler<KeyEvent>() {
+    private EventHandler<KeyEvent> keyReleased = new EventHandler<>() {
 
         @Override
         public void handle(KeyEvent event) {

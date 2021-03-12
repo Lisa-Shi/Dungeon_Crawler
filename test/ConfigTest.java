@@ -1,8 +1,5 @@
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.testfx.api.FxToolkit;
+
 import org.testfx.assertions.api.Assertions;
-import org.testfx.util.WaitForAsyncUtils;
 import sample.Main;
 import javafx.stage.Stage;
 import org.junit.Test;
@@ -10,7 +7,6 @@ import org.testfx.framework.junit.ApplicationTest;
 import org.testfx.matcher.base.NodeMatchers;
 import sample.Player;
 
-import java.util.concurrent.TimeoutException;
 
 import static org.testfx.api.FxAssert.verifyThat;
 

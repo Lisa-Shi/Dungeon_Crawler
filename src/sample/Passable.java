@@ -6,5 +6,5 @@ public interface Passable extends Collideable {
      * runs into the object
      *
      */
-    boolean collisionWithPlayerEvent(Player player);
+    void collisionWithPlayerEvent(Player player);
 }

@@ -140,15 +140,7 @@ public class GameStage extends Stage {
         if (playerIsMovingRight) {
             player.getPhysics().pushRight(Main.DEFAULT_CONTROL_PLAYER_FORCE);
         }
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        //here is the room transition
-        for( ExitTile exit: room.getExits()){
-            if (exit.collisionWithPlayerEvent(player)){
-                System.out.println("entering "+exit.getLinkedRoom().getRoomId());
-                enterRoom(exit);
-                break;
-            }
-        }
+
         room.update(camera);
         player.update(camera, room.getCollideables());
         camera.update(null);
@@ -157,11 +149,8 @@ public class GameStage extends Stage {
     /**
      * updating the scene to be the next room
      *
-     * @param fromExit the exitTile which player collided with to enter the next room
      */
-    public void enterRoom(ExitTile fromExit){
-        previousRoom = fromExit.getInRoom();
-        room = fromExit.getLinkedRoom();
+    public void enterRoom(Room room) {
         if( room.getRoomId() != 999) {
             room.generateExits(map.getAdjRooms(room));
         }

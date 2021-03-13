@@ -44,11 +44,9 @@ public class ExitTile extends Tile implements Passable {
     }
 
     @Override
-    public boolean collisionWithPlayerEvent(Player player) {
-        // Linking rooms goes here!
-        //center point of player
-        Vector2D playerCenter = player.getCollisionBox().getPhysics().getAbsolutePosition();
-        return this.collisionBox.containsPoint(playerCenter);
+    public void collisionWithPlayerEvent(Player player) {
+        System.out.println("entering "+getLinkedRoom().getRoomId());
+        player.enterRoom(getLinkedRoom());
     }
 
     /**

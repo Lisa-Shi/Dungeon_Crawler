@@ -118,6 +118,11 @@ public class Player implements Physical, Collideable, Drawable {
         }
     }
 
+    public void enterRoom(Room room) {
+        System.out.println("See enterRoom function in Player.java.");
+        //gameStage.enterRoom(room);
+    }
+
     /**player is legal if the name is not empty string and difficulty is not -1
      *
      * @return if the player object is legal

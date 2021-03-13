@@ -1,6 +1,5 @@
 package sample;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
@@ -13,9 +12,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-
-import java.io.FileWriter;
-import java.util.Random;
 
 public class GameStage extends Stage {
     private Pane pane = new Pane();
@@ -158,6 +154,11 @@ public class GameStage extends Stage {
         camera.update(null);
     }
 
+    /**
+     * updating the scene to be the next room
+     *
+     * @param fromExit the exitTile which player collided with to enter the next room
+     */
     public void enterRoom(ExitTile fromExit){
         previousRoom = fromExit.getInRoom();
         room = fromExit.getLinkedRoom();

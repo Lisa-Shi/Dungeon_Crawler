@@ -1,12 +1,7 @@
 package sample;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import java.util.LinkedList;
-
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.*;
 
 public class Room implements Physical {

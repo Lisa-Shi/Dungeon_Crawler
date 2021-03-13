@@ -2,6 +2,11 @@ package sample;
 
 import java.util.*;
 
+/**
+ * the overall map of the game
+ *
+ *
+ */
 public class GameMap {
     private Room start;
     private Room end;
@@ -9,6 +14,11 @@ public class GameMap {
     private Set<Room> rooms;
     private Map<Room, List<Room>> adjList = new HashMap<>();
 
+    /**
+     * minimun of 6 room is initialized between starting room and end
+     * in total 4 rooms are initialized around starting room
+     * @param starting the room where the player is born
+     */
     public GameMap(Room starting){
         start = starting;
         end = new Room(20, 20, 999);
@@ -40,55 +50,44 @@ public class GameMap {
             adjList.put(newRoom, new ArrayList<Room>(List.of(start)));
         }
     }
+
+    /**
+     * get the list of adjacent rooms around the param
+     * @param room the center room that connects the adjacent rooms
+     * @return list of adjacent rooms
+     */
     public List<Room> getAdjRooms(Room room){
         return adjList.get(room);
     }
 
+    private class Edge {
+        private Room linkedRoom;
+        private Room inRoom;
 
-
-    /**
-
-    public Map<Room, Integer> dijkstras(Room start) {
-        if (start == null || !rooms.contains(start)) {
-            throw new IllegalArgumentException("the argument is not valid");
+        public Edge(Room inRoom, Room linkedRoom) {
+            this.inRoom = inRoom;
+            this.linkedRoom = linkedRoom;
         }
-        LinkedList<Room> visitedList = new LinkedList<>();
-        Queue<roomDist> theQueue = new PriorityQueue<>();
-        Map<Room, Integer> distanceMap = new HashMap<>();
-        for (Room v: rooms) {
-            distanceMap.put(v, 0);
+
+        public Room getInRoom() {
+            return inRoom;
         }
-        theQueue.add(new roomDist(start, 0));
-        while (!theQueue.isEmpty() && visitedList.size() < rooms.size()) {
-            roomDist current= theQueue.remove();
-            Room next = current.getNext();
-            int dist = current.getDistance();
-            if (!visitedList.contains(next)) {
-                visitedList.add(next);
-                distanceMap.put(next, dist);
-            }
-            for (ExitTile each : adjList.get(current)) {
-                if (!visitedList.contains(each.getLinkedRoom())) {
-                    theQueue.add(new roomDist(each.getLinkedRoom(), 1 + dist));
-                } else {
-                    theQueue.remove(each.getLinkedRoom());
+
+        public Room getLinkedRoom() {
+            return linkedRoom;
+        }
+        @Override
+        public boolean equals(Object other){
+            if( other instanceof Edge){
+                if( ((Edge)other).getInRoom().equals(this.inRoom) && ((Edge)other).getLinkedRoom().equals(this.linkedRoom)){
+                    return true;
+                }
+                if( ((Edge)other).getInRoom().equals(this.linkedRoom) && ((Edge)other).getLinkedRoom().equals(this.inRoom)){
+                    return true;
                 }
             }
+            return false;
         }
-        return distanceMap;
     }
-    private class roomDist{
-        private Room next;
-        private int distance;
-        public roomDist(Room in, int dist){
-            next = in;
-            distance = dist;
-        }
-        public Room getNext() {
-            return next;
-        }
-        public int getDistance() {
-            return distance;
-        }
-    }*/
+
 }

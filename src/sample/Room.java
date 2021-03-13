@@ -11,11 +11,10 @@ import java.util.*;
 
 public class Room implements Physical {
     // Variables
-    private static int roomId = 0;
-    private int id;
+    private int roomId;
+    private static int id = 0;
     private int width;
     private int height;
-    private String name;
 
     private LinkedList<Physical> physicals;
     private LinkedList<Collideable> collideables;
@@ -30,9 +29,9 @@ public class Room implements Physical {
      *
      * @param width width of the room in tiles
      * @param height height of the room in tiles
-     * @param name name of the room (for saving purposes)
      */
-    public Room(int width, int height, String name) {
+    public Room(int width, int height) {
+        roomId = id++;
         this.width = width;
         this.height = height;
 
@@ -43,23 +42,50 @@ public class Room implements Physical {
         this.collideables = new LinkedList<>();
         this.exits = new LinkedList<>();
         this.drawables = new LinkedList<>();
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            FileWriter fileWriter = new FileWriter(name + ".txt");
-            fileWriter.write(objectMapper.writeValueAsString(this));
-            fileWriter.close();
-        }catch (IOException e){
-            System.out.println("unable to store room");
-        }
     }
 
     // Methods
-    public void generateExits() {
-        add(new ExitTile(this, (int) (Math.random() * width), 0, null));
-        add(new ExitTile(this, (int) 0, (int) (Math.random() * height), null));
-        add(new ExitTile(this, (int) width - 1, (int) (Math.random() * height), null));
-        add(new ExitTile(this, (int) (Math.random() * width), height - 1, null));
+    public void generateExits(int numberOfExit) {
+        LinkedList<ExitTile> availableExits = new LinkedList<>();
+        availableExits.add(new ExitTile(this, (int) (Math.random() * (width - 2) + 1),
+                0, new Room(this.width, this.height)));
+        availableExits.add(new ExitTile(this, (int) 0,
+                (int) (Math.random() * (height - 2) + 1), new Room(this.width, this.height)));
+        availableExits.add(new ExitTile(this, (int) width - 1,
+                (int) (Math.random() * (height - 2) + 1), new Room(this.width, this.height)));
+        availableExits.add(new ExitTile(this, (int) (Math.random() * (width - 2) + 1),
+                height - 1, new Room(this.width, this.height)));
+        Random ran = new Random();
+        if( exits.size() != 0){
+            //if exit to the previous room is in the list
+            //remove the choice that is on the same side of the room from the list
+            //see equals in ExitTile.java
+            availableExits.remove(exits.get(0));
+        }
+        for( int i = 0; i < numberOfExit; i++){
+            int index = ran.nextInt(availableExits.size());
+            ExitTile exit = availableExits.remove(index);
+            add(exit);
+        }
+    }
+    public void generateExits(ExitTile fromExit){
+        Room previousRoom = fromExit.getInRoom();
+        int preWidth = previousRoom.getWidth()-1;
+        int preHeight = previousRoom.getHeight()-1;
+        int x = fromExit.getExitX();
+        int y = fromExit.getExitY();
+        ExitTile corresponding = null;
+        if( x == 0 || x == preWidth){
+            corresponding = new ExitTile(this, preWidth - x, y, previousRoom);
+        }else if( y == 0 || y == preHeight){
+            corresponding = new ExitTile(this, x, preHeight - y, previousRoom);
+        }
+        add(corresponding);
+        int numOfExit;
+        do{
+            numOfExit = (int)(Math.random()*3);
+        } while( id < 7 && numOfExit == 0);
+        generateExits(numOfExit);
     }
     /**
      * Places the sprites that will be manipulated into the inputted pane
@@ -121,6 +147,11 @@ public class Room implements Physical {
 
 
     // Getters
+
+    public int getRoomId() {
+        return roomId;
+    }
+
     /**
      * @return room width
      */
@@ -159,6 +190,10 @@ public class Room implements Physical {
         }
     }
 
+    public LinkedList<ExitTile> getExits() {
+        return exits;
+    }
+
     /**
      * @return physics of the room (important
      * for smooth camera physics)
@@ -166,5 +201,10 @@ public class Room implements Physical {
     @Override
     public PhysicsController getPhysics() {
         return physics;
+    }
+
+    @Override
+    public boolean equals(Object other){
+        return other instanceof Room && ((Room)other).getRoomId() == this.roomId;
     }
 }

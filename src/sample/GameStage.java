@@ -65,30 +65,6 @@ public class GameStage extends Stage {
         room.add(new WallTile(room, 11, 7));
     }
 
-    public void enterRoom(int roomId){
-        Random ran = new Random();
-        int exitNum = ran.nextInt(4)+1;
-        room = room.nextRoom(roomId);
-        room.generateExits(exitNum);
-        pane = new Pane();
-        pane.setPrefSize(Main.GAME_WIDTH, Main.GAME_HEIGHT);
-        room.finalize(pane);
-        Scene scene = new Scene(pane);
-        pane.getChildren().add(player.getSprite());
-        HBox infoBar = new HBox();
-        Text text = new Text();
-        text.setFont(new Font(20));
-        text.setText("$" + player.getMoney());
-        text.setX(0);
-        text.setY(20);
-        text.setTextAlignment(TextAlignment.LEFT);
-        infoBar.getChildren().add(text);
-        pane.getChildren().add(infoBar);
-        scene.setOnKeyPressed(keyPressed);
-        scene.setOnKeyReleased(keyReleased);
-        stage.setScene(scene);
-        stage.show();
-    }
     /**
      * Finishes setting up the room where the main game
      * takes place
@@ -110,6 +86,14 @@ public class GameStage extends Stage {
         text.setX(0);
         text.setY(20);
         text.setTextAlignment(TextAlignment.LEFT);
+
+        Text testingPurpose = new Text();
+        testingPurpose.setFont(new Font(20));
+        testingPurpose.setText("now in room " + room.getRoomId() + " \n");
+        testingPurpose.setX(0);
+        testingPurpose.setY(50);
+        testingPurpose.setTextAlignment(TextAlignment.LEFT);
+        infoBar.getChildren().add(testingPurpose);
 
         infoBar.getChildren().add(text);
         pane.getChildren().add(infoBar);
@@ -162,7 +146,7 @@ public class GameStage extends Stage {
 
         for( ExitTile exit: room.getExits()){
             if (exit.collisionWithPlayerEvent(player)){
-                enterRoom(exit.getLinkedRoom());
+                enterRoom(exit);
                 break;
             }
         }
@@ -171,7 +155,35 @@ public class GameStage extends Stage {
         camera.update(null);
     }
 
-
+    public void enterRoom(ExitTile fromExit){
+        room = fromExit.getLinkedRoom();
+        room.generateExits(fromExit);
+        pane = new Pane();
+        pane.setPrefSize(Main.GAME_WIDTH, Main.GAME_HEIGHT);
+        room.finalize(pane);
+        Scene scene = new Scene(pane);
+        pane.getChildren().add(player.getSprite());
+        HBox infoBar = new HBox();
+        Text text = new Text();
+        text.setFont(new Font(20));
+        text.setText("$" + player.getMoney());
+        text.setX(0);
+        text.setY(20);
+        text.setTextAlignment(TextAlignment.LEFT);
+        Text testingPurpose = new Text();
+        testingPurpose.setFont(new Font(20));
+        testingPurpose.setText("now in room " + room.getRoomId() +" \n");
+        testingPurpose.setX(0);
+        testingPurpose.setY(50);
+        testingPurpose.setTextAlignment(TextAlignment.LEFT);
+        infoBar.getChildren().add(testingPurpose);
+        infoBar.getChildren().add(text);
+        pane.getChildren().add(infoBar);
+        scene.setOnKeyPressed(keyPressed);
+        scene.setOnKeyReleased(keyReleased);
+        stage.setScene(scene);
+        stage.show();
+    }
     /**
      * Derived from https://stackoverflow.com/questions/39007382/moving-two-rectangles-with-keyboard-in-javafx
      * Register key press to start moving player in direction specified

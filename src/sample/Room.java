@@ -43,49 +43,33 @@ public class Room implements Physical {
         this.exits = new LinkedList<>();
         this.drawables = new LinkedList<>();
     }
+    public Room(int width, int height, int ID) {
+        roomId = ID;
+        this.width = width;
+        this.height = height;
 
+        // Physics so the camera works properly
+        this.physics = new PhysicsController(0, 0);
+
+        this.physicals = new LinkedList<>();
+        this.collideables = new LinkedList<>();
+        this.exits = new LinkedList<>();
+        this.drawables = new LinkedList<>();
+    }
     // Methods
-    public void generateExits(int numberOfExit) {
-        LinkedList<ExitTile> availableExits = new LinkedList<>();
-        availableExits.add(new ExitTile(this, (int) (Math.random() * (width - 2) + 1),
-                0, new Room(this.width, this.height)));
-        availableExits.add(new ExitTile(this, (int) 0,
-                (int) (Math.random() * (height - 2) + 1), new Room(this.width, this.height)));
-        availableExits.add(new ExitTile(this, (int) width - 1,
-                (int) (Math.random() * (height - 2) + 1), new Room(this.width, this.height)));
-        availableExits.add(new ExitTile(this, (int) (Math.random() * (width - 2) + 1),
-                height - 1, new Room(this.width, this.height)));
+    public void generateExits(List<Room> listOfExit) {
+        LinkedList<Vector2D> availableExits = new LinkedList<>();
+        availableExits.add(new Vector2D((int) (Math.random() * (width - 2) + 1), 0));
+        availableExits.add(new Vector2D( (int) 0,(int) (Math.random() * (height - 2) + 1)));
+        availableExits.add(new Vector2D( (int) width - 1, (int) (Math.random() * (height - 2) + 1)));
+        availableExits.add(new Vector2D((int) (Math.random() * (width - 2) + 1), height - 1));
         Random ran = new Random();
-        if( exits.size() != 0){
-            //if exit to the previous room is in the list
-            //remove the choice that is on the same side of the room from the list
-            //see equals in ExitTile.java
-            availableExits.remove(exits.get(0));
-        }
-        for( int i = 0; i < numberOfExit; i++){
+        for(Room room: listOfExit){
             int index = ran.nextInt(availableExits.size());
-            ExitTile exit = availableExits.remove(index);
+            Vector2D vec = availableExits.remove(index);
+            ExitTile exit = new ExitTile(this, (int)vec.getX(), (int)vec.getY(), room);
             add(exit);
         }
-    }
-    public void generateExits(ExitTile fromExit){
-        Room previousRoom = fromExit.getInRoom();
-        int preWidth = previousRoom.getWidth()-1;
-        int preHeight = previousRoom.getHeight()-1;
-        int x = fromExit.getExitX();
-        int y = fromExit.getExitY();
-        ExitTile corresponding = null;
-        if( x == 0 || x == preWidth){
-            corresponding = new ExitTile(this, preWidth - x, y, previousRoom);
-        }else if( y == 0 || y == preHeight){
-            corresponding = new ExitTile(this, x, preHeight - y, previousRoom);
-        }
-        add(corresponding);
-        int numOfExit;
-        do{
-            numOfExit = (int)(Math.random()*3);
-        } while( id < 7 && numOfExit == 0);
-        generateExits(numOfExit);
     }
     /**
      * Places the sprites that will be manipulated into the inputted pane
@@ -189,7 +173,14 @@ public class Room implements Physical {
             drawables.add(0, (Drawable) obj);
         }
     }
-
+    public Vector2D getLocToRoom(Room room){
+        for(ExitTile exit : exits){
+            if( exit.getLinkedRoom() == room){
+                return new Vector2D(exit.getExitX(), exit.getExitY());
+            }
+        }
+        return null;
+    }
     public LinkedList<ExitTile> getExits() {
         return exits;
     }
@@ -206,5 +197,9 @@ public class Room implements Physical {
     @Override
     public boolean equals(Object other){
         return other instanceof Room && ((Room)other).getRoomId() == this.roomId;
+    }
+    @Override
+    public int hashCode(){
+        return roomId;
     }
 }

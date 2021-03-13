@@ -29,9 +29,10 @@ public class GameStage extends Stage {
 
     private Player player;
     private Camera camera;
+    private Room previousRoom;
     private Room room;
     private Stage stage;
-
+    private GameMap map;
     /**
      * Constructs the Stage where the main game takes place
      * Adapted from https://www.youtube.com/watch?v=FVo1fm52hz0
@@ -43,7 +44,7 @@ public class GameStage extends Stage {
         camera = new Camera(Main.GAME_WIDTH / 2, Main.GAME_HEIGHT / 2, player);
 
         room = new Room(20, 20);
-
+        map = new GameMap(room);
         /*
         room.add(new ExitTile(room, 9, 0, null));
         room.add(new ExitTile(room, 0, 9, null));
@@ -51,7 +52,7 @@ public class GameStage extends Stage {
         room.add(new ExitTile(room, 19, 9, null));
          */
 
-        room.generateExits(4);
+        room.generateExits(map.getAdjRooms(room));
 
         // test code, could make shapes into functions later
         room.add(new WallTile(room, 9, 9));
@@ -143,9 +144,11 @@ public class GameStage extends Stage {
         if (playerIsMovingRight) {
             player.getPhysics().pushRight(Main.DEFAULT_CONTROL_PLAYER_FORCE);
         }
-
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //here is the room transition
         for( ExitTile exit: room.getExits()){
             if (exit.collisionWithPlayerEvent(player)){
+                System.out.println("entering "+exit.getLinkedRoom().getRoomId());
                 enterRoom(exit);
                 break;
             }
@@ -156,8 +159,11 @@ public class GameStage extends Stage {
     }
 
     public void enterRoom(ExitTile fromExit){
+        previousRoom = fromExit.getInRoom();
         room = fromExit.getLinkedRoom();
-        room.generateExits(fromExit);
+        if( room.getRoomId() != 999) {
+            room.generateExits(map.getAdjRooms(room));
+        }
         pane = new Pane();
         pane.setPrefSize(Main.GAME_WIDTH, Main.GAME_HEIGHT);
         room.finalize(pane);

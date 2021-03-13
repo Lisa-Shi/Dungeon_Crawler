@@ -1,6 +1,5 @@
 package sample;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
@@ -14,8 +13,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-import java.io.FileWriter;
-
 public class GameStage extends Stage {
     private Pane pane = new Pane();
 
@@ -28,8 +25,10 @@ public class GameStage extends Stage {
 
     private Player player;
     private Camera camera;
+    private Room previousRoom;
     private Room room;
-
+    private Stage stage;
+    private GameMap map;
     /**
      * Constructs the Stage where the main game takes place
      * Adapted from https://www.youtube.com/watch?v=FVo1fm52hz0
@@ -40,8 +39,8 @@ public class GameStage extends Stage {
         this.player = player;
         camera = new Camera(Main.GAME_WIDTH / 2, Main.GAME_HEIGHT / 2, player);
 
-        room = new Room(20, 20, "mainroom");
-
+        room = new Room(20, 20);
+        map = new GameMap(room);
         /*
         room.add(new ExitTile(room, 9, 0, null));
         room.add(new ExitTile(room, 0, 9, null));
@@ -49,12 +48,12 @@ public class GameStage extends Stage {
         room.add(new ExitTile(room, 19, 9, null));
          */
 
-        room.generateExits();
+        room.generateExits(map.getAdjRooms(room));
 
         // test code, could make shapes into functions later
         room.add(new WallTile(room, 9, 9));
         room.add(new WallTile(room, 8, 9));
-        room.add(new WallTile(room, 10, 9));;
+        room.add(new WallTile(room, 10, 9));
         room.add(new WallTile(room, 9, 8));
         room.add(new WallTile(room, 9, 10));
         room.add(new WallTile(room, 7, 7));
@@ -70,6 +69,7 @@ public class GameStage extends Stage {
      * @param stage Stage to set up main game on
      */
     public void start(Stage stage) {
+        this.stage = stage;
         Scene scene = new Scene(createContent());
 
         pane.getChildren().add(player.getSprite());
@@ -83,6 +83,14 @@ public class GameStage extends Stage {
         text.setX(0);
         text.setY(20);
         text.setTextAlignment(TextAlignment.LEFT);
+
+        Text testingPurpose = new Text();
+        testingPurpose.setFont(new Font(20));
+        testingPurpose.setText("now in room " + room.getRoomId() + " \n");
+        testingPurpose.setX(0);
+        testingPurpose.setY(50);
+        testingPurpose.setTextAlignment(TextAlignment.LEFT);
+        infoBar.getChildren().add(testingPurpose);
 
         infoBar.getChildren().add(text);
         pane.getChildren().add(infoBar);
@@ -104,18 +112,14 @@ public class GameStage extends Stage {
      */
     private Parent createContent() {
         pane.setPrefSize(Main.GAME_WIDTH, Main.GAME_HEIGHT);
-
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
                 update();
             }
         };
-
         timer.start();
-
         room.finalize(pane);
-
         return pane;
     }
 
@@ -136,20 +140,63 @@ public class GameStage extends Stage {
         if (playerIsMovingRight) {
             player.getPhysics().pushRight(Main.DEFAULT_CONTROL_PLAYER_FORCE);
         }
-
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //here is the room transition
+        for( ExitTile exit: room.getExits()){
+            if (exit.collisionWithPlayerEvent(player)){
+                System.out.println("entering "+exit.getLinkedRoom().getRoomId());
+                enterRoom(exit);
+                break;
+            }
+        }
         room.update(camera);
         player.update(camera, room.getCollideables());
         camera.update(null);
     }
 
-
+    /**
+     * updating the scene to be the next room
+     *
+     * @param fromExit the exitTile which player collided with to enter the next room
+     */
+    public void enterRoom(ExitTile fromExit){
+        previousRoom = fromExit.getInRoom();
+        room = fromExit.getLinkedRoom();
+        if( room.getRoomId() != 999) {
+            room.generateExits(map.getAdjRooms(room));
+        }
+        pane = new Pane();
+        pane.setPrefSize(Main.GAME_WIDTH, Main.GAME_HEIGHT);
+        room.finalize(pane);
+        Scene scene = new Scene(pane);
+        pane.getChildren().add(player.getSprite());
+        HBox infoBar = new HBox();
+        Text text = new Text();
+        text.setFont(new Font(20));
+        text.setText("$" + player.getMoney());
+        text.setX(0);
+        text.setY(20);
+        text.setTextAlignment(TextAlignment.LEFT);
+        Text testingPurpose = new Text();
+        testingPurpose.setFont(new Font(20));
+        testingPurpose.setText("now in room " + room.getRoomId() +" \n");
+        testingPurpose.setX(0);
+        testingPurpose.setY(50);
+        testingPurpose.setTextAlignment(TextAlignment.LEFT);
+        infoBar.getChildren().add(testingPurpose);
+        infoBar.getChildren().add(text);
+        pane.getChildren().add(infoBar);
+        scene.setOnKeyPressed(keyPressed);
+        scene.setOnKeyReleased(keyReleased);
+        stage.setScene(scene);
+        stage.show();
+    }
     /**
      * Derived from https://stackoverflow.com/questions/39007382/moving-two-rectangles-with-keyboard-in-javafx
      * Register key press to start moving player in direction specified
      *
-     * @return the event information
      */
-    private EventHandler<KeyEvent> keyPressed = new EventHandler<KeyEvent>() {
+    private EventHandler<KeyEvent> keyPressed = new EventHandler<>() {
         @Override
         public void handle(KeyEvent event) {
             if (event.getCode() == KeyCode.A) {
@@ -170,9 +217,8 @@ public class GameStage extends Stage {
      * Derived from https://stackoverflow.com/questions/39007382/moving-two-rectangles-with-keyboard-in-javafx
      * Register key release to stop moving player in direction specified
      *
-     * @return the event information
      */
-    private EventHandler<KeyEvent> keyReleased = new EventHandler<KeyEvent>() {
+    private EventHandler<KeyEvent> keyReleased = new EventHandler<>() {
 
         @Override
         public void handle(KeyEvent event) {

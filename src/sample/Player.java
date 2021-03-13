@@ -69,9 +69,7 @@ public class Player implements Physical, Collideable, Drawable {
     }
     public void update(Camera camera, LinkedList<Collideable> collideables) {
         update(camera);
-
         raytraceCollision(collideables);
-
         updateSprite(camera);
     }
     private void updateSprite(Camera camera) {
@@ -82,13 +80,12 @@ public class Player implements Physical, Collideable, Drawable {
     }
     private void raytraceCollision(LinkedList<Collideable> collideables) {
         int backtracks = 0;
-        boolean hasCollidedWithSolid = false;
+        boolean hasCollidedWithSolid;
         Vector2D backtrackVel = new Vector2D(0, 0);
         LinkedList<Passable> boundaries = new LinkedList<>();
 
         do {
             hasCollidedWithSolid = false;
-
             // Test if there are any collisions, and continue moving player back
             for (Collideable collideable : collideables) {
                 boolean solid = collideable.getCollisionBox().isSolid();
@@ -117,7 +114,7 @@ public class Player implements Physical, Collideable, Drawable {
 
         // Activate boundaries
         for (Passable boundary : boundaries) {
-            boundary.collisionWithPlayerEvent();
+            boundary.collisionWithPlayerEvent(this);
         }
     }
 

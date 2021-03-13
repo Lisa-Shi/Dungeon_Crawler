@@ -1,21 +1,15 @@
 package sample;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import java.util.LinkedList;
-
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.*;
 
 public class Room implements Physical {
     // Variables
-    private static int roomId = 0;
-    private int id;
+    private int roomId;
+    private static int id = 0;
     private int width;
     private int height;
-    private String name;
 
     private LinkedList<Physical> physicals;
     private LinkedList<Collideable> collideables;
@@ -30,9 +24,9 @@ public class Room implements Physical {
      *
      * @param width width of the room in tiles
      * @param height height of the room in tiles
-     * @param name name of the room (for saving purposes)
      */
-    public Room(int width, int height, String name) {
+    public Room(int width, int height) {
+        roomId = id++;
         this.width = width;
         this.height = height;
 
@@ -43,23 +37,34 @@ public class Room implements Physical {
         this.collideables = new LinkedList<>();
         this.exits = new LinkedList<>();
         this.drawables = new LinkedList<>();
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            FileWriter fileWriter = new FileWriter(name + ".txt");
-            fileWriter.write(objectMapper.writeValueAsString(this));
-            fileWriter.close();
-        }catch (IOException e){
-            System.out.println("unable to store room");
-        }
     }
+    public Room(int width, int height, int ID) {
+        roomId = ID;
+        this.width = width;
+        this.height = height;
 
+        // Physics so the camera works properly
+        this.physics = new PhysicsController(0, 0);
+
+        this.physicals = new LinkedList<>();
+        this.collideables = new LinkedList<>();
+        this.exits = new LinkedList<>();
+        this.drawables = new LinkedList<>();
+    }
     // Methods
-    public void generateExits() {
-        add(new ExitTile(this, (int) (Math.random() * width), 0, null));
-        add(new ExitTile(this, (int) 0, (int) (Math.random() * height), null));
-        add(new ExitTile(this, (int) width - 1, (int) (Math.random() * height), null));
-        add(new ExitTile(this, (int) (Math.random() * width), height - 1, null));
+    public void generateExits(List<Room> listOfExit) {
+        LinkedList<Vector2D> availableExits = new LinkedList<>();
+        availableExits.add(new Vector2D((int) (Math.random() * (width - 2) + 1), 0));
+        availableExits.add(new Vector2D( (int) 0,(int) (Math.random() * (height - 2) + 1)));
+        availableExits.add(new Vector2D( (int) width - 1, (int) (Math.random() * (height - 2) + 1)));
+        availableExits.add(new Vector2D((int) (Math.random() * (width - 2) + 1), height - 1));
+        Random ran = new Random();
+        for(Room room: listOfExit){
+            int index = ran.nextInt(availableExits.size());
+            Vector2D vec = availableExits.remove(index);
+            ExitTile exit = new ExitTile(this, (int)vec.getX(), (int)vec.getY(), room);
+            add(exit);
+        }
     }
     /**
      * Places the sprites that will be manipulated into the inputted pane
@@ -121,6 +126,11 @@ public class Room implements Physical {
 
 
     // Getters
+
+    public int getRoomId() {
+        return roomId;
+    }
+
     /**
      * @return room width
      */
@@ -158,6 +168,17 @@ public class Room implements Physical {
             drawables.add(0, (Drawable) obj);
         }
     }
+    public Vector2D getLocToRoom(Room room){
+        for(ExitTile exit : exits){
+            if( exit.getLinkedRoom() == room){
+                return new Vector2D(exit.getExitX(), exit.getExitY());
+            }
+        }
+        return null;
+    }
+    public LinkedList<ExitTile> getExits() {
+        return exits;
+    }
 
     /**
      * @return physics of the room (important
@@ -166,5 +187,14 @@ public class Room implements Physical {
     @Override
     public PhysicsController getPhysics() {
         return physics;
+    }
+
+    @Override
+    public boolean equals(Object other){
+        return other instanceof Room && ((Room)other).getRoomId() == this.roomId;
+    }
+    @Override
+    public int hashCode(){
+        return roomId;
     }
 }

@@ -4,7 +4,7 @@ public interface Physical {
     /**
      * Gets physics information of object
      *
-     * @return physics information
+     * @param camera camera that focuses on object
      */
     void update(Camera camera);
     PhysicsController getPhysics();

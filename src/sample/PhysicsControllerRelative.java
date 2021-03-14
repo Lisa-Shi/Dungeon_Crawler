@@ -5,7 +5,8 @@ public class PhysicsControllerRelative extends PhysicsController {
     private PhysicsController relativeTo;
 
     // Constructors
-    public PhysicsControllerRelative(double initialX, double initialY, PhysicsController relativeTo) {
+    public PhysicsControllerRelative(
+            double initialX, double initialY, PhysicsController relativeTo) {
         super(initialX, initialY);
         this.relativeTo = relativeTo;
     }

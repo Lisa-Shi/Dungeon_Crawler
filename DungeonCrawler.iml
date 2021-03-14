@@ -31,7 +31,6 @@
     <orderEntry type="library" name="org.testfx:testfx-junit:4.0.15-alpha" level="application" />
     <orderEntry type="library" name="org.testfx:testfx-junit:4.0.15-alpha1" level="project" />
     <orderEntry type="library" name="org.testfx:testfx-core:4.0.15-alpha" level="project" />
-    <orderEntry type="library" name="com.fasterxml.jackson.core:jackson-databind:2.7.4" level="project" />
     <orderEntry type="module-library" scope="TEST">
       <library name="JUnit5.4">
         <CLASSES>
@@ -48,6 +47,5 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="com.google.code.gson:gson:2.8.61" level="project" />
   </component>
 </module>

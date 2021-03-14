@@ -1,7 +1,7 @@
 package sample;
 
 
-public class ExitTile extends Tile implements Passable{
+public class ExitTile extends Tile implements Passable {
     // Variables
     private Room linkedRoom;
     private CollisionBox collisionBox;
@@ -16,7 +16,8 @@ public class ExitTile extends Tile implements Passable{
         exitX = initialX;
         exitY = initialY;
         this.linkedRoom = linkedRoom;
-        this.collisionBox = new CollisionBox(getPhysics(), new RectangleWireframe(Main.TILE_WIDTH, Main.TILE_HEIGHT), false);
+        this.collisionBox = new CollisionBox(getPhysics(),
+                new RectangleWireframe(Main.TILE_WIDTH, Main.TILE_HEIGHT), false);
         this.collisionBox.generate();
     }
 
@@ -45,20 +46,22 @@ public class ExitTile extends Tile implements Passable{
 
     @Override
     public void collisionWithPlayerEvent(Player player) {
-        System.out.println("entering "+getLinkedRoom().getRoomId());
+        System.out.println("entering " + getLinkedRoom().getRoomId());
         GameMap.enterRoom(getLinkedRoom());
     }
 
     /**
-     * if two tiles are in the same room and on the same side of the room, they are considered to be equal.
-     * @param other
-     * @return
+     * if two tiles are in the same room and on the same side of the room
+     * they are considered to be equal.
+     * @param other other object to compare with
+     * @return true if this tile is equal to the param object
      */
     @Override
-    public boolean equals(Object other){
-        if(other instanceof ExitTile){
-            if( this.inRoom.equals((((ExitTile) other).getInRoom()))){
-                return ((ExitTile) other).getExitX() == this.exitX || ((ExitTile) other).getExitY() == this.exitY;
+    public boolean equals(Object other) {
+        if (other instanceof ExitTile) {
+            if (this.inRoom.equals((((ExitTile) other).getInRoom()))) {
+                return ((ExitTile) other).getExitX() == this.exitX
+                        || ((ExitTile) other).getExitY() == this.exitY;
             }
         }
         return false;

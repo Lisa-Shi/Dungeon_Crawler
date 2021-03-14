@@ -20,20 +20,20 @@ public class GameMap {
      * in total 4 rooms are initialized around starting room
      * @param starting the room where the player is born
      */
-    public GameMap(Room starting){
+    public GameMap(Room starting) {
         currentRoom = starting;
         start = starting;
         end = new Room(20, 20, 999);
         rooms = new HashSet<>();
-        for( int i = 0 ; i < 6; i++){
+        for (int i = 0; i < 6; i++) {
             rooms.add(new Room(20, 20));
         }
         Room pre = null;
         Room curr = starting;
-        for( Room a: rooms){
+        for (Room a: rooms) {
             ArrayList<Room> adj = new ArrayList<>();
             adj.add(a);
-            if(pre != null) {
+            if (pre != null) {
                 adj.add(pre);
             }
             adjList.put(curr, adj);
@@ -48,7 +48,7 @@ public class GameMap {
         r1 = new ArrayList<>();
         r1.add(curr);
         adjList.put(end, r1);
-        for(int i = 0; i < 3; i++){
+        for (int i = 0; i < 3; i++) {
             Room newRoom = new Room(20, 20);
             rooms.add(newRoom);
             edge.add(new Edge(newRoom, start));
@@ -59,10 +59,10 @@ public class GameMap {
         }
         start.generateExits(adjList.get(start));
     }
-    public static void enterRoom(Room entering){
+    public static void enterRoom(Room entering) {
         currentRoom = entering;
     }
-    public static Room enterRoom(){
+    public static Room enterRoom() {
         return currentRoom;
     }
     /**
@@ -70,7 +70,7 @@ public class GameMap {
      * @param room the center room that connects the adjacent rooms
      * @return list of adjacent rooms
      */
-    public List<Room> getAdjRooms(Room room){
+    public List<Room> getAdjRooms(Room room) {
         return adjList.get(room);
     }
 
@@ -91,12 +91,14 @@ public class GameMap {
             return linkedRoom;
         }
         @Override
-        public boolean equals(Object other){
-            if( other instanceof Edge){
-                if( ((Edge)other).getInRoom().equals(this.inRoom) && ((Edge)other).getLinkedRoom().equals(this.linkedRoom)){
+        public boolean equals(Object other) {
+            if (other instanceof Edge) {
+                if (((Edge) other).getInRoom().equals(this.inRoom)
+                        && ((Edge) other).getLinkedRoom().equals(this.linkedRoom)) {
                     return true;
                 }
-                if( ((Edge)other).getInRoom().equals(this.linkedRoom) && ((Edge)other).getLinkedRoom().equals(this.inRoom)){
+                if (((Edge) other).getInRoom().equals(this.linkedRoom)
+                        && ((Edge) other).getLinkedRoom().equals(this.inRoom)) {
                     return true;
                 }
             }

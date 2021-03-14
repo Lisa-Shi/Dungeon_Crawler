@@ -17,11 +17,6 @@ public class Player implements Physical, Collideable, Drawable {
 
     private Sprite sprite;
     private int money;
-    private boolean finish = false;
-
-    public boolean getFinish(){
-        return finish;
-    }
 
     /**
      * Constructs the Player object that the user will control
@@ -51,7 +46,8 @@ public class Player implements Physical, Collideable, Drawable {
             money = 20;
         }
 
-        this.collisionBox = new DynamicCollisionBox(physics, new RectangleWireframe(Main.PLAYER_WIDTH, Main.PLAYER_HEIGHT));
+        this.collisionBox = new DynamicCollisionBox(physics,
+                new RectangleWireframe(Main.PLAYER_WIDTH, Main.PLAYER_HEIGHT));
         this.collisionBox.generate();
     }
 
@@ -96,10 +92,12 @@ public class Player implements Physical, Collideable, Drawable {
                 boolean collided = getCollisionBox().collidedWith(collideable.getCollisionBox());
                 if (collided) {
                     if (solid) {
-                        backtrackVel = backtrackVel.add(getCollisionBox().calculateCollisionVector(collideable.getCollisionBox()).multiply(0.001D));
+                        backtrackVel = backtrackVel.add(
+                                getCollisionBox().calculateCollisionVector(
+                                        collideable.getCollisionBox()).multiply(0.001D));
                         hasCollidedWithSolid = true;
                     }
-                    if (collideable instanceof ExitTile){
+                    if (collideable instanceof ExitTile) {
                         ((ExitTile) collideable).collisionWithPlayerEvent(this);
                     }
                 }

@@ -131,7 +131,7 @@ public class Main extends Application {
             goCongrat();
         });
     }
-    private void goCongrat(){
+    private void goCongrat() {
         CongratScreen welcome = new CongratScreen();
 
         BorderPane finishLayout = welcome.finishLayout();

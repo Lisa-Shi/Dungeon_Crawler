@@ -2,7 +2,6 @@ package sample;
 
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -36,6 +35,10 @@ public class GameStage extends Stage {
     private HBox infoBar = new HBox();
     private Text text = new Text();
     private Text testingPurpose = new Text();
+
+    public GameMap getMap() {
+        return map;
+    }
     /**
      * Constructs the Stage where the main game takes place
      * Adapted from https://www.youtube.com/watch?v=FVo1fm52hz0
@@ -129,7 +132,7 @@ public class GameStage extends Stage {
             player.getPhysics().pushRight(Main.DEFAULT_CONTROL_PLAYER_FORCE);
         }
         player.update(camera, room.getCollideables());
-        if(!GameMap.enterRoom().equals(room)){
+        if (!GameMap.enterRoom().equals(room)) {
             room = GameMap.enterRoom();
             enterRoom();
             player.update(camera, room.getCollideables());
@@ -144,8 +147,10 @@ public class GameStage extends Stage {
         room.generateExits(map.getAdjRooms(room));
         room.finalize(pane);
         Scene scene = new Scene(pane);
-        if( room.getRoomId() == 999) {
+        if (room.getRoomId() == 999) {
             infoBar.getChildren().add(exitButton);
+        } else {
+            infoBar.getChildren().remove(exitButton);
         }
         text.setText("$" + player.getMoney());
         testingPurpose.setText("now in room " + room.getRoomId() + " \n");

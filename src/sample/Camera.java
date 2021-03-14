@@ -29,6 +29,7 @@ public class Camera implements Physical {
      */
     /**
      * Update the camera's sprite position and physics.
+     * @param camera camera that focuses on object
      */
     public void update(Camera camera) {
         Vector2D camPosition = physics.getPosition();

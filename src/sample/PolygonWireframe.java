@@ -33,7 +33,7 @@ public class PolygonWireframe {
             double x = relativePoint.getX();
             double y = relativePoint.getY();
 
-            double cross = (x - x1) * (y2-y1) - (y - y1) * (x2 - x1);
+            double cross = (x - x1) * (y2 - y1) - (y - y1) * (x2 - x1);
 
             if (cross > 0) {
                 pos++;

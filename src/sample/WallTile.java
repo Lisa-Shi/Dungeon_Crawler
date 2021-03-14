@@ -11,7 +11,8 @@ public class WallTile extends Tile implements Collideable {
         super(inRoom, initialX, initialY, "spr_dungeon_wall.png");
         this.initialX = initialX;
         this.initialY = initialY;
-        this.collisionBox = new CollisionBox(getPhysics(), new RectangleWireframe(Main.TILE_WIDTH, Main.TILE_HEIGHT));
+        this.collisionBox = new CollisionBox(getPhysics(),
+                new RectangleWireframe(Main.TILE_WIDTH, Main.TILE_HEIGHT));
         this.collisionBox.generate();
     }
 

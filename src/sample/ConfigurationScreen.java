@@ -5,15 +5,8 @@ import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.stage.Screen;
-import org.w3c.dom.css.RGBColor;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 /**
  * set up for the configuration screen.
@@ -91,7 +84,7 @@ public class ConfigurationScreen {
         HBox hb = new HBox();
         hb.getChildren().addAll(nameLabel, nameInput);
         hb.setSpacing(15);
-        hb.setPadding(new Insets(25,0,0,0));
+        hb.setPadding(new Insets(25, 0, 0, 0));
         return hb;
     }
 
@@ -155,7 +148,7 @@ public class ConfigurationScreen {
             togBut[i] = new ToggleButton(buttonN[i]);
 
             //allows button to be bigger
-            togBut[i].setMinSize(width/3, height/8);
+            togBut[i].setMinSize(width / 3, height / 8);
 
             togBut[i].setToggleGroup(togGroup);
             //adds button to h box container
@@ -209,7 +202,8 @@ public class ConfigurationScreen {
     private ImageView createImage() {
         StackPane base;
         try {
-            Image titleImage = new Image(new FileInputStream("file:/Resources/maxim-revin-saiph21.jpg"));
+            Image titleImage = new Image(
+            new FileInputStream("file:/Resources/maxim-revin-saiph21.jpg"));
             ImageView imageView = new ImageView(titleImage);
             imageView.setPreserveRatio(true);
             imageView.setFitHeight(height);

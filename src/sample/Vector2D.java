@@ -69,7 +69,7 @@ public class Vector2D {
      * @return scalar result of operation
      */
     public double squaredLen() {
-       return x * x + y * y;
+        return x * x + y * y;
     }
     /**
      * Normalizes a vector (finds its unit vector)
@@ -179,15 +179,15 @@ public class Vector2D {
 
 
     @Override
-    public boolean equals(Object other){
-        if( other instanceof Vector2D) {
-            return ((Vector2D)other).getX() == this.x && ((Vector2D)other).getY() == this.y;
+    public boolean equals(Object other) {
+        if (other instanceof Vector2D) {
+            return ((Vector2D) other).getX() == this.x && ((Vector2D) other).getY() == this.y;
         }
         return false;
     }
 
     @Override
-    public int hashCode(){
-        return (int)(this.x *100) * 101 + (int)(this.y * 100) * 179;
+    public int hashCode() {
+        return (int) (this.x * 100) * 101 + (int) (this.y * 100) * 179;
     }
 }

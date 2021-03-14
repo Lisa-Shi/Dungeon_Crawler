@@ -1,15 +1,15 @@
 package sample;
 
 
-public class Monster extends Vector2D implements Physical{
+public class Monster extends Vector2D implements Physical {
     //monster needs a name too. give some respect to the monster :)
-    public String name;
+    private String name;
     private int demage;
     private PhysicsController physics;
     private Sprite sprite;
 
 
-    public Monster(String inputName, int inputDemage, double inX, double inY){
+    public Monster(String inputName, int inputDemage, double inX, double inY) {
         super(inX, inY);
         name = inputName;
         demage = inputDemage;
@@ -28,5 +28,9 @@ public class Monster extends Vector2D implements Physical{
     }
     public Sprite getSprite() {
         return sprite;
+    }
+
+    public String getName() {
+        return name;
     }
 }

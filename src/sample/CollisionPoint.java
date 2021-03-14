@@ -32,7 +32,8 @@ public class CollisionPoint {
             normal2 = normal2.add(edgeNormal.opposite());
         }
 
-        if (position.add(normal1).distanceSquared(towardPoint) < position.add(normal2).distanceSquared(towardPoint)) {
+        if (position.add(normal1).distanceSquared(towardPoint)
+                < position.add(normal2).distanceSquared(towardPoint)) {
             return normal1.norm();
         } else {
             return normal2.norm();

@@ -161,16 +161,16 @@ public class Room implements Physical {
     public void add(GameObject obj) {
         if (obj instanceof Physical) {
             // so far, all game objects are physical
-            physicals.add(0, (Physical) obj);
+            physicals.add((Physical) obj);
         }
         if (obj instanceof Collideable) {
-            collideables.add(0, (Collideable) obj);
+            collideables.add((Collideable) obj);
         }
         if (obj instanceof ExitTile) {
-            exits.add(0, (ExitTile) obj);
+            exits.add((ExitTile) obj);
         }
         if (obj instanceof Drawable) {
-            drawables.add(0, (Drawable) obj);
+            drawables.add((Drawable) obj);
         }
     }
     public Vector2D getLocToRoom(Room room){

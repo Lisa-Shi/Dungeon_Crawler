@@ -220,9 +220,4 @@ public class GameStage extends Stage {
         }
 
     };
-
-    public Room getRoom() {
-        return room;
-    }
-
 }

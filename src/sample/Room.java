@@ -33,10 +33,7 @@ public class Room implements Physical {
         // Physics so the camera works properly
         this.physics = new PhysicsController(0, 0);
 
-        this.physicals = new LinkedList<>();
-        this.collideables = new LinkedList<>();
-        this.exits = new LinkedList<>();
-        this.drawables = new LinkedList<>();
+        clear();
     }
     public Room(int width, int height, int ID) {
         roomId = ID;
@@ -46,10 +43,7 @@ public class Room implements Physical {
         // Physics so the camera works properly
         this.physics = new PhysicsController(0, 0);
 
-        this.physicals = new LinkedList<>();
-        this.collideables = new LinkedList<>();
-        this.exits = new LinkedList<>();
-        this.drawables = new LinkedList<>();
+        clear();
     }
     // Methods
     public void generateExits(List<Room> listOfExit) {
@@ -121,6 +115,13 @@ public class Room implements Physical {
         for (Physical physical : physicals) {
             physical.update(camera);
         }
+    }
+
+    public void clear() {
+        this.physicals = new LinkedList<>();
+        this.collideables = new LinkedList<>();
+        this.exits = new LinkedList<>();
+        this.drawables = new LinkedList<>();
     }
 
 

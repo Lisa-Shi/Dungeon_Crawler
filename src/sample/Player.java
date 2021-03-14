@@ -94,8 +94,6 @@ public class Player implements Physical, Collideable, Drawable {
                     if (solid) {
                         backtrackVel = backtrackVel.add(getCollisionBox().calculateCollisionVector(collideable.getCollisionBox()).multiply(0.01D));
                         hasCollidedWithSolid = true;
-                    } else {
-                        boundaries.add((Passable) collideable);
                     }
                 }
             }
@@ -104,6 +102,11 @@ public class Player implements Physical, Collideable, Drawable {
                 // Move player back to test if safe from collisions
                 physics.setPosition(physics.getPosition().add(backtrackVel));
                 backtracks++;
+                boundaries.clear();
+            }
+
+            if (backtrackVel.getX() == 0 && backtrackVel.getY() == 0) {
+                break;
             }
         } while (hasCollidedWithSolid);
 

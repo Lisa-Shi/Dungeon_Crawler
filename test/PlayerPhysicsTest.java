@@ -9,7 +9,7 @@ import sample.Weapon;
 
 import static org.junit.Assert.assertEquals;
 
-public class GameTest extends ApplicationTest {
+public class PlayerPhysicsTest extends ApplicationTest {
     private GameStage game;
     private Player player;
 

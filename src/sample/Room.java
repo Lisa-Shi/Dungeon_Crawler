@@ -12,10 +12,10 @@ public class Room implements Physical {
     private int height;
     private String layout;
 
-    private LinkedList<Physical> physicals;
-    private LinkedList<Collideable> collideables;
-    private LinkedList<Drawable> drawables;
-    private LinkedList<ExitTile> exits;
+    private LinkedList<Physical> physicals = new LinkedList<>();
+    private LinkedList<Collideable> collideables = new LinkedList<>();
+    private LinkedList<Drawable> drawables = new LinkedList<>();
+    private LinkedList<ExitTile> exits = new LinkedList<>();
 
     private PhysicsController physics;
 
@@ -46,6 +46,9 @@ public class Room implements Physical {
 
         clear();
     }
+    public List<ExitTile> getExits(){
+        return exits;
+    }
     // Methods
     public void generateExits(List<Room> listOfExit) {
         LinkedList<Vector2D> availableExits = new LinkedList<>();
@@ -58,6 +61,18 @@ public class Room implements Physical {
             int index = ran.nextInt(availableExits.size());
             Vector2D vec = availableExits.remove(index);
             ExitTile exit = new ExitTile(this, (int) vec.getX(), (int) vec.getY(), room);
+            for( ExitTile exitA : room.getExits()){
+                if( vec.getY() == exitA.getExitY()){
+                    if( Math.abs(vec.getX()-exitA.getExitX()) < 5){
+                        exit = new ExitTile(this, (int) (width - vec.getX()), (int) vec.getY(), room);
+                    }
+                }
+                if( vec.getX() == exitA.getExitX()){
+                    if( Math.abs(vec.getY()-exitA.getExitY()) < 5){
+                        exit = new ExitTile(this, (int) vec.getX(), (int) (height - vec.getY()), room);
+                    }
+                }
+            }
             add(exit);
         }
     }
@@ -172,14 +187,6 @@ public class Room implements Physical {
         if (obj instanceof Drawable) {
             drawables.add((Drawable) obj);
         }
-    }
-    public Vector2D getLocToRoom(Room room){
-        for(ExitTile exit : exits){
-            if( exit.getLinkedRoom() == room){
-                return new Vector2D(exit.getExitX(), exit.getExitY());
-            }
-        }
-        return null;
     }
     public String getLayout() {
         return layout;

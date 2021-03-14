@@ -126,8 +126,21 @@ public class Main extends Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Button exit = r.getExitButton();
+        exit.setOnAction(event -> {
+            goCongrat();
+        });
     }
+    private void goCongrat(){
+        CongratScreen welcome = new CongratScreen();
 
+        BorderPane finishLayout = welcome.finishLayout();
+        Scene scene = new Scene(finishLayout, GAME_WIDTH, GAME_HEIGHT);
+        scene.getStylesheets().add("stylesheet.css");
+        mainWindow.setScene(scene);
+
+        mainWindow.show();
+    }
     public static void main(String[] args) {
         launch(args);
     }

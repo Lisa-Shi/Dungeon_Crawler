@@ -2,6 +2,7 @@ package sample;
 
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -13,6 +14,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
+import javafx.scene.control.*;
+
 public class GameStage extends Stage {
     private Pane pane = new Pane();
 
@@ -23,12 +26,12 @@ public class GameStage extends Stage {
     private boolean playerIsMovingUp;
     private boolean playerIsMovingDown;
 
+    private Button exitButton;
     private Player player;
     private Camera camera;
-    private Room previousRoom;
     private Room room;
-    private Stage stage;
     private GameMap map;
+    private Stage stage;
     /**
      * Constructs the Stage where the main game takes place
      * Adapted from https://www.youtube.com/watch?v=FVo1fm52hz0
@@ -41,15 +44,17 @@ public class GameStage extends Stage {
 
         room = new Room(20, 20);
         map = new GameMap(room);
+        exitButton = new Button("finish");
         /*
         room.add(new ExitTile(room, 9, 0, null));
         room.add(new ExitTile(room, 0, 9, null));
         room.add(new ExitTile(room, 9, 19, null));
         room.add(new ExitTile(room, 19, 9, null));
          */
+    }
 
-        room.generateExits(map.getAdjRooms(room));
-
+    public Button getExitButton() {
+        return exitButton;
     }
 
     /**
@@ -63,10 +68,7 @@ public class GameStage extends Stage {
         Scene scene = new Scene(createContent());
 
         pane.getChildren().add(player.getSprite());
-
         HBox infoBar = new HBox();
-
-
         Text text = new Text();
         text.setFont(new Font(20));
         text.setText("$" + player.getMoney());
@@ -89,9 +91,7 @@ public class GameStage extends Stage {
         scene.setOnKeyReleased(keyReleased);
 
         stage.setScene(scene);
-
         stage.show();
-
     }
 
     /**
@@ -130,25 +130,21 @@ public class GameStage extends Stage {
         if (playerIsMovingRight) {
             player.getPhysics().pushRight(Main.DEFAULT_CONTROL_PLAYER_FORCE);
         }
-
-        room.update(camera);
         player.update(camera, room.getCollideables());
+        if(!GameMap.enterRoom().equals(room)){
+            room = GameMap.enterRoom();
+            pane = new Pane();
+            enterRoom();
+            player.update(camera, room.getCollideables());
+        }
+        room.update(camera);
         camera.update(null);
     }
 
-    /**
-     * updating the scene to be the next room
-     *
-     */
-    public void enterRoom(Room room) {
-        if( room.getRoomId() != 999) {
-            room.generateExits(map.getAdjRooms(room));
-        }
+    public void enterRoom() {
+
         pane = new Pane();
         pane.setPrefSize(Main.GAME_WIDTH, Main.GAME_HEIGHT);
-        room.finalize(pane);
-        Scene scene = new Scene(pane);
-        pane.getChildren().add(player.getSprite());
         HBox infoBar = new HBox();
         Text text = new Text();
         text.setFont(new Font(20));
@@ -164,13 +160,20 @@ public class GameStage extends Stage {
         testingPurpose.setTextAlignment(TextAlignment.LEFT);
         infoBar.getChildren().add(testingPurpose);
         infoBar.getChildren().add(text);
+        if( room.getRoomId() != 999) {
+            room.generateExits(map.getAdjRooms(room));
+        } else{
+            infoBar.getChildren().add(exitButton);
+        }
+        room.finalize(pane);
+        Scene scene = new Scene(pane);
+        pane.getChildren().add(player.getSprite());
         pane.getChildren().add(infoBar);
         scene.setOnKeyPressed(keyPressed);
         scene.setOnKeyReleased(keyReleased);
         stage.setScene(scene);
         stage.show();
     }
-
     public Room getRoom() {
         return room;
     }

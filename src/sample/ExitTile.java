@@ -1,7 +1,7 @@
 package sample;
 
 
-public class ExitTile extends Tile implements Passable {
+public class ExitTile extends Tile implements Passable{
     // Variables
     private Room linkedRoom;
     private CollisionBox collisionBox;
@@ -46,7 +46,7 @@ public class ExitTile extends Tile implements Passable {
     @Override
     public void collisionWithPlayerEvent(Player player) {
         System.out.println("entering "+getLinkedRoom().getRoomId());
-        player.enterRoom(getLinkedRoom());
+        GameMap.enterRoom(getLinkedRoom());
     }
 
     /**

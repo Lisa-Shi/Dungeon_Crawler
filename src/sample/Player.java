@@ -17,7 +17,11 @@ public class Player implements Physical, Collideable, Drawable {
 
     private Sprite sprite;
     private int money;
+    private boolean finish = false;
 
+    public boolean getFinish(){
+        return finish;
+    }
 
     /**
      * Constructs the Player object that the user will control
@@ -95,7 +99,11 @@ public class Player implements Physical, Collideable, Drawable {
                         backtrackVel = backtrackVel.add(getCollisionBox().calculateCollisionVector(collideable.getCollisionBox()).multiply(0.001D));
                         hasCollidedWithSolid = true;
                     }
+                    if (collideable instanceof ExitTile){
+                        ((ExitTile) collideable).collisionWithPlayerEvent(this);
+                    }
                 }
+
             }
 
             if (hasCollidedWithSolid) {
@@ -114,7 +122,6 @@ public class Player implements Physical, Collideable, Drawable {
             physics.setVelocity(physics.getVelocity().projectOnto(backtrackVel.normal()));
             physics.setAcceleration(physics.getAcceleration().projectOnto(backtrackVel.normal()));
         }
-
         // Activate boundaries
         for (Passable boundary : boundaries) {
             boundary.collisionWithPlayerEvent(this);

@@ -8,6 +8,7 @@ import java.util.*;
  *
  */
 public class GameMap {
+    private static Room currentRoom;
     private Room start;
     private Room end;
     private Set<Edge> edge = new HashSet<>();
@@ -20,6 +21,7 @@ public class GameMap {
      * @param starting the room where the player is born
      */
     public GameMap(Room starting){
+        currentRoom = starting;
         start = starting;
         end = new Room(20, 20, 999);
         rooms = new HashSet<>();
@@ -49,12 +51,17 @@ public class GameMap {
             rooms.add(newRoom);
             edge.add(new Edge(newRoom, start));
             adjList.get(start).add(newRoom);
-            ArrayList<Room> r2 = new ArrayList<Room>();
-            r2.add(end);
+            ArrayList<Room> r2 = new ArrayList<Room>(List.of(start));
             adjList.put(newRoom, r2);
         }
+        start.generateExits(adjList.get(start));
     }
-
+    public static void enterRoom(Room entering){
+        currentRoom = entering;
+    }
+    public static Room enterRoom(){
+        return currentRoom;
+    }
     /**
      * get the list of adjacent rooms around the param
      * @param room the center room that connects the adjacent rooms

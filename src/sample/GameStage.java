@@ -32,6 +32,10 @@ public class GameStage extends Stage {
     private Room room;
     private GameMap map;
     private Stage stage;
+    private Scene scene;
+    private HBox infoBar = new HBox();
+    private Text text = new Text();
+    private Text testingPurpose = new Text();
     /**
      * Constructs the Stage where the main game takes place
      * Adapted from https://www.youtube.com/watch?v=FVo1fm52hz0
@@ -53,10 +57,6 @@ public class GameStage extends Stage {
          */
     }
 
-    public Button getExitButton() {
-        return exitButton;
-    }
-
     /**
      * Finishes setting up the room where the main game
      * takes place
@@ -65,18 +65,16 @@ public class GameStage extends Stage {
      */
     public void start(Stage stage) {
         this.stage = stage;
-        Scene scene = new Scene(createContent());
+        scene = new Scene(createContent());
 
         pane.getChildren().add(player.getSprite());
-        HBox infoBar = new HBox();
-        Text text = new Text();
         text.setFont(new Font(20));
         text.setText("$" + player.getMoney());
         text.setX(0);
         text.setY(20);
         text.setTextAlignment(TextAlignment.LEFT);
 
-        Text testingPurpose = new Text();
+
         testingPurpose.setFont(new Font(20));
         testingPurpose.setText("now in room " + room.getRoomId() + " \n");
         testingPurpose.setX(0);
@@ -133,7 +131,6 @@ public class GameStage extends Stage {
         player.update(camera, room.getCollideables());
         if(!GameMap.enterRoom().equals(room)){
             room = GameMap.enterRoom();
-            pane = new Pane();
             enterRoom();
             player.update(camera, room.getCollideables());
         }
@@ -144,27 +141,16 @@ public class GameStage extends Stage {
     public void enterRoom() {
         pane = new Pane();
         pane.setPrefSize(Main.GAME_WIDTH, Main.GAME_HEIGHT);
-        HBox infoBar = new HBox();
-        Text text = new Text();
-        text.setFont(new Font(20));
-        text.setText("$" + player.getMoney());
-        text.setX(0);
-        text.setY(20);
-        text.setTextAlignment(TextAlignment.LEFT);
-        Text testingPurpose = new Text();
-        testingPurpose.setFont(new Font(20));
-        testingPurpose.setText("now in room " + room.getRoomId() +" \n");
-        testingPurpose.setX(0);
-        testingPurpose.setY(50);
-        testingPurpose.setTextAlignment(TextAlignment.LEFT);
-        infoBar.getChildren().add(testingPurpose);
-        infoBar.getChildren().add(text);
         room.generateExits(map.getAdjRooms(room));
-        infoBar.getChildren().add(exitButton);
         room.finalize(pane);
+        Scene scene = new Scene(pane);
+        if( room.getRoomId() == 999) {
+            infoBar.getChildren().add(exitButton);
+        }
+        text.setText("$" + player.getMoney());
+        testingPurpose.setText("now in room " + room.getRoomId() + " \n");
         pane.getChildren().add(player.getSprite());
         pane.getChildren().add(infoBar);
-        Scene scene = new Scene(pane);
         scene.setOnKeyPressed(keyPressed);
         scene.setOnKeyReleased(keyReleased);
         stage.setScene(scene);
@@ -219,4 +205,8 @@ public class GameStage extends Stage {
         }
 
     };
+    public Button getExitButton() {
+        return exitButton;
+    }
+
 }

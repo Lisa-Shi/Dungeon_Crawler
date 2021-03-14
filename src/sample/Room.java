@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import java.util.LinkedList;
 import java.util.*;
@@ -34,7 +35,6 @@ public class Room implements Physical {
         // Physics so the camera works properly
         this.physics = new PhysicsController(0, 0);
 
-        clear();
     }
     public Room(int width, int height, int ID) {
         roomId = ID;
@@ -44,36 +44,37 @@ public class Room implements Physical {
         // Physics so the camera works properly
         this.physics = new PhysicsController(0, 0);
 
-        clear();
     }
     public List<ExitTile> getExits(){
         return exits;
     }
     // Methods
     public void generateExits(List<Room> listOfExit) {
-        LinkedList<Vector2D> availableExits = new LinkedList<>();
-        availableExits.add(new Vector2D((int) (Math.random() * (width - 2) + 1), 0));
-        availableExits.add(new Vector2D( (int) 0, (int) (Math.random() * (height - 2) + 1)));
-        availableExits.add(new Vector2D( (int) width - 1, (int) (Math.random() * (height - 2) + 1)));
-        availableExits.add(new Vector2D((int) (Math.random() * (width - 2) + 1), height - 1));
-        Random ran = new Random();
-        for(Room room: listOfExit){
-            int index = ran.nextInt(availableExits.size());
-            Vector2D vec = availableExits.remove(index);
-            ExitTile exit = new ExitTile(this, (int) vec.getX(), (int) vec.getY(), room);
-            for( ExitTile exitA : room.getExits()){
-                if( vec.getY() == exitA.getExitY()){
-                    if( Math.abs(vec.getX()-exitA.getExitX()) < 5){
-                        exit = new ExitTile(this, (int) (width - vec.getX()), (int) vec.getY(), room);
+        if( exits.isEmpty()) {
+            LinkedList<Vector2D> availableExits = new LinkedList<>();
+            availableExits.add(new Vector2D((int) (Math.random() * (width - 2) + 1), 0));
+            availableExits.add(new Vector2D((int) 0, (int) (Math.random() * (height - 2) + 1)));
+            availableExits.add(new Vector2D((int) width - 1, (int) (Math.random() * (height - 2) + 1)));
+            availableExits.add(new Vector2D((int) (Math.random() * (width - 2) + 1), height - 1));
+            Random ran = new Random();
+            for (Room room : listOfExit) {
+                int index = ran.nextInt(availableExits.size());
+                Vector2D vec = availableExits.remove(index);
+                ExitTile exit = new ExitTile(this, (int) vec.getX(), (int) vec.getY(), room);
+                for (ExitTile exitA : room.getExits()) {
+                    if (vec.getY() == exitA.getExitY()) {
+                        if (Math.abs(vec.getX() - exitA.getExitX()) < 5) {
+                            exit = new ExitTile(this, (int) (width - vec.getX()), (int) vec.getY(), room);
+                        }
+                    }
+                    if (vec.getX() == exitA.getExitX()) {
+                        if (Math.abs(vec.getY() - exitA.getExitY()) < 5) {
+                            exit = new ExitTile(this, (int) vec.getX(), (int) (height - vec.getY()), room);
+                        }
                     }
                 }
-                if( vec.getX() == exitA.getExitX()){
-                    if( Math.abs(vec.getY()-exitA.getExitY()) < 5){
-                        exit = new ExitTile(this, (int) vec.getX(), (int) (height - vec.getY()), room);
-                    }
-                }
+                add(exit);
             }
-            add(exit);
         }
     }
     /**

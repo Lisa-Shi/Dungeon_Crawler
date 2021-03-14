@@ -40,14 +40,18 @@ public class GameMap {
             curr = a;
         }
         edge.add(new Edge(curr, end));
-        adjList.put(curr, new ArrayList<Room>(List.of(end)));
+        ArrayList<Room> r1 = new ArrayList<Room>();
+        r1.add(end);
+        adjList.put(curr, r1);
 
         for(int i = 0; i < 3; i++){
             Room newRoom = new Room(20, 20);
             rooms.add(newRoom);
             edge.add(new Edge(newRoom, start));
             adjList.get(start).add(newRoom);
-            adjList.put(newRoom, new ArrayList<Room>(List.of(start)));
+            ArrayList<Room> r2 = new ArrayList<Room>();
+            r2.add(end);
+            adjList.put(newRoom, r2);
         }
     }
 

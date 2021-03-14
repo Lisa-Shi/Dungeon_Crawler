@@ -50,16 +50,6 @@ public class GameStage extends Stage {
 
         room.generateExits(map.getAdjRooms(room));
 
-        // test code, could make shapes into functions later
-        room.add(new WallTile(room, 9, 9));
-        room.add(new WallTile(room, 8, 9));
-        room.add(new WallTile(room, 10, 9));
-        room.add(new WallTile(room, 9, 8));
-        room.add(new WallTile(room, 9, 10));
-        room.add(new WallTile(room, 7, 7));
-        room.add(new WallTile(room, 11, 11));
-        room.add(new WallTile(room, 7, 11));
-        room.add(new WallTile(room, 11, 7));
     }
 
     /**
@@ -180,12 +170,16 @@ public class GameStage extends Stage {
         stage.setScene(scene);
         stage.show();
     }
+
+    public Room getRoom() {
+        return room;
+    }
     /**
      * Derived from https://stackoverflow.com/questions/39007382/moving-two-rectangles-with-keyboard-in-javafx
      * Register key press to start moving player in direction specified
      *
      */
-    private EventHandler<KeyEvent> keyPressed = new EventHandler<>() {
+    private EventHandler<KeyEvent> keyPressed = new EventHandler<KeyEvent>() {
         @Override
         public void handle(KeyEvent event) {
             if (event.getCode() == KeyCode.A) {
@@ -207,7 +201,7 @@ public class GameStage extends Stage {
      * Register key release to stop moving player in direction specified
      *
      */
-    private EventHandler<KeyEvent> keyReleased = new EventHandler<>() {
+    private EventHandler<KeyEvent> keyReleased = new EventHandler<KeyEvent>() {
 
         @Override
         public void handle(KeyEvent event) {

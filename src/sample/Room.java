@@ -85,9 +85,9 @@ public class Room implements Physical {
      * @param pane Pane to draw the room within
      */
     public void finalize(Pane pane) {
+        addRoomLayout();
         addFloorTiles();
         addSurroundingWalls();
-        addRoomLayout();
         addAllSprites(pane);
     }
     private void addFloorTiles() {
@@ -113,7 +113,7 @@ public class Room implements Physical {
             add(rightWall);
         }
     }
-    private void addRoomLayout() {
+    public void addRoomLayout() {
         layout = RoomLayout.design(this);
     }
     private void addAllSprites(Pane pane) {
@@ -186,7 +186,7 @@ public class Room implements Physical {
             exits.add((ExitTile) obj);
         }
         if (obj instanceof Drawable) {
-            drawables.add((Drawable) obj);
+            drawables.add(0, (Drawable) obj);
         }
     }
     public String getLayout() {

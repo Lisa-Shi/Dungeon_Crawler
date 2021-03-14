@@ -42,16 +42,19 @@ public class GameMap {
             curr = a;
         }
         edge.add(new Edge(curr, end));
-        ArrayList<Room> r1 = new ArrayList<Room>(List.of(end));
+        ArrayList<Room> r1 = new ArrayList<Room>();
+        r1.add(end);
         adjList.put(curr, r1);
-        r1 = new ArrayList<>(List.of(curr));
+        r1 = new ArrayList<>();
+        r1.add(curr);
         adjList.put(end, r1);
         for(int i = 0; i < 3; i++){
             Room newRoom = new Room(20, 20);
             rooms.add(newRoom);
             edge.add(new Edge(newRoom, start));
             adjList.get(start).add(newRoom);
-            ArrayList<Room> r2 = new ArrayList<Room>(List.of(start));
+            ArrayList<Room> r2 = new ArrayList<Room>();
+            r2.add(start);
             adjList.put(newRoom, r2);
         }
         start.generateExits(adjList.get(start));

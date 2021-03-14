@@ -10,6 +10,7 @@ public class Room implements Physical {
     private static int id = 0;
     private int width;
     private int height;
+    private String layout;
 
     private LinkedList<Physical> physicals;
     private LinkedList<Collideable> collideables;
@@ -49,14 +50,14 @@ public class Room implements Physical {
     public void generateExits(List<Room> listOfExit) {
         LinkedList<Vector2D> availableExits = new LinkedList<>();
         availableExits.add(new Vector2D((int) (Math.random() * (width - 2) + 1), 0));
-        availableExits.add(new Vector2D( (int) 0,(int) (Math.random() * (height - 2) + 1)));
+        availableExits.add(new Vector2D( (int) 0, (int) (Math.random() * (height - 2) + 1)));
         availableExits.add(new Vector2D( (int) width - 1, (int) (Math.random() * (height - 2) + 1)));
         availableExits.add(new Vector2D((int) (Math.random() * (width - 2) + 1), height - 1));
         Random ran = new Random();
         for(Room room: listOfExit){
             int index = ran.nextInt(availableExits.size());
             Vector2D vec = availableExits.remove(index);
-            ExitTile exit = new ExitTile(this, (int)vec.getX(), (int)vec.getY(), room);
+            ExitTile exit = new ExitTile(this, (int) vec.getX(), (int) vec.getY(), room);
             add(exit);
         }
     }
@@ -70,7 +71,7 @@ public class Room implements Physical {
     public void finalize(Pane pane) {
         addFloorTiles();
         addSurroundingWalls();
-
+        addRoomLayout();
         addAllSprites(pane);
     }
     private void addFloorTiles() {
@@ -95,6 +96,9 @@ public class Room implements Physical {
             add(leftWall);
             add(rightWall);
         }
+    }
+    private void addRoomLayout() {
+        layout = RoomLayout.design(this);
     }
     private void addAllSprites(Pane pane) {
         for (Drawable drawable : drawables) {
@@ -177,8 +181,8 @@ public class Room implements Physical {
         }
         return null;
     }
-    public LinkedList<ExitTile> getExits() {
-        return exits;
+    public String getLayout() {
+        return layout;
     }
 
     /**

@@ -92,7 +92,7 @@ public class Player implements Physical, Collideable, Drawable {
                 boolean collided = getCollisionBox().collidedWith(collideable.getCollisionBox());
                 if (collided) {
                     if (solid) {
-                        backtrackVel = backtrackVel.add(getCollisionBox().calculateCollisionVector(collideable.getCollisionBox()).multiply(0.01D));
+                        backtrackVel = backtrackVel.add(getCollisionBox().calculateCollisionVector(collideable.getCollisionBox()).multiply(0.001D));
                         hasCollidedWithSolid = true;
                     }
                 }

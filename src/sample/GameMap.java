@@ -42,10 +42,10 @@ public class GameMap {
             curr = a;
         }
         edge.add(new Edge(curr, end));
-        ArrayList<Room> r1 = new ArrayList<Room>();
-        r1.add(end);
+        ArrayList<Room> r1 = new ArrayList<Room>(List.of(end));
         adjList.put(curr, r1);
-
+        r1 = new ArrayList<>(List.of(curr));
+        adjList.put(end, r1);
         for(int i = 0; i < 3; i++){
             Room newRoom = new Room(20, 20);
             rooms.add(newRoom);

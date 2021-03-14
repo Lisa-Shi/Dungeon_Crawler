@@ -142,7 +142,6 @@ public class GameStage extends Stage {
     }
 
     public void enterRoom() {
-
         pane = new Pane();
         pane.setPrefSize(Main.GAME_WIDTH, Main.GAME_HEIGHT);
         HBox infoBar = new HBox();
@@ -160,15 +159,12 @@ public class GameStage extends Stage {
         testingPurpose.setTextAlignment(TextAlignment.LEFT);
         infoBar.getChildren().add(testingPurpose);
         infoBar.getChildren().add(text);
-        if( room.getRoomId() != 999) {
-            room.generateExits(map.getAdjRooms(room));
-        } else{
-            infoBar.getChildren().add(exitButton);
-        }
+        room.generateExits(map.getAdjRooms(room));
+        infoBar.getChildren().add(exitButton);
         room.finalize(pane);
-        Scene scene = new Scene(pane);
         pane.getChildren().add(player.getSprite());
         pane.getChildren().add(infoBar);
+        Scene scene = new Scene(pane);
         scene.setOnKeyPressed(keyPressed);
         scene.setOnKeyReleased(keyReleased);
         stage.setScene(scene);

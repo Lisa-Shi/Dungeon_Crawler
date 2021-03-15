@@ -135,9 +135,8 @@ public class GameStage extends Stage {
         }
         player.update(camera, room.getCollideables());
 
-        Room previous = null;
-        if(!GameMap.enterRoom().equals(room)){
-            previous = room;
+        if (!GameMap.enterRoom().equals(room)) {
+            Room previous = room;
             room = GameMap.enterRoom();
             enterRoom();
             player.update(camera, room.getCollideables());
@@ -168,8 +167,7 @@ public class GameStage extends Stage {
                 double x = obj.getPhysics().getPosition().getX();
                 double y = obj.getPhysics().getPosition().getY();
                 int exitX = tile.getExitX();
-                int exitY =tile.getExitY();
-                System.out.println("Exit simple - X:" + exitX + "   Y:" + exitY);
+                int exitY = tile.getExitY();
 
                 double distance = 5.0 / 3;
                 boolean teleport = false;

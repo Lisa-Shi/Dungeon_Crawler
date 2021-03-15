@@ -70,28 +70,19 @@ public class Player implements Physical, Collideable, Drawable {
         }
     }
 
-    public void update(Camera camera, Sprite newlocation) {
-
-        sprite.setTranslateX(newlocation.getX());
-        sprite.setTranslateY(newlocation.getY());
-        updateSprite(camera);
-//        update(camera);
-//        raytraceCollision(collideables);
-//        updateSprite(camera);
-        //this.physics = new PhysicsController(newX, newY);
-    }
-
     public void update(Camera camera, LinkedList<Collideable> collideables) {
         update(camera);
         raytraceCollision(collideables);
         updateSprite(camera);
     }
+
     private void updateSprite(Camera camera) {
         sprite.setTranslateX(physics.getPosition().getX() - camera.getPhysics().getPosition().getX()
                 + camera.getOffsetX() - Main.PLAYER_WIDTH / 2);
         sprite.setTranslateY(physics.getPosition().getY() - camera.getPhysics().getPosition().getY()
                 + camera.getOffsetY() - Main.PLAYER_HEIGHT / 2);
     }
+
     private void raytraceCollision(LinkedList<Collideable> collideables) {
         int backtracks = 0;
         boolean hasCollidedWithSolid;

@@ -1,3 +1,5 @@
+package M3UnitTest;
+
 import javafx.stage.Stage;
 import org.junit.Assert;
 import org.junit.Test;

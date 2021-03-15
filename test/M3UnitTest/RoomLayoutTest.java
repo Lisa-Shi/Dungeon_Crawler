@@ -1,3 +1,5 @@
+package M3UnitTest;
+
 import org.testfx.framework.junit.ApplicationTest;
 import sample.GameStage;
 import sample.*;

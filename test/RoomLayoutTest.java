@@ -77,7 +77,7 @@ public class RoomLayoutTest extends ApplicationTest {
      */
     @Test
     public void testDimensionWall() {
-        for (int i = 0; i < 100; i += 10) {
+        for (int i = 0; i <= 80; i += 10) {
             Room r = new Room(20, 20 + i, 2);
             RoomLayout.design(r);
             LinkedList<Physical> p = r.getPhysicals();

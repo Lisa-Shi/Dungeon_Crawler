@@ -53,13 +53,13 @@ public class Room implements Physical {
         if (exits.isEmpty()) {
             LinkedList<Vector2D> availableExits = new LinkedList<>();
             availableExits.add(
-                    new Vector2D((int) (Math.random() * (width - 2) + 1), 0));
+                    new Vector2D((int) (Math.random() * (width - 2) + 1), -1));
             availableExits.add(
-                    new Vector2D((int) 0, (int) (Math.random() * (height - 2) + 1)));
+                    new Vector2D((int) -1, (int) (Math.random() * (height - 2) + 1)));
             availableExits.add(
-                    new Vector2D((int) width - 1, (int) (Math.random() * (height - 2) + 1)));
+                    new Vector2D((int) width, (int) (Math.random() * (height - 2) + 1)));
             availableExits.add(
-                    new Vector2D((int) (Math.random() * (width - 2) + 1), height - 1));
+                    new Vector2D((int) (Math.random() * (width - 2) + 1), height));
             Random ran = new Random();
             for (Room room : listOfExit) {
                 int index = ran.nextInt(availableExits.size());

@@ -168,27 +168,28 @@ public class GameStage extends Stage {
                 double y = obj.getPhysics().getPosition().getY();
                 int exitX = tile.getExitX();
                 int exitY = tile.getExitY();
-
-                double distance = 5.0 / 3;
+                System.out.println("Exit simple x: " + exitX + " y:" + exitY);
+                double distance = 1;
                 boolean teleport = false;
-                if (exitX == 0) {
+                if (exitX == -1) {
                     //right wall
                     teleport = true;
                     x += distance * Main.TILE_WIDTH;
-                } else if (exitX == room.getWidth() - 1) {
+                } else if (exitX == room.getWidth()) {
                     //left wall
                     teleport = true;
                     x -= distance * Main.TILE_WIDTH;
-                } else if (exitY == 0) {
+                } else if (exitY == -1) {
                     //top
                     teleport = true;
                     y += distance * Main.TILE_HEIGHT;
-                } else if (exitY == room.getWidth() - 1) {
+                } else if (exitY == room.getWidth()) {
                     //bottom
                     teleport = true;
                     y -= distance * Main.TILE_HEIGHT;
                 }
                 if (teleport) {
+                    System.out.println("New x: " + x + " y:" + y);
                     Vector2D vec = new Vector2D(x, y);
                     player.getPhysics().setPosition(vec);
                     player.getPhysics().setVelocity(new Vector2D(0, 0));

@@ -1,6 +1,5 @@
 package sample;
 
-import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import java.util.LinkedList;
 import java.util.*;
@@ -36,8 +35,8 @@ public class Room implements Physical {
         this.physics = new PhysicsController(0, 0);
 
     }
-    public Room(int width, int height, int ID) {
-        roomId = ID;
+    public Room(int width, int height, int inputId) {
+        roomId = inputId;
         this.width = width;
         this.height = height;
 
@@ -45,17 +44,22 @@ public class Room implements Physical {
         this.physics = new PhysicsController(0, 0);
 
     }
-    public LinkedList<ExitTile> getExits(){
+
+    public LinkedList<ExitTile> getExits() {
         return exits;
     }
     // Methods
     public void generateExits(List<Room> listOfExit) {
-        if( exits.isEmpty()) {
+        if (exits.isEmpty()) {
             LinkedList<Vector2D> availableExits = new LinkedList<>();
-            availableExits.add(new Vector2D((int) (Math.random() * (width - 2) + 1), 0));
-            availableExits.add(new Vector2D((int) 0, (int) (Math.random() * (height - 2) + 1)));
-            availableExits.add(new Vector2D((int) width - 1, (int) (Math.random() * (height - 2) + 1)));
-            availableExits.add(new Vector2D((int) (Math.random() * (width - 2) + 1), height - 1));
+            availableExits.add(
+                    new Vector2D((int) (Math.random() * (width - 2) + 1), 0));
+            availableExits.add(
+                    new Vector2D((int) 0, (int) (Math.random() * (height - 2) + 1)));
+            availableExits.add(
+                    new Vector2D((int) width - 1, (int) (Math.random() * (height - 2) + 1)));
+            availableExits.add(
+                    new Vector2D((int) (Math.random() * (width - 2) + 1), height - 1));
             Random ran = new Random();
             for (Room room : listOfExit) {
                 int index = ran.nextInt(availableExits.size());
@@ -64,12 +68,14 @@ public class Room implements Physical {
                 for (ExitTile exitA : room.getExits()) {
                     if (vec.getY() == exitA.getExitY()) {
                         if (Math.abs(vec.getX() - exitA.getExitX()) < 5) {
-                            exit = new ExitTile(this, (int) (width - vec.getX()), (int) vec.getY(), room);
+                            exit = new ExitTile(this,
+                                    (int) (width - vec.getX()), (int) vec.getY(), room);
                         }
                     }
                     if (vec.getX() == exitA.getExitX()) {
                         if (Math.abs(vec.getY() - exitA.getExitY()) < 5) {
-                            exit = new ExitTile(this, (int) vec.getX(), (int) (height - vec.getY()), room);
+                            exit = new ExitTile(this,
+                                    (int) vec.getX(), (int) (height - vec.getY()), room);
                         }
                     }
                 }
@@ -203,11 +209,11 @@ public class Room implements Physical {
     }
 
     @Override
-    public boolean equals(Object other){
-        return other instanceof Room && ((Room)other).getRoomId() == this.roomId;
+    public boolean equals(Object other) {
+        return other instanceof Room && ((Room) other).getRoomId() == this.roomId;
     }
     @Override
-    public int hashCode(){
+    public int hashCode() {
         return roomId;
     }
 }

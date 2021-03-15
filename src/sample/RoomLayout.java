@@ -6,6 +6,7 @@ public class RoomLayout {
      * Decides which design to use based on room id.
      *
      * @param room to design
+     * @return the name of the design
      */
     public static String design(Room room) {
         int designID = room.getRoomId() % 4;
@@ -42,7 +43,7 @@ public class RoomLayout {
     private static void design0(Room room) {
         int width = room.getWidth();
         int height = room.getHeight();
-        centerQuad(room, width / 2, height / 2, 4 , 4);
+        centerQuad(room, width / 2, height / 2, 4, 4);
 
         //left
         for (int i = 1; i < 6; i += 2) {

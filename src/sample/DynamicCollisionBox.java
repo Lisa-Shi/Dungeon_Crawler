@@ -31,7 +31,8 @@ public class DynamicCollisionBox extends CollisionBox {
 
             Vector2D targetEdgeNorm = targetEdge.norm();
             for (int j = 1; j <= numCollisionPoints; j++) {
-                Vector2D pointPos = getWireframe().getVertices().get(i).add(targetEdgeNorm.multiply(distBetweenCollisionPoints * j));
+                Vector2D pointPos = getWireframe().getVertices().get(i).add(
+                        targetEdgeNorm.multiply(distBetweenCollisionPoints * j));
                 collisionPoints.add(new CollisionPoint(pointPos, targetEdge));
             }
         }
@@ -44,7 +45,8 @@ public class DynamicCollisionBox extends CollisionBox {
                 borderingVertexIndex += getWireframe().getVertices().size();
             }
 
-            collisionPoints.add(new CollisionPoint(pointPos, getWireframe().getEdges().get(i), getWireframe().getEdges().get(borderingVertexIndex)));
+            collisionPoints.add(new CollisionPoint(pointPos, getWireframe().getEdges().get(i),
+                    getWireframe().getEdges().get(borderingVertexIndex)));
         }
     }
 
@@ -65,10 +67,14 @@ public class DynamicCollisionBox extends CollisionBox {
             if (other.containsPoint(getPhysics().getAbsolutePosition().add(cp.getPosition()))) {
                 if (cp.getOnEdges().size() == 1) {
                     foundEdge = true;
-                    collisionVectorEdges = collisionVectorEdges.add(cp.getNormalTowardPoint(getWireframe().getCenter()));
+                    collisionVectorEdges =
+                            collisionVectorEdges.add(
+                                    cp.getNormalTowardPoint(getWireframe().getCenter()));
                 }
                 if (!foundEdge) {
-                    collisionVectorVertices = collisionVectorVertices.add(cp.getNormalTowardPoint(getWireframe().getCenter()));
+                    collisionVectorVertices =
+                            collisionVectorVertices.add(
+                                    cp.getNormalTowardPoint(getWireframe().getCenter()));
                 }
             }
         }

@@ -11,7 +11,8 @@ public class CollisionBox {
         this(physics, wireframe, true);
     }
     public CollisionBox(PhysicsController physics, PolygonWireframe wireframe, boolean solid) {
-        this.physics = new PhysicsControllerRelative(physics.getPosition().getX(), physics.getPosition().getY(), physics);
+        this.physics = new PhysicsControllerRelative(
+                physics.getPosition().getX(), physics.getPosition().getY(), physics);
         this.wireframe = wireframe;
         this.solid = solid;
     }
@@ -32,7 +33,8 @@ public class CollisionBox {
         for (Vector2D vertex : wireframe.getVertices()) {
             verticesString = verticesString.concat(vertex + ", ");
         }
-        return "Collision box with vertices: " + verticesString.substring(0, verticesString.length() - 2);
+        return "Collision box with vertices: "
+                + verticesString.substring(0, verticesString.length() - 2);
     }
 
     // Getters

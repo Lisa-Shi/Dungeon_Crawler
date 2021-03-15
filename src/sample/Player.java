@@ -41,6 +41,8 @@ public class Player implements Physical, Collideable, Drawable {
         sprite = new Sprite((int) initialX, (int) initialY, (int) Main.PLAYER_WIDTH,
                 (int) Main.PLAYER_HEIGHT, Main.PLAYER_IMAGE);
 
+        //System.out.println()
+
         this.physics = new PhysicsController(initialX, initialY);
         this.difficulty = difficulty;
         if (difficulty == 1) {
@@ -71,6 +73,18 @@ public class Player implements Physical, Collideable, Drawable {
             physics.setVelocity(relenVel);
         }
     }
+
+    public void update(Camera camera, Sprite newlocation) {
+
+        sprite.setTranslateX(newlocation.getX());
+        sprite.setTranslateY(newlocation.getY());
+        updateSprite(camera);
+//        update(camera);
+//        raytraceCollision(collideables);
+//        updateSprite(camera);
+        //this.physics = new PhysicsController(newX, newY);
+    }
+
     public void update(Camera camera, LinkedList<Collideable> collideables) {
         update(camera);
         raytraceCollision(collideables);

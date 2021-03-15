@@ -45,7 +45,7 @@ public class Room implements Physical {
         this.physics = new PhysicsController(0, 0);
 
     }
-    public List<ExitTile> getExits(){
+    public LinkedList<ExitTile> getExits(){
         return exits;
     }
     // Methods

@@ -4,6 +4,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class Sprite extends ImageView {
+    int x;
+    int y;
     /**
      * Links an image to code, making its behavior easy to modify
      * Heavily adapted from https://www.youtube.com/watch?v=FVo1fm52hz0
@@ -20,7 +22,11 @@ public class Sprite extends ImageView {
         this.setFitWidth(w);
         this.setFitHeight(h);
 
+        this.x = x;
+        this.y = y;
+
         setTranslateX(x);
         setTranslateY(y);
     }
+
 }

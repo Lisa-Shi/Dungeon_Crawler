@@ -29,6 +29,9 @@ public abstract class GameObject implements Physical, Drawable {
     public PhysicsController getPhysics() {
         return physics;
     }
+    public PhysicsControllerRelative getPhysicsRel() {
+        return physics;
+    }
     public Sprite getSprite() {
         return sprite;
     }

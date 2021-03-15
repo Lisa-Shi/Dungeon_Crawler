@@ -1,7 +1,7 @@
 package sample;
 
 
-public class ExitTile extends Tile implements Passable{
+public class ExitTile extends Tile implements Passable {
     // Variables
     private Room linkedRoom;
     private CollisionBox collisionBox;
@@ -32,6 +32,15 @@ public class ExitTile extends Tile implements Passable{
 
     public int getExitX() {
         return exitX;
+    }
+
+    public int[] getNextTo() {
+        //X: 0, Y: # -> vertical right
+        //X: 19, Y: # -> vertical left
+        //X: #, Y: 0 -> top
+        //X: #, Y: 19 -> bottom
+
+        return null;
     }
 
     public Room getLinkedRoom() {

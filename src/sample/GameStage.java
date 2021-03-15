@@ -16,6 +16,8 @@ import javafx.stage.Stage;
 
 import javafx.scene.control.*;
 
+import java.util.LinkedList;
+
 public class GameStage extends Stage {
     private Pane pane = new Pane();
 
@@ -129,19 +131,74 @@ public class GameStage extends Stage {
             player.getPhysics().pushRight(Main.DEFAULT_CONTROL_PLAYER_FORCE);
         }
         player.update(camera, room.getCollideables());
+        Room previous = null;
         if(!GameMap.enterRoom().equals(room)){
+            previous = room;
             room = GameMap.enterRoom();
             enterRoom();
             player.update(camera, room.getCollideables());
+            matchPlayerExit(previous);
         }
         room.update(camera);
         camera.update(null);
     }
 
+    /**
+     * Matches player's position to entrance.
+     *
+     * Takes in the previous room.
+     * Finds the corresponding exit in current room.
+     * Sets the player's position to be at the exit.
+     *
+     * @param previous room
+     */
+    public void matchPlayerExit(Room previous) {
+        LinkedList<ExitTile> exits = room.getExits();
+        System.out.println("NEW ROOM");
+
+        for (ExitTile tile : exits) {
+            System.out.println("exit id:" + tile.getLinkedRoom().getRoomId());
+
+            if (tile.getLinkedRoom().getRoomId() == previous.getRoomId()) {
+                GameObject obj = (GameObject) tile;
+                double x = obj.getPhysics().getPosition().getX();
+                double y = obj.getPhysics().getPosition().getY();
+                int exitX = tile.getExitX();
+                int exitY =tile.getExitY();
+                System.out.println("Exit simple - X:" + exitX + "   Y:" + exitY);
+
+                double distance = 5.0 / 3;
+                boolean teleport = false;
+                if (exitX == 0) {
+                    //right wall
+                    teleport = true;
+                    x += distance * Main.TILE_WIDTH;
+                } else if (exitX == room.getWidth() - 1) {
+                    //left wall
+                    teleport = true;
+                    x -= distance * Main.TILE_WIDTH;
+                } else if (exitY == 0) {
+                    //top
+                    teleport = true;
+                    y += distance * Main.TILE_HEIGHT;
+                } else if (exitY == room.getWidth() - 1) {
+                    //bottom
+                    teleport = true;
+                    y -= distance * Main.TILE_HEIGHT;
+                }
+                if (teleport) {
+                    Vector2D vec = new Vector2D(x, y);
+                    player.getPhysics().setPosition(vec);
+                    player.getPhysics().setVelocity(new Vector2D(0, 0));
+                }
+            }
+        }
+    }
     public void enterRoom() {
         pane = new Pane();
         pane.setPrefSize(Main.GAME_WIDTH, Main.GAME_HEIGHT);
         room.generateExits(map.getAdjRooms(room));
+
         room.finalize(pane);
         Scene scene = new Scene(pane);
         if( room.getRoomId() == 999) {

@@ -1,3 +1,5 @@
+package unittest.m3;
+
 import javafx.stage.Stage;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
@@ -17,7 +19,7 @@ public class PlayerCollisionTest extends ApplicationTest {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        player = new Player("test", new Weapon("test", "test",
+        player = new Player("unittest", new Weapon("unittest", "unittest",
                 1, 5), 2 * Main.TILE_WIDTH, 2 * Main.TILE_HEIGHT, 0);
         game = new GameStage(player);
         game.start(new Stage());

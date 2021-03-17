@@ -1,4 +1,4 @@
-package M3UnitTest;
+package unittest.m3;
 
 import javafx.stage.Stage;
 import org.junit.Assert;
@@ -18,7 +18,7 @@ public class NextRoomTest extends ApplicationTest {
     private GameMap map;
     @Override
     public void start(Stage primaryStage) throws Exception {
-        player = new Player("test", new Weapon("test", "test", 1, 5), 0, 0, 0);
+        player = new Player("unittest", new Weapon("unittest", "unittest", 1, 5), 0, 0, 0);
         game = new GameStage(player);
         map = game.getMap();
         game.start(new Stage());

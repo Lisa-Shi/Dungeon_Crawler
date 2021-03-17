@@ -1,3 +1,4 @@
+package unittest.m2;
 
 import org.testfx.assertions.api.Assertions;
 import sample.Main;

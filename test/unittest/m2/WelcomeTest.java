@@ -1,3 +1,5 @@
+package unittest.m2;
+
 import javafx.stage.Stage;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;

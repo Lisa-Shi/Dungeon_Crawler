@@ -1,3 +1,5 @@
+package unittest.m2;
+
 import org.testfx.framework.junit.ApplicationTest;
 import sample.GameStage;
 import sample.Main;
@@ -15,7 +17,7 @@ public class PlayerPhysicsTest extends ApplicationTest {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        player = new Player("test", new Weapon("test", "test", 1, 5), 0, 0, 0);
+        player = new Player("unittest", new Weapon("unittest", "unittest", 1, 5), 0, 0, 0);
         game = new GameStage(player);
         game.start(new Stage());
     }

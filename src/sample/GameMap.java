@@ -41,9 +41,14 @@ public class GameMap {
             pre = curr;
             curr = a;
         }
-        adjList.put(curr, new ArrayList<>(List.of(pre)));
+        ArrayList arr1 = new ArrayList<>();
+        arr1.add(pre);
+        adjList.put(curr, arr1);
         adjList.get(curr).add(end);
-        adjList.put(end, new ArrayList<>(List.of(curr)));
+
+        ArrayList arr2 = new ArrayList<>();
+        arr2.add(curr);
+        adjList.put(end, arr2);
         for (int i = 0; i < 3; i++) {
             Room newRoom = new Room(20, 20);
             rooms.add(newRoom);

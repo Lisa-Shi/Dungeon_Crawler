@@ -1,8 +1,12 @@
 package sample;
 
+import javafx.scene.image.Image;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import static com.sun.javafx.scene.control.skin.Utils.getResource;
 
 public class Player implements Physical, Collideable, Drawable {
 
@@ -15,6 +19,10 @@ public class Player implements Physical, Collideable, Drawable {
     private PhysicsController physics;
     private DynamicCollisionBox collisionBox;
 
+    public List<Image> still = new ArrayList<>(
+            List.of(
+                    //new Image(Player.class.getResource("..\\..\\Resources\\character\\2.PNG").toExternalForm())
+            ));
     private Sprite sprite;
     private int money;
 
@@ -34,7 +42,7 @@ public class Player implements Physical, Collideable, Drawable {
         weaponList = new ArrayList<>();
         weaponList.add(initialWeapon);
         sprite = new Sprite((int) initialX, (int) initialY, (int) Main.PLAYER_WIDTH,
-                (int) Main.PLAYER_HEIGHT, Main.PLAYER_IMAGE);
+                (int) Main.PLAYER_HEIGHT, Main.PLAYER_IMAGE.get(2));
 
         //System.out.println()
 

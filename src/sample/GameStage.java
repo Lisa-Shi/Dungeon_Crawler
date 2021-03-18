@@ -1,9 +1,12 @@
 package sample;
 
 import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
@@ -14,8 +17,11 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import javafx.scene.control.*;
+import javafx.util.Duration;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class GameStage extends Stage {
     private Pane pane = new Pane();
@@ -120,18 +126,34 @@ public class GameStage extends Stage {
      * Updates room physics, player movement from keyboard input,
      * etc.
      */
+    private final List<Image> direction = new ArrayList<>();
     public void update() {
+        KeyFrame frame;
+        List<Image>[] direction = new List[1];
         if (playerIsMovingUp) {
             player.getPhysics().pushUp(Main.DEFAULT_CONTROL_PLAYER_FORCE);
+            direction[0] = Main.WALKNORTH;
         }
         if (playerIsMovingDown) {
             player.getPhysics().pushDown(Main.DEFAULT_CONTROL_PLAYER_FORCE);
+            direction[0] = Main.WALKSOUTH;
         }
         if (playerIsMovingLeft) {
             player.getPhysics().pushLeft(Main.DEFAULT_CONTROL_PLAYER_FORCE);
+            direction[0] = Main.WALKWEST;
         }
         if (playerIsMovingRight) {
             player.getPhysics().pushRight(Main.DEFAULT_CONTROL_PLAYER_FORCE);
+            direction[0] = Main.WALKEAST;
+        }
+        if( direction[0] != null) {
+            frame = new KeyFrame(Duration.millis(50), e -> {
+                player.getSprite().setImage(direction[0].get((imageindex++) % 2));
+
+            });
+            timeline.getKeyFrames().add(frame);
+            timeline.setCycleCount(Timeline.INDEFINITE);
+            timeline.play();
         }
         player.update(camera, room.getCollideables());
 
@@ -171,28 +193,34 @@ public class GameStage extends Stage {
                 System.out.println("Exit simple x: " + exitX + " y:" + exitY);
                 double distance = 1;
                 boolean teleport = false;
+                Image image = null;
                 if (exitX == -1) {
                     //right wall
                     teleport = true;
                     x += distance * Main.TILE_WIDTH;
+                    image = Main.PLAYER_IMAGE.get(3);
                 } else if (exitX == room.getWidth()) {
                     //left wall
                     teleport = true;
                     x -= distance * Main.TILE_WIDTH;
+                    image = Main.PLAYER_IMAGE.get(1);
                 } else if (exitY == -1) {
                     //top
                     teleport = true;
                     y += distance * Main.TILE_HEIGHT;
+                    image = Main.PLAYER_IMAGE.get(2);
                 } else if (exitY == room.getWidth()) {
                     //bottom
                     teleport = true;
                     y -= distance * Main.TILE_HEIGHT;
+                    image = Main.PLAYER_IMAGE.get(0);
                 }
                 if (teleport) {
                     System.out.println("New x: " + x + " y:" + y);
                     Vector2D vec = new Vector2D(x, y);
                     player.getPhysics().setPosition(vec);
                     player.getPhysics().setVelocity(new Vector2D(0, 0));
+                    player.getSprite().setImage(image);
                 }
             }
         }
@@ -226,6 +254,8 @@ public class GameStage extends Stage {
      * Register key press to start moving player in direction specified
      *
      */
+    public Timeline timeline = new Timeline();
+    public int imageindex = 0;
     private EventHandler<KeyEvent> keyPressed = new EventHandler<KeyEvent>() {
         @Override
         public void handle(KeyEvent event) {
@@ -252,20 +282,26 @@ public class GameStage extends Stage {
 
         @Override
         public void handle(KeyEvent event) {
+            Image image = null;
             if (event.getCode() == KeyCode.A) {
                 playerIsMovingLeft = false;
+                image = Main.PLAYER_IMAGE.get(3);
             }
             if (event.getCode() == KeyCode.D) {
                 playerIsMovingRight = false;
+                image = Main.PLAYER_IMAGE.get(1);
             }
             if (event.getCode() == KeyCode.W) {
                 playerIsMovingUp = false;
+                image = Main.PLAYER_IMAGE.get(0);
             }
             if (event.getCode() == KeyCode.S) {
                 playerIsMovingDown = false;
+                image = Main.PLAYER_IMAGE.get(2);
             }
+            player.getSprite().setImage(image);
+            timeline.stop();
         }
-
     };
     public Button getExitButton() {
         return exitButton;

@@ -10,7 +10,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-import java.awt.*;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Main extends Application {
     // Variables
@@ -36,11 +37,31 @@ public class Main extends Application {
     public static final PolygonWireframe TILE_WIREFRAME =
             new RectangleWireframe(Main.PLAYER_WIDTH, Main.PLAYER_HEIGHT);
 
-    public static final Image PLAYER_IMAGE =
-            new Image(Player.class.getResource("testimg.png").toExternalForm());
+    public static final List<Image> PLAYER_IMAGE = new LinkedList<>(
+            List.of( new Image(Main.class.getResource("../character/PlayerFaceNorth.png").toExternalForm()),
+                new Image(Main.class.getResource("../character/PlayerFaceEast.png").toExternalForm()),
+                new Image(Main.class.getResource("../character/PlayerFaceSouth.png").toExternalForm()),
+                new Image(Main.class.getResource("../character/PlayerFaceWest.png").toExternalForm())
+            )
+    );
     public static final Image MONSTER_IMAGE =
             new Image(Player.class.getResource("monsterIMG.jpg").toExternalForm());
-
+    public static final List<Image> WALKSOUTH = new LinkedList<>(
+            List.of( new Image(Player.class.getResource("../character/PlayerWalkingSouthA.png").toExternalForm()),
+                    new Image(Player.class.getResource("../character/playerWalkingSouthB.png").toExternalForm())
+            ));
+    public static final List<Image> WALKNORTH = new LinkedList<>(
+            List.of( new Image(Player.class.getResource("../character/PlayerWalkingNorthA.png").toExternalForm()),
+                    new Image(Player.class.getResource("../character/playerWalkingNorthB.png").toExternalForm())
+            ));
+    public static final List<Image> WALKWEST = new LinkedList<>(
+            List.of( new Image(Player.class.getResource("../character/PlayerWalkingWestA.png").toExternalForm()),
+                    new Image(Player.class.getResource("../character/playerWalkingWestB.png").toExternalForm())
+            ));
+    public static final List<Image> WALKEAST = new LinkedList<>(
+            List.of( new Image(Player.class.getResource("../character/PlayerWalkingEastA.png").toExternalForm()),
+                    new Image(Player.class.getResource("../character/playerWalkingEastB.png").toExternalForm())
+            ));
     private Player player;
 
     @Override

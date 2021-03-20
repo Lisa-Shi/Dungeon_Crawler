@@ -17,8 +17,8 @@ public class Main extends Application {
     // Variables
     private Stage mainWindow;
 
-    public static final int GAME_WIDTH = 500;
-    public static final int GAME_HEIGHT = 500;
+    public static final int GAME_WIDTH = 800;
+    public static final int GAME_HEIGHT = 800;
 
     public static final double DEFAULT_FORCE = 1;
     public static final double DEFAULT_FRICTIONAL_FORCE = 0.18D;

@@ -13,7 +13,7 @@ public class CongratScreen {
      */
     public BorderPane finishLayout() {
         BorderPane border = new BorderPane();
-        Label title = new Label("finish");
+        Label title = new Label("congratulations");
         title.setId("title"); //adds css styling
         border.setTop(title);
 

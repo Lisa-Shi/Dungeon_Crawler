@@ -1,12 +1,10 @@
 package sample;
 
 
-import com.sun.javafx.css.StyleCache;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
 
-import java.awt.*;
 
 public class Monster extends GameObject implements Physical, Collideable, Drawable {
     //monster needs a name too. give some respect to the monster :)

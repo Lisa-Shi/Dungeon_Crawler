@@ -3,8 +3,11 @@ package sample;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.image.Image;
 import javafx.util.Duration;
 
+import java.util.List;
+import java.util.Random;
 
 
 public class Monster extends GameObject implements Physical, Collideable, Drawable {
@@ -22,20 +25,25 @@ public class Monster extends GameObject implements Physical, Collideable, Drawab
             new DynamicCollisionBox(getPhysics(),
                     new RectangleWireframe(3 * Main.TILE_WIDTH, 3 * Main.TILE_HEIGHT));
     private int imageindex = 0;
+    private int monsterType;
+    private List<Image> imageList;
     public Monster(Room room, String inputName, int hp, int inputDemage, double initialX, double initialY) {
+        //trivial image
         super(room, initialX * Main.TILE_WIDTH, initialY * Main.TILE_HEIGHT
-                , Main.MONSTER_WIDTH / 2, Main.MONSTER_HEIGHT / 2,  Main.MONSTER_IMAGE.get(0));
+                    , Main.MONSTER_WIDTH / 2, Main.MONSTER_HEIGHT / 2, Main.FLOORTILE);
+        monsterType = new Random().nextInt(Main.MONSTERS.size());
+        imageList = Main.MONSTERS.get(monsterType);
         name = inputName;
         this.hp = hp;
         demage = inputDemage;
         sprite = new Sprite((int) initialX, (int) initialY, (int) Main.MONSTER_WIDTH,
-                (int) Main.MONSTER_HEIGHT, Main.MONSTER_IMAGE.get(0));
+                (int) Main.MONSTER_HEIGHT, imageList.get(2));
         this.collisionBox = new DynamicCollisionBox(getPhysics(),
                 new RectangleWireframe(Main.MONSTER_WIDTH, Main.MONSTER_HEIGHT));
         this.collisionBox.generate();
         attackRange.generate();
-        frame = new KeyFrame(Duration.millis(50), e -> {
-            sprite.setImage(Main.MONSTER_IMAGE.get((imageindex++) % 2));
+        frame = new KeyFrame(Duration.millis(150), e -> {
+            sprite.setImage(imageList.get(2 + ((imageindex++) % 2)));
         });
         timeline.getKeyFrames().add(frame);
         timeline.setCycleCount(Timeline.INDEFINITE);
@@ -43,12 +51,26 @@ public class Monster extends GameObject implements Physical, Collideable, Drawab
     }
     public void playerInRange(Player player){
         //attack every 1 second
+
+        KeyFrame attack = new KeyFrame(Duration.millis(100), e ->{
+            sprite.setImage(imageList.get((imageindex++) % 2));
+        });
         if( (System.nanoTime() - lastAttack >= 1000000000)
                 && attackRange.containsPoint(player.getCollisionBox().getPhysics().getAbsolutePosition())){
             lastAttack = System.nanoTime();
             player.hurt(demage);
             System.out.println("attacked " + player);
-    }
+            timeline.stop();
+            timeline.getKeyFrames().clear();
+            timeline.getKeyFrames().add(attack);
+            timeline.setCycleCount(3);
+            timeline.play();
+        }
+        timeline.stop();
+        timeline.getKeyFrames().clear();
+        timeline.getKeyFrames().add(frame);
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
     }
 
     @Override

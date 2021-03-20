@@ -47,16 +47,21 @@ public class Room implements Physical {
     }
     public void generateMonster(){
         if(monsters.isEmpty()) {
-            Random ran = new Random();
-            int numOfMon = ran.nextInt(5);
             Monster monster = null;
-            for( int i = 1; i <= numOfMon; i++){
-                int monsterX, monsterY;
-                do {
-                    monsterX = ran.nextInt(width - 2) + 1;
-                    monsterY = ran.nextInt(height - 2) + 1;
-                    monster = new Monster(this, "Monster", 100, 10, monsterX, monsterY);
-                } while (findExistingCollideable(monster));
+            if( roomId != 999) {
+                Random ran = new Random();
+                int numOfMon = ran.nextInt(5);
+                for (int i = 1; i <= numOfMon; i++) {
+                    int monsterX, monsterY;
+                    do {
+                        monsterX = ran.nextInt(width - 2) + 1;
+                        monsterY = ran.nextInt(height - 2) + 1;
+                        monster = new Monster(this, "Monster", 100, 10, monsterX, monsterY);
+                    } while (findExistingCollideable(monster));
+                    add(monster);
+                }
+            }else{
+                monster = new Monster(this, "boss", 1000, 100, width / 2, height / 2);
                 add(monster);
             }
         }
@@ -116,7 +121,9 @@ public class Room implements Physical {
      */
     public void finalize(Pane pane) {
         addRoomLayout();
-        generateMonster();
+        if( roomId != 0) {
+            generateMonster();
+        }
         addFloorTiles();
 
         addSurroundingWalls();

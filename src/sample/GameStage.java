@@ -43,6 +43,9 @@ public class GameStage extends Stage {
     private HBox infoBar = new HBox();
     private Text text = new Text();
     private Text testingPurpose = new Text();
+    //for animation
+    private Timeline timeline = new Timeline();
+    private int imageindex = 0;
 
     public GameMap getMap() {
         return map;
@@ -229,7 +232,7 @@ public class GameStage extends Stage {
         pane = new Pane();
         pane.setPrefSize(Main.GAME_WIDTH, Main.GAME_HEIGHT);
         room.generateExits(map.getAdjRooms(room));
-
+        room.generateMonster();
         room.finalize(pane);
         Scene scene = new Scene(pane);
         if (room.getRoomId() == 999) {
@@ -254,8 +257,7 @@ public class GameStage extends Stage {
      * Register key press to start moving player in direction specified
      *
      */
-    public Timeline timeline = new Timeline();
-    public int imageindex = 0;
+
     private EventHandler<KeyEvent> keyPressed = new EventHandler<KeyEvent>() {
         @Override
         public void handle(KeyEvent event) {

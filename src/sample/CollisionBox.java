@@ -47,4 +47,18 @@ public class CollisionBox {
     public boolean isSolid() {
         return solid;
     }
+
+    /**
+     * if physics (Position) and solid are the same, two collisionboxes are considered to be true
+     * @param other object to compare to
+     * @return true if equal. otherwise false
+     */
+    @Override
+    public boolean equals(Object other){
+        if( other instanceof CollisionBox){
+            return ((CollisionBox) other).getPhysics().equals(this.physics)
+                    && ((CollisionBox) other).isSolid() == this.isSolid();
+        }
+        return false;
+    }
 }

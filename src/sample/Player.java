@@ -242,4 +242,14 @@ public class Player implements Physical, Collideable, Drawable {
     public void setMoney(int money) {
         this.money = money;
     }
+
+    @Override
+    public boolean collideableEqual(Object other) {
+        if( other instanceof Collideable){
+            if (((Collideable) other).getCollisionBox().equals(this.collisionBox)){
+                return true;
+            }
+        }
+        return false;
+    }
 }

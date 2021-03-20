@@ -17,8 +17,8 @@ public class Main extends Application {
     // Variables
     private Stage mainWindow;
 
-    public static final int GAME_WIDTH = 800;
-    public static final int GAME_HEIGHT = 800;
+    public static final int GAME_WIDTH = 500;
+    public static final int GAME_HEIGHT = 500;
 
     public static final double DEFAULT_FORCE = 1;
     public static final double DEFAULT_FRICTIONAL_FORCE = 0.18D;
@@ -28,7 +28,8 @@ public class Main extends Application {
 
     public static final double PLAYER_WIDTH = 40;
     public static final double PLAYER_HEIGHT = 40;
-
+    public static final double MONSTER_WIDTH = 40;
+    public static final double MONSTER_HEIGHT = 40;
     public static final int TILE_WIDTH = 64;
     public static final int TILE_HEIGHT = 64;
 
@@ -44,8 +45,6 @@ public class Main extends Application {
                 new Image(Main.class.getResource("../character/PlayerFaceWest.png").toExternalForm())
             )
     );
-    public static final Image MONSTER_IMAGE =
-            new Image(Player.class.getResource("monsterIMG.jpg").toExternalForm());
     public static final List<Image> WALKSOUTH = new LinkedList<>(
             List.of( new Image(Player.class.getResource("../character/PlayerWalkingSouthA.png").toExternalForm()),
                     new Image(Player.class.getResource("../character/playerWalkingSouthB.png").toExternalForm())
@@ -62,6 +61,11 @@ public class Main extends Application {
             List.of( new Image(Player.class.getResource("../character/PlayerWalkingEastA.png").toExternalForm()),
                     new Image(Player.class.getResource("../character/playerWalkingEastB.png").toExternalForm())
             ));
+    public static final List<Image> MONSTER_IMAGE = new LinkedList<>(
+            List.of( new Image(Player.class.getResource("../character/BuzzA.png").toExternalForm()),
+                    new Image(Player.class.getResource("../character/BuzzB.png").toExternalForm())
+            ));
+
     private Player player;
 
     @Override

@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.scene.control.RadioMenuItem;
 import javafx.scene.layout.Pane;
 import java.util.LinkedList;
 import java.util.*;
@@ -16,7 +17,7 @@ public class Room implements Physical {
     private LinkedList<Collideable> collideables = new LinkedList<>();
     private LinkedList<Drawable> drawables = new LinkedList<>();
     private LinkedList<ExitTile> exits = new LinkedList<>();
-
+    private LinkedList<Monster> monsters = new LinkedList<>();
     private PhysicsController physics;
 
     // Constructors
@@ -44,9 +45,32 @@ public class Room implements Physical {
         this.physics = new PhysicsController(0, 0);
 
     }
-
+    public void generateMonster(){
+        if(monsters.isEmpty()) {
+            Random ran = new Random();
+            int numOfMon = ran.nextInt(5);
+            Monster monster = null;
+            for( int i = 1; i <= numOfMon; i++){
+                int monsterX, monsterY;
+                do {
+                    monsterX = ran.nextInt(width - 2) + 1;
+                    monsterY = ran.nextInt(height - 2) + 1;
+                    monster = new Monster(this, "Monster", 100, 10, monsterX, monsterY);
+                } while (findExistingCollideable(monster));
+                add(monster);
+            }
+        }
+    }
     public LinkedList<ExitTile> getExits() {
         return exits;
+    }
+    public boolean findExistingCollideable(Collideable lookingFor){
+        for( Collideable object: collideables){
+            if( object.collideableEqual(lookingFor)){
+                return true;
+            }
+        }
+        return false;
     }
     // Methods
     public void generateExits(List<Room> listOfExit) {
@@ -193,6 +217,9 @@ public class Room implements Physical {
         }
         if (obj instanceof Drawable) {
             drawables.add(0, (Drawable) obj);
+        }
+        if( obj instanceof Monster) {
+            monsters.add(0, (Monster) obj);
         }
     }
     public String getLayout() {

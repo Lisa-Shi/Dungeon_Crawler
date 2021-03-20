@@ -11,7 +11,7 @@ public class ExitTile extends Tile implements Passable {
 
     // Constructors
     public ExitTile(Room inRoom, int initialX, int initialY, Room linkedRoom) {
-        super(inRoom, initialX, initialY, "spr_dungeon_exit.png");
+        super(inRoom, initialX, initialY, Main.EXITTILE);
         this.inRoom = inRoom;
         exitX = initialX;
         exitY = initialY;

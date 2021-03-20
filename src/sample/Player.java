@@ -15,6 +15,7 @@ public class Player implements Physical, Collideable, Drawable {
     private List<Weapon> weaponList;
     private int difficulty;
     private int holdingWeapon; // index of weapon in the weapon list
+    private int hp = 100;
 
     private PhysicsController physics;
     private DynamicCollisionBox collisionBox;
@@ -52,6 +53,7 @@ public class Player implements Physical, Collideable, Drawable {
             money = 100;
         } else if (difficulty == 2) {
             money = 60;
+
         } else {
             money = 20;
         }
@@ -138,10 +140,8 @@ public class Player implements Physical, Collideable, Drawable {
             boundary.collisionWithPlayerEvent(this);
         }
     }
-
-    public void enterRoom(Room room) {
-        System.out.println("See enterRoom function in Player.java.");
-        //gameStage.enterRoom(room);
+    public void hurt(int damge){
+        hp -= damge;
     }
 
     /**player is legal if the name is not empty string and difficulty is not -1

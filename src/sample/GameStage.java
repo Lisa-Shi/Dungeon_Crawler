@@ -159,7 +159,9 @@ public class GameStage extends Stage {
             timeline.play();
         }
         player.update(camera, room.getCollideables());
-
+        for( Monster monster : room.getMonsters()){
+            monster.playerInRange(player);
+        }
         if (!GameMap.enterRoom().equals(room)) {
             Room previous = room;
             room = GameMap.enterRoom();
@@ -232,7 +234,6 @@ public class GameStage extends Stage {
         pane = new Pane();
         pane.setPrefSize(Main.GAME_WIDTH, Main.GAME_HEIGHT);
         room.generateExits(map.getAdjRooms(room));
-        room.generateMonster();
         room.finalize(pane);
         Scene scene = new Scene(pane);
         if (room.getRoomId() == 999) {

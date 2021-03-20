@@ -6,19 +6,25 @@ import javafx.animation.Timeline;
 import javafx.util.Duration;
 
 
+
 public class Monster extends GameObject implements Physical, Collideable, Drawable {
     //monster needs a name too. give some respect to the monster :)
     private String name;
     private int hp;
     private int demage;
     private Sprite sprite;
-    private CollisionBox collisionBox;
+    private DynamicCollisionBox collisionBox;
+    private boolean isDead = false;
+    private long lastAttack = System.nanoTime();
     private Timeline timeline = new Timeline();
     private KeyFrame frame;
+    private DynamicCollisionBox attackRange =
+            new DynamicCollisionBox(getPhysics(),
+                    new RectangleWireframe(3 * Main.TILE_WIDTH, 3 * Main.TILE_HEIGHT));
     private int imageindex = 0;
     public Monster(Room room, String inputName, int hp, int inputDemage, double initialX, double initialY) {
-        super(room, initialX * Main.MONSTER_WIDTH, initialY * Main.MONSTER_HEIGHT
-                , Main.MONSTER_WIDTH / 2, Main.MONSTER_HEIGHT / 2,  "../character/BuzzA.png");
+        super(room, initialX * Main.TILE_WIDTH, initialY * Main.TILE_HEIGHT
+                , Main.MONSTER_WIDTH / 2, Main.MONSTER_HEIGHT / 2,  Main.MONSTER_IMAGE.get(0));
         name = inputName;
         this.hp = hp;
         demage = inputDemage;
@@ -27,6 +33,7 @@ public class Monster extends GameObject implements Physical, Collideable, Drawab
         this.collisionBox = new DynamicCollisionBox(getPhysics(),
                 new RectangleWireframe(Main.MONSTER_WIDTH, Main.MONSTER_HEIGHT));
         this.collisionBox.generate();
+        attackRange.generate();
         frame = new KeyFrame(Duration.millis(50), e -> {
             sprite.setImage(Main.MONSTER_IMAGE.get((imageindex++) % 2));
         });
@@ -34,10 +41,23 @@ public class Monster extends GameObject implements Physical, Collideable, Drawab
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
     }
-
+    public void playerInRange(Player player){
+        //attack every 1 second
+        if( (System.nanoTime() - lastAttack >= 1000000000)
+                && attackRange.containsPoint(player.getCollisionBox().getPhysics().getAbsolutePosition())){
+            lastAttack = System.nanoTime();
+            player.hurt(demage);
+            System.out.println("attacked " + player);
+    }
+    }
 
     @Override
     public void update(Camera camera) {
+        if( hp <= 0){
+            isDead = true;
+            collisionBox.setSolid(false);
+            getSprite().setImage(Main.CHEST_IMAGE.get(0));
+        }
         getPhysics().update();
         updateSprite(camera);
     }

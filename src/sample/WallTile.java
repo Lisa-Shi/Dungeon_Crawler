@@ -8,7 +8,7 @@ public class WallTile extends Tile implements Collideable {
     private Room inRoom;
     // Constructors
     public WallTile(Room inRoom, int initialX, int initialY) {
-        super(inRoom, initialX, initialY, "spr_dungeon_wall.png");
+        super(inRoom, initialX, initialY, Main.WALLTILE);
         this.inRoom = inRoom;
         this.initialX = initialX;
         this.initialY = initialY;

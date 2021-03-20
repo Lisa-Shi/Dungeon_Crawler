@@ -39,33 +39,43 @@ public class Main extends Application {
             new RectangleWireframe(Main.PLAYER_WIDTH, Main.PLAYER_HEIGHT);
 
     public static final List<Image> PLAYER_IMAGE = new LinkedList<>(
-            List.of( new Image(Main.class.getResource("../character/PlayerFaceNorth.png").toExternalForm()),
-                new Image(Main.class.getResource("../character/PlayerFaceEast.png").toExternalForm()),
-                new Image(Main.class.getResource("../character/PlayerFaceSouth.png").toExternalForm()),
-                new Image(Main.class.getResource("../character/PlayerFaceWest.png").toExternalForm())
+            List.of( new Image(Main.class.getResource("../image/PlayerFaceNorth.png").toExternalForm()),
+                new Image(Main.class.getResource("../image/PlayerFaceEast.png").toExternalForm()),
+                new Image(Main.class.getResource("../image/PlayerFaceSouth.png").toExternalForm()),
+                new Image(Main.class.getResource("../image/PlayerFaceWest.png").toExternalForm())
             )
     );
     public static final List<Image> WALKSOUTH = new LinkedList<>(
-            List.of( new Image(Player.class.getResource("../character/PlayerWalkingSouthA.png").toExternalForm()),
-                    new Image(Player.class.getResource("../character/playerWalkingSouthB.png").toExternalForm())
+            List.of( new Image(Main.class.getResource("../image/PlayerWalkingSouthA.png").toExternalForm()),
+                    new Image(Main.class.getResource("../image/playerWalkingSouthB.png").toExternalForm())
             ));
     public static final List<Image> WALKNORTH = new LinkedList<>(
-            List.of( new Image(Player.class.getResource("../character/PlayerWalkingNorthA.png").toExternalForm()),
-                    new Image(Player.class.getResource("../character/playerWalkingNorthB.png").toExternalForm())
+            List.of( new Image(Main.class.getResource("../image/PlayerWalkingNorthA.png").toExternalForm()),
+                    new Image(Main.class.getResource("../image/playerWalkingNorthB.png").toExternalForm())
             ));
     public static final List<Image> WALKWEST = new LinkedList<>(
-            List.of( new Image(Player.class.getResource("../character/PlayerWalkingWestA.png").toExternalForm()),
-                    new Image(Player.class.getResource("../character/playerWalkingWestB.png").toExternalForm())
+            List.of( new Image(Main.class.getResource("../image/PlayerWalkingWestA.png").toExternalForm()),
+                    new Image(Main.class.getResource("../image/playerWalkingWestB.png").toExternalForm())
             ));
     public static final List<Image> WALKEAST = new LinkedList<>(
-            List.of( new Image(Player.class.getResource("../character/PlayerWalkingEastA.png").toExternalForm()),
-                    new Image(Player.class.getResource("../character/playerWalkingEastB.png").toExternalForm())
+            List.of( new Image(Main.class.getResource("../image/PlayerWalkingEastA.png").toExternalForm()),
+                    new Image(Main.class.getResource("../image/playerWalkingEastB.png").toExternalForm())
             ));
     public static final List<Image> MONSTER_IMAGE = new LinkedList<>(
-            List.of( new Image(Player.class.getResource("../character/BuzzA.png").toExternalForm()),
-                    new Image(Player.class.getResource("../character/BuzzB.png").toExternalForm())
+            List.of( new Image(Main.class.getResource("../image/BuzzA.png").toExternalForm()),
+                    new Image(Main.class.getResource("../image/BuzzB.png").toExternalForm())
             ));
-
+    public static final List<Image> CHEST_IMAGE = new LinkedList<>(
+            List.of( new Image(Main.class.getResource("../image/closedChest.png").toExternalForm()),
+                    new Image(Main.class.getResource("../image/openChest.png").toExternalForm()),
+                    new Image(Main.class.getResource("../image/emptyChest.png").toExternalForm())
+            ));
+    public static final Image WALLTILE =
+            new Image(Main.class.getResource("../image/spr_dungeon_wall.png").toExternalForm());
+    public static final Image EXITTILE =
+            new Image(Main.class.getResource("../image/spr_dungeon_exit.png").toExternalForm());
+    public static final Image FLOORTILE =
+            new Image(Main.class.getResource("../image/spr_dungeon_tile.png").toExternalForm());
     private Player player;
 
     @Override

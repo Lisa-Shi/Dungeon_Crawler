@@ -64,9 +64,9 @@ public class Room implements Physical {
     public LinkedList<ExitTile> getExits() {
         return exits;
     }
-    public boolean findExistingCollideable(Collideable lookingFor){
+    public boolean findExistingCollideable(Monster monster){
         for( Collideable object: collideables){
-            if( object.collideableEqual(lookingFor)){
+            if( ((DynamicCollisionBox) monster.getCollisionBox()).collidedWith(object.getCollisionBox())){
                 return true;
             }
         }
@@ -116,7 +116,9 @@ public class Room implements Physical {
      */
     public void finalize(Pane pane) {
         addRoomLayout();
+        generateMonster();
         addFloorTiles();
+
         addSurroundingWalls();
         addAllSprites(pane);
     }
@@ -180,6 +182,10 @@ public class Room implements Physical {
 
     public int getRoomId() {
         return roomId;
+    }
+
+    public LinkedList<Monster> getMonsters() {
+        return monsters;
     }
 
     /**

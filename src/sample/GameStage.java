@@ -160,7 +160,15 @@ public class GameStage extends Stage {
         }
         player.update(camera, room.getCollideables());
         for( Monster monster : room.getMonsters()){
-            monster.playerInRange(player);
+            if( System.nanoTime() - monster.lastMove >= 1000000000) {
+                monster.lastMove = System.nanoTime();
+                String action = monster.heuristicSearch(player, room);
+                if (action.equals("A")) monster.getPhysics().pushLeft(3);
+                if (action.equals("D")) monster.getPhysics().pushRight(3);
+                if (action.equals("W")) monster.getPhysics().pushUp(3);
+                if (action.equals("S")) monster.getPhysics().pushDown(3);
+            }
+            monster.update(camera, player);
         }
         if (!GameMap.enterRoom().equals(room)) {
             Room previous = room;

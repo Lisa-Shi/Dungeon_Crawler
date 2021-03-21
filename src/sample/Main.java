@@ -62,25 +62,46 @@ public class Main extends Application {
                     new Image(Main.class.getResource("../image/playerWalkingEastB.png").toExternalForm())
             ));
 
-    private static final List<Image> BUZZ_IMAGE = new LinkedList<>(
-            List.of( new Image(Main.class.getResource("../image/Monster/BuzzA.png").toExternalForm()),
-                    new Image(Main.class.getResource("../image/Monster/BuzzB.png").toExternalForm()),
-                    new Image(Main.class.getResource("../image/Monster/BuzzA.png").toExternalForm()),
-                    new Image(Main.class.getResource("../image/Monster/BuzzB.png").toExternalForm()),
-                    new Image(Main.class.getResource("../image/Monster/BuzzA.png").toExternalForm()),
-                    new Image(Main.class.getResource("../image/Monster/BuzzB.png").toExternalForm())
-            ));
-    private static final List<Image> MAGICIAN_IMAGE = new LinkedList<>(
-            List.of( new Image(Main.class.getResource("../image/Monster/magicianAttackA.png").toExternalForm()),
-                    new Image(Main.class.getResource("../image/Monster/magicianAttackB.png").toExternalForm()),
-                    new Image(Main.class.getResource("../image/Monster/magicianFaceWestA.png").toExternalForm()),
-                    new Image(Main.class.getResource("../image/Monster/magicianFaceWestB.png").toExternalForm()),
-                    new Image(Main.class.getResource("../image/Monster/magicianFaceEastA.png").toExternalForm()),
-                    new Image(Main.class.getResource("../image/Monster/magicianFaceEastB.png").toExternalForm())
-
-            ));
-    public static final List<List<Image>> MONSTERS = new LinkedList<>(
-            List.of( BUZZ_IMAGE, MAGICIAN_IMAGE)
+    public static final List<List<Image>> MONSTERS_ATTACK = new LinkedList<>(
+            List.of(
+                    List.of(new Image(Main.class.getResource("../image/Monster/BuzzA.png").toExternalForm()),
+                            new Image(Main.class.getResource("../image/Monster/BuzzB.png").toExternalForm())),
+                    List.of(new Image(Main.class.getResource("../image/Monster/magicianAttackA.png").toExternalForm()),
+                            new Image(Main.class.getResource("../image/Monster/magicianAttackB.png").toExternalForm())),
+                    List.of(new Image(Main.class.getResource("../image/Monster/slimeAttackA.png").toExternalForm()),
+                            new Image(Main.class.getResource("../image/Monster/slimeAttackB.png").toExternalForm()),
+                            new Image(Main.class.getResource("../image/Monster/slimeAttackC.png").toExternalForm()),
+                            new Image(Main.class.getResource("../image/Monster/slimeAttackD.png").toExternalForm()),
+                            new Image(Main.class.getResource("../image/Monster/slimeAttackE.png").toExternalForm()))
+                    )
+    );
+    public static final List<List<Image>> MONSTERS_EAST = new LinkedList<>(
+            List.of(
+                    List.of(new Image(Main.class.getResource("../image/Monster/BuzzA.png").toExternalForm()),
+                            new Image(Main.class.getResource("../image/Monster/BuzzB.png").toExternalForm())),
+                    List.of(new Image(Main.class.getResource("../image/Monster/magicianFaceEastA.png").toExternalForm()),
+                            new Image(Main.class.getResource("../image/Monster/magicianFaceEastB.png").toExternalForm())),
+                    List.of(new Image(Main.class.getResource("../image/Monster/slimeEastA.png").toExternalForm()),
+                            new Image(Main.class.getResource("../image/Monster/slimeEastB.png").toExternalForm()),
+                            new Image(Main.class.getResource("../image/Monster/slimeEastC.png").toExternalForm()),
+                            new Image(Main.class.getResource("../image/Monster/slimeEastD.png").toExternalForm()),
+                            new Image(Main.class.getResource("../image/Monster/slimeEastE.png").toExternalForm())
+                    )
+            )
+    );
+    public static final List<List<Image>> MONSTERS_WEST = new LinkedList<>(
+            List.of(
+                    List.of(new Image(Main.class.getResource("../image/Monster/BuzzA.png").toExternalForm()),
+                            new Image(Main.class.getResource("../image/Monster/BuzzB.png").toExternalForm())),
+                    List.of(new Image(Main.class.getResource("../image/Monster/magicianFaceWestA.png").toExternalForm()),
+                            new Image(Main.class.getResource("../image/Monster/magicianFaceWestB.png").toExternalForm())),
+                    List.of(new Image(Main.class.getResource("../image/Monster/slimeWestA.png").toExternalForm()),
+                            new Image(Main.class.getResource("../image/Monster/slimeWestB.png").toExternalForm()),
+                            new Image(Main.class.getResource("../image/Monster/slimeWestC.png").toExternalForm()),
+                            new Image(Main.class.getResource("../image/Monster/slimeWestD.png").toExternalForm()),
+                            new Image(Main.class.getResource("../image/Monster/slimeWestE.png").toExternalForm())
+                            )
+            )
     );
     public static final List<Image> CHEST_IMAGE = new LinkedList<>(
             List.of( new Image(Main.class.getResource("../image/closedChest.png").toExternalForm()),

@@ -12,14 +12,21 @@ public class Room implements Physical {
     private int width;
     private int height;
     private String layout;
-
+    private Vector2D[][] heuristicMap;
     private LinkedList<Physical> physicals = new LinkedList<>();
     private LinkedList<Collideable> collideables = new LinkedList<>();
     private LinkedList<Drawable> drawables = new LinkedList<>();
     private LinkedList<ExitTile> exits = new LinkedList<>();
     private LinkedList<Monster> monsters = new LinkedList<>();
     private PhysicsController physics;
-
+    public boolean checkObstacle(Vector2D location){
+        for(Collideable collideable : collideables){
+            if( collideable.getCollisionBox().containsPoint(location)) {
+                return true;
+            }
+        }
+        return false;
+    }
     // Constructors
     /**
      * Constructs a dungeon room
@@ -31,7 +38,7 @@ public class Room implements Physical {
         roomId = id++;
         this.width = width;
         this.height = height;
-
+        heuristicMap = new Vector2D[width][height];
         // Physics so the camera works properly
         this.physics = new PhysicsController(0, 0);
 
@@ -121,7 +128,7 @@ public class Room implements Physical {
      */
     public void finalize(Pane pane) {
         addRoomLayout();
-        if( roomId != 0) {
+        if( roomId != 999) {
             generateMonster();
         }
         addFloorTiles();
@@ -181,11 +188,16 @@ public class Room implements Physical {
         this.collideables = new LinkedList<>();
         this.exits = new LinkedList<>();
         this.drawables = new LinkedList<>();
+        this.monsters = new LinkedList<>();
     }
 
 
 
     // Getters
+
+    public Vector2D[][] getHeuristicMap() {
+        return heuristicMap;
+    }
 
     public int getRoomId() {
         return roomId;

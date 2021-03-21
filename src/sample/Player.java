@@ -45,7 +45,6 @@ public class Player implements Physical, Collideable, Drawable {
         sprite = new Sprite((int) initialX, (int) initialY, (int) Main.PLAYER_WIDTH,
                 (int) Main.PLAYER_HEIGHT, Main.PLAYER_IMAGE.get(2));
 
-        //System.out.println()
 
         this.physics = new PhysicsController(initialX, initialY);
         this.difficulty = difficulty;
@@ -73,7 +72,6 @@ public class Player implements Physical, Collideable, Drawable {
     public void update(Camera camera) {
         physics.update();
         updateSprite(camera);
-
         if (physics.getVelocity().len() > Main.MAX_PLAYER_SPEED) {
             Vector2D relenVel = physics.getVelocity().relen(Main.MAX_PLAYER_SPEED);
             physics.setVelocity(relenVel);

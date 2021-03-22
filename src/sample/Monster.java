@@ -139,16 +139,15 @@ public class Monster extends GameObject implements Physical, Collideable, Drawab
      * using manhattan distance as heuristic funcytion. each path cost is one
      * @param player the target that monster moving toward
      * @room room room that player and monster are in
-     * @return string representation of next action
      */
-    public String heuristicSearch(Player player, Room room){
+    public void heuristicSearch(Player player, Room room){
         lastMove = System.nanoTime();
         Vector2D playerLoc = new Vector2D(Math.round(player.getPhysics().getPosition().getX() / 64)
                 , Math.round(player.getPhysics().getPosition().getY() / 64));
         Vector2D monsterLoc = new Vector2D(Math.round(getPhysics().getPosition().getX() / 64)
                 , Math.round(getPhysics().getPosition().getY() / 64));
         if( playerLoc.distanceSquared(monsterLoc) <= Math.pow(shootingRange / 2, 2) * 2){
-            return "";
+            return;
         }
         PriorityQueue<State> thePQ = new PriorityQueue<>(1, new Comparator<State>() {
             @Override
@@ -171,9 +170,12 @@ public class Monster extends GameObject implements Physical, Collideable, Drawab
             double cost = popped.cost;
             if( playerLoc.distanceSquared(current) <= 1){
                 if(currPath.size() >= 1) {
-                    String a = currPath.remove(0);
-                    System.out.println(a);
-                    return a;
+                    String action = currPath.remove(0);
+                    if (action.equals("A")) getPhysics().pushLeft(3);
+                    if (action.equals("D")) getPhysics().pushRight(3);
+                    if (action.equals("W")) getPhysics().pushUp(3);
+                    if (action.equals("S")) getPhysics().pushDown(3);
+                    return;
                 }
             }
             //possible state (action)
@@ -216,7 +218,6 @@ public class Monster extends GameObject implements Physical, Collideable, Drawab
                 }
             }
         }
-        return "";
     }
     private class State{
         public Vector2D state;

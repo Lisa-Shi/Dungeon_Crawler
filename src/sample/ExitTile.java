@@ -11,7 +11,7 @@ public class ExitTile extends Tile implements Passable {
 
     // Constructors
     public ExitTile(Room inRoom, int initialX, int initialY, Room linkedRoom) {
-        super(inRoom, initialX, initialY, "spr_dungeon_exit.png");
+        super(inRoom, initialX, initialY, Main.EXITTILE);
         this.inRoom = inRoom;
         exitX = initialX;
         exitY = initialY;
@@ -78,14 +78,5 @@ public class ExitTile extends Tile implements Passable {
     @Override
     public int hashCode(){
         return this.exitX * 97 + this.exitY * 89;
-    }
-    @Override
-    public boolean collideableEqual(Object other) {
-        if( other instanceof Collideable){
-            if (((Collideable) other).getCollisionBox().equals(this.collisionBox)){
-                return true;
-            }
-        }
-        return false;
     }
 }

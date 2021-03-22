@@ -8,7 +8,7 @@ public class WallTile extends Tile implements Collideable {
     private Room inRoom;
     // Constructors
     public WallTile(Room inRoom, int initialX, int initialY) {
-        super(inRoom, initialX, initialY, "spr_dungeon_wall.png");
+        super(inRoom, initialX, initialY, Main.WALLTILE);
         this.inRoom = inRoom;
         this.initialX = initialX;
         this.initialY = initialY;
@@ -27,15 +27,5 @@ public class WallTile extends Tile implements Collideable {
     @Override
     public CollisionBox getCollisionBox() {
         return collisionBox;
-    }
-
-    @Override
-    public boolean collideableEqual(Object other) {
-        if( other instanceof Collideable){
-            if (((Collideable) other).getCollisionBox().equals(this.collisionBox)){
-                return true;
-            }
-        }
-        return false;
     }
 }

@@ -133,6 +133,7 @@ public class GameStage extends Stage {
     public void update() {
         KeyFrame frame;
         List<Image>[] direction = new List[1];
+
         if (playerIsMovingUp) {
             player.getPhysics().pushUp(Main.DEFAULT_CONTROL_PLAYER_FORCE);
             direction[0] = Main.WALKNORTH;
@@ -159,7 +160,17 @@ public class GameStage extends Stage {
             timeline.play();
         }
         player.update(camera, room.getCollideables());
-
+        for( Monster monster : room.getMonsters()){
+            if( System.nanoTime() - monster.lastMove >= 1000000000) {
+                monster.lastMove = System.nanoTime();
+                String action = monster.heuristicSearch(player, room);
+                if (action.equals("A")) monster.getPhysics().pushLeft(3);
+                if (action.equals("D")) monster.getPhysics().pushRight(3);
+                if (action.equals("W")) monster.getPhysics().pushUp(3);
+                if (action.equals("S")) monster.getPhysics().pushDown(3);
+            }
+            monster.update(camera, player);
+        }
         if (!GameMap.enterRoom().equals(room)) {
             Room previous = room;
             room = GameMap.enterRoom();
@@ -232,7 +243,6 @@ public class GameStage extends Stage {
         pane = new Pane();
         pane.setPrefSize(Main.GAME_WIDTH, Main.GAME_HEIGHT);
         room.generateExits(map.getAdjRooms(room));
-        room.generateMonster();
         room.finalize(pane);
         Scene scene = new Scene(pane);
         if (room.getRoomId() == 999) {

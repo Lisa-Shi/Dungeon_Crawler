@@ -48,6 +48,10 @@ public class CollisionBox {
         return solid;
     }
 
+    // Setters
+    public void setSolid(boolean solid){
+        this.solid = solid;
+    }
     /**
      * if physics (Position) and solid are the same, two collisionboxes are considered to be true
      * @param other object to compare to

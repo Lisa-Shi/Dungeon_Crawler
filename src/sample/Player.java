@@ -15,6 +15,7 @@ public class Player implements Physical, Collideable, Drawable {
     private List<Weapon> weaponList;
     private int difficulty;
     private int holdingWeapon; // index of weapon in the weapon list
+    private int hp = 100;
 
     private PhysicsController physics;
     private DynamicCollisionBox collisionBox;
@@ -44,7 +45,6 @@ public class Player implements Physical, Collideable, Drawable {
         sprite = new Sprite((int) initialX, (int) initialY, (int) Main.PLAYER_WIDTH,
                 (int) Main.PLAYER_HEIGHT, Main.PLAYER_IMAGE.get(2));
 
-        //System.out.println()
 
         this.physics = new PhysicsController(initialX, initialY);
         this.difficulty = difficulty;
@@ -52,6 +52,7 @@ public class Player implements Physical, Collideable, Drawable {
             money = 100;
         } else if (difficulty == 2) {
             money = 60;
+
         } else {
             money = 20;
         }
@@ -71,7 +72,6 @@ public class Player implements Physical, Collideable, Drawable {
     public void update(Camera camera) {
         physics.update();
         updateSprite(camera);
-
         if (physics.getVelocity().len() > Main.MAX_PLAYER_SPEED) {
             Vector2D relenVel = physics.getVelocity().relen(Main.MAX_PLAYER_SPEED);
             physics.setVelocity(relenVel);
@@ -110,8 +110,9 @@ public class Player implements Physical, Collideable, Drawable {
                                         collideable.getCollisionBox()).multiply(0.001D));
                         hasCollidedWithSolid = true;
                     }
-                    if (collideable instanceof ExitTile) {
-                        ((ExitTile) collideable).collisionWithPlayerEvent(this);
+
+                    if (collideable instanceof Passable) {
+                        ((Passable) collideable).collisionWithPlayerEvent(this);
                     }
                 }
 
@@ -138,10 +139,8 @@ public class Player implements Physical, Collideable, Drawable {
             boundary.collisionWithPlayerEvent(this);
         }
     }
-
-    public void enterRoom(Room room) {
-        System.out.println("See enterRoom function in Player.java.");
-        //gameStage.enterRoom(room);
+    public void hurt(int damge){
+        hp -= damge;
     }
 
     /**player is legal if the name is not empty string and difficulty is not -1
@@ -241,15 +240,5 @@ public class Player implements Physical, Collideable, Drawable {
      */
     public void setMoney(int money) {
         this.money = money;
-    }
-
-    @Override
-    public boolean collideableEqual(Object other) {
-        if( other instanceof Collideable){
-            if (((Collideable) other).getCollisionBox().equals(this.collisionBox)){
-                return true;
-            }
-        }
-        return false;
     }
 }

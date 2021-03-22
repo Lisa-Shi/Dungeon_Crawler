@@ -28,14 +28,4 @@ public class WallTile extends Tile implements Collideable {
     public CollisionBox getCollisionBox() {
         return collisionBox;
     }
-
-    @Override
-    public boolean collideableEqual(Object other) {
-        if( other instanceof Collideable){
-            if (((Collideable) other).getCollisionBox().equals(this.collisionBox)){
-                return true;
-            }
-        }
-        return false;
-    }
 }

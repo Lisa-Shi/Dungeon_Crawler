@@ -110,8 +110,9 @@ public class Player implements Physical, Collideable, Drawable {
                                         collideable.getCollisionBox()).multiply(0.001D));
                         hasCollidedWithSolid = true;
                     }
-                    if (collideable instanceof ExitTile) {
-                        ((ExitTile) collideable).collisionWithPlayerEvent(this);
+
+                    if (collideable instanceof Passable) {
+                        ((Passable) collideable).collisionWithPlayerEvent(this);
                     }
                 }
 
@@ -239,15 +240,5 @@ public class Player implements Physical, Collideable, Drawable {
      */
     public void setMoney(int money) {
         this.money = money;
-    }
-
-    @Override
-    public boolean collideableEqual(Object other) {
-        if( other instanceof Collideable){
-            if (((Collideable) other).getCollisionBox().equals(this.collisionBox)){
-                return true;
-            }
-        }
-        return false;
     }
 }

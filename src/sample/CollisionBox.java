@@ -47,6 +47,8 @@ public class CollisionBox {
     public boolean isSolid() {
         return solid;
     }
+
+    // Setters
     public void setSolid(boolean solid){
         this.solid = solid;
     }

@@ -133,6 +133,7 @@ public class GameStage extends Stage {
     public void update() {
         KeyFrame frame;
         List<Image>[] direction = new List[1];
+
         if (playerIsMovingUp) {
             player.getPhysics().pushUp(Main.DEFAULT_CONTROL_PLAYER_FORCE);
             direction[0] = Main.WALKNORTH;

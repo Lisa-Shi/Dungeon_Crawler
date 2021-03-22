@@ -7,5 +7,4 @@ public interface Collideable {
      * @return collision box of object
      */
     CollisionBox getCollisionBox();
-    boolean collideableEqual(Object other);
 }

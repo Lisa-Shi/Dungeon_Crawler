@@ -3,18 +3,20 @@ package sample;
 
 import javafx.scene.image.Image;
 
-public class Chest{
+public class Chest {
+    // Variables
     private Image image = Main.CHEST_IMAGE.get(0);
     private int money;
     private String treasure;
     private boolean isOpen = false;
+
+    // Constructors
     public Chest(int money, String treasure){
         this.money = money;
         this.treasure = treasure;
     }
-    public Image getImage(){
-        return image;
-    }
+
+    // Misc.
     public int takeMoney(){
         int givePlayer = money;
         money = 0;
@@ -32,6 +34,10 @@ public class Chest{
         return givePlayer;
     }
 
+    // Getters
+    public Image getImage(){
+        return image;
+    }
     public boolean isOpen() {
         return isOpen;
     }

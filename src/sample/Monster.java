@@ -104,15 +104,6 @@ public class Monster extends GameObject implements Physical, Collideable, Drawab
         return name;
     }
 
-    @Override
-    public boolean collideableEqual(Object other) {
-        if( other instanceof Collideable){
-            if (((Collideable) other).getCollisionBox().equals(this.collisionBox)){
-                return true;
-            }
-        }
-        return false;
-    }
     /**
      * using manhattan distance as heuristic. each path cost is one
      */

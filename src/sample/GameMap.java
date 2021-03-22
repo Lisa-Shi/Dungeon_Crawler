@@ -16,7 +16,7 @@ public class GameMap {
     private Map<Room, List<Room>> adjList = new HashMap<>();
 
     /**
-     * minimun of 6 room is initialized between starting room and end
+     * minimum of 6 room is initialized between starting room and end
      * in total 4 rooms are initialized around starting room
      * @param starting the room where the player is born
      */
@@ -25,29 +25,51 @@ public class GameMap {
         start = starting;
         end = new Room(20, 20, 999);
         rooms = new HashSet<>();
+
+        addRooms();
+        connectRooms();
+
+        start.generateExits(adjList.get(start));
+    }
+
+    private void addRooms() {
         for (int i = 0; i < 6; i++) {
             rooms.add(new Room(20, 20));
         }
-        Room pre = null;
-        Room curr = starting;
-        for (Room a: rooms) {
-            ArrayList<Room> adj = new ArrayList<>();
-            adj.add(a);
-            if (pre != null) {
-                adj.add(pre);
+    }
+
+    private void connectRooms() {
+        Room roomBeforePrev = null;
+        Room prev = start;
+
+        for (Room room : rooms) {
+            // Create list of adjacent rooms to this room
+            ArrayList<Room> adjacent = new ArrayList<>();
+
+            // Add room to list
+            adjacent.add(room);
+
+            // Add previous room list
+            if (roomBeforePrev != null) {
+                adjacent.add(roomBeforePrev);
             }
-            adjList.put(curr, adj);
-            edge.add(new Edge(curr, a));
-            pre = curr;
-            curr = a;
+
+            // Record the adjacent rooms
+            adjList.put(prev, adjacent);
+
+            // Connect rooms
+            edge.add(new Edge(prev, room));
+            roomBeforePrev = prev;
+            prev = room;
         }
+
         ArrayList arr1 = new ArrayList<>();
-        arr1.add(pre);
-        adjList.put(curr, arr1);
-        adjList.get(curr).add(end);
+        arr1.add(roomBeforePrev);
+        adjList.put(prev, arr1);
+        adjList.get(prev).add(end);
 
         ArrayList arr2 = new ArrayList<>();
-        arr2.add(curr);
+        arr2.add(prev);
         adjList.put(end, arr2);
         for (int i = 0; i < 3; i++) {
             Room newRoom = new Room(20, 20);
@@ -58,8 +80,9 @@ public class GameMap {
             r2.add(start);
             adjList.put(newRoom, r2);
         }
-        start.generateExits(adjList.get(start));
     }
+
+
     public static void enterRoom(Room entering) {
         currentRoom = entering;
     }

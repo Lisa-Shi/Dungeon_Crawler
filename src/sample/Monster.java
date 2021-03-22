@@ -1,5 +1,8 @@
 package sample;
 
+/**
+ * the monster class
+ */
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -15,23 +18,36 @@ public class Monster extends GameObject implements Physical, Collideable, Drawab
     private int hp;
     private int demage;
     private Sprite sprite;
-    private DynamicCollisionBox collisionBox;
     private boolean isDead = false;
-    private long lastAttack = System.nanoTime();
-    private Timeline timeline = new Timeline();
-    private KeyFrame frame;
+    private DynamicCollisionBox collisionBox;
+    //the range which monster will attack if player is inside
     private int shootingRange = 3;
     private DynamicCollisionBox attackRange =
             new DynamicCollisionBox(getPhysics(),
                     new RectangleWireframe(shootingRange * Main.TILE_WIDTH, shootingRange * Main.TILE_HEIGHT));
+    //instance for the animation
     private int imageindex = 0;
     private int monsterType;
     private List<Image> attackImage;
     private List<Image> EastImage;
     private List<Image> WestImage;
     private List<Image> imageFrom;
-    public long lastMove = System.nanoTime();
-    public Monster(Room room, String inputName, int hp, int inputDemage, double initialX, double initialY) {
+    private Timeline timeline = new Timeline();
+    private KeyFrame frame;
+    //time instance
+    private long lastMove = System.nanoTime();
+    private long lastAttack = System.nanoTime();
+
+    /**
+     *constructor
+     * @param room room that the monster belongs to
+     * @param inputName name of the monster
+     * @param hp health point
+     * @param inputDamage monster's damage
+     * @param initialX initial X position
+     * @param initialY initial Y position
+     */
+    public Monster(Room room, String inputName, int hp, int inputDamage, double initialX, double initialY) {
         //trivial image
         super(room, initialX * Main.TILE_WIDTH, initialY * Main.TILE_HEIGHT
                     , Main.MONSTER_WIDTH / 2, Main.MONSTER_HEIGHT / 2, Main.FLOORTILE);
@@ -42,7 +58,7 @@ public class Monster extends GameObject implements Physical, Collideable, Drawab
         imageFrom = WestImage;
         name = inputName;
         this.hp = hp;
-        demage = inputDemage;
+        demage = inputDamage;
         sprite = new Sprite((int) initialX, (int) initialY, (int) Main.MONSTER_WIDTH,
                 (int) Main.MONSTER_HEIGHT, WestImage.get(0));
         this.collisionBox = new DynamicCollisionBox(getPhysics(),
@@ -56,6 +72,13 @@ public class Monster extends GameObject implements Physical, Collideable, Drawab
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
     }
+
+    /**
+     * it is called in the update method. monster will attack the player every one seoncd
+     * if the player is in the attackRange collisionBox. When monster attacks, animation changes.
+     * @param player player
+     * @return true if player is in the range. otherwise false
+     */
     public boolean playerInRange(Player player){
         //attack every 1 second
         if( (System.nanoTime() - lastAttack >= 1000000000)
@@ -67,6 +90,10 @@ public class Monster extends GameObject implements Physical, Collideable, Drawab
         }
         return attackRange.containsPoint(player.getCollisionBox().getPhysics().getAbsolutePosition());
     }
+
+    /**
+     * update monster position and the camera
+     */
     public void update(Camera camera, Player player){
         this.update(camera);
         boolean playerInRange = playerInRange(player);
@@ -91,23 +118,31 @@ public class Monster extends GameObject implements Physical, Collideable, Drawab
         sprite.setTranslateY(getPhysics().getPosition().getY() - camera.getPhysics().getPosition().getY()
                 + camera.getOffsetY() - Main.MONSTER_HEIGHT / 2);
     }
+    /* getter
+     *
+     */
     @Override
     public CollisionBox getCollisionBox() {
         return collisionBox;
     }
-
     public Sprite getSprite() {
         return sprite;
     }
-
     public String getName() {
         return name;
     }
+    public long getLastMove() {
+        return lastMove;
+    }
 
     /**
-     * using manhattan distance as heuristic. each path cost is one
+     * using manhattan distance as heuristic funcytion. each path cost is one
+     * @param player the target that monster moving toward
+     * @room room room that player and monster are in
+     * @return string representation of next action
      */
     public String heuristicSearch(Player player, Room room){
+        lastMove = System.nanoTime();
         Vector2D playerLoc = new Vector2D(Math.round(player.getPhysics().getPosition().getX() / 64)
                 , Math.round(player.getPhysics().getPosition().getY() / 64));
         Vector2D monsterLoc = new Vector2D(Math.round(getPhysics().getPosition().getX() / 64)
@@ -141,12 +176,14 @@ public class Monster extends GameObject implements Physical, Collideable, Drawab
                     return a;
                 }
             }
+            //possible state (action)
             ArrayList<Vector2D> successors = new ArrayList<>(
                     List.of(new Vector2D(1, 0),
                             new Vector2D(-1, 0),
                             new Vector2D(0, 1),
                             new Vector2D(0, -1))
             );
+            //remove the action that will move the monster to the wall
             ArrayList<Vector2D> removeList = new ArrayList<>();
             for(Vector2D successor: successors){
                 if(room.checkObstacle(current.add(successor).multiply(Main.TILE_HEIGHT))){
@@ -191,4 +228,5 @@ public class Monster extends GameObject implements Physical, Collideable, Drawab
             cost = pathCost;
         }
     }
+
 }

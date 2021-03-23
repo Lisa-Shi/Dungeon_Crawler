@@ -1,30 +1,23 @@
 package sample;
 
-import javafx.scene.image.Image;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.sun.javafx.scene.control.skin.Utils.getResource;
-
-public class Player implements Physical, Collideable, Drawable {
+public class Player implements Damageable, Collideable, Drawable {
 
     // Variables
     private String name;
     private List<Weapon> weaponList;
     private int difficulty;
     private int holdingWeapon; // index of weapon in the weapon list
-    private int hp = 100;
+    private int health;
 
     private PhysicsController physics;
     private DynamicCollisionBox collisionBox;
 
-    public List<Image> still = new ArrayList<>(
-            List.of(
-                    //new Image(Player.class.getResource("..\\..\\Resources\\character\\2.PNG").toExternalForm())
-            ));
-    private Sprite sprite;
+    private CharacterImageSheet spriteSheet;
+    private SpriteController graphics;
     private int money;
 
     /**
@@ -42,24 +35,32 @@ public class Player implements Physical, Collideable, Drawable {
         this.name = name;
         weaponList = new ArrayList<>();
         weaponList.add(initialWeapon);
-        sprite = new Sprite((int) initialX, (int) initialY, (int) Main.PLAYER_WIDTH,
-                (int) Main.PLAYER_HEIGHT, Main.PLAYER_IMAGE.get(2));
 
+        spriteSheet = Main.PLAYER_IMAGE_SHEET;
+        Sprite sprite = new Sprite((int) initialX, (int) initialY, (int) Main.PLAYER_WIDTH,
+                (int) Main.PLAYER_HEIGHT, Main.PLAYER_IMAGE_SHEET.getStandSheet().getDownImage().getInitialImage());
+
+        graphics = new SpriteController(sprite, spriteSheet.getStandSheet().getDownImage());
+
+
+        this.health = Main.PLAYER_STARTING_HEALTH;
 
         this.physics = new PhysicsController(initialX, initialY);
         this.difficulty = difficulty;
-        if (difficulty == 1) {
-            money = 100;
-        } else if (difficulty == 2) {
-            money = 60;
-
-        } else {
-            money = 20;
-        }
+        giveMoney(difficulty);
 
         this.collisionBox = new DynamicCollisionBox(physics,
                 new RectangleWireframe(Main.PLAYER_WIDTH, Main.PLAYER_HEIGHT));
         this.collisionBox.generate();
+    }
+    private void giveMoney(int difficulty) {
+        if (difficulty == 1) {
+            money = 100;
+        } else if (difficulty == 2) {
+            money = 60;
+        } else {
+            money = 20;
+        }
     }
 
     /**
@@ -71,7 +72,9 @@ public class Player implements Physical, Collideable, Drawable {
      */
     public void update(Camera camera) {
         physics.update();
+
         updateSprite(camera);
+
         if (physics.getVelocity().len() > Main.MAX_PLAYER_SPEED) {
             Vector2D relenVel = physics.getVelocity().relen(Main.MAX_PLAYER_SPEED);
             physics.setVelocity(relenVel);
@@ -85,9 +88,9 @@ public class Player implements Physical, Collideable, Drawable {
     }
 
     private void updateSprite(Camera camera) {
-        sprite.setTranslateX(physics.getPosition().getX() - camera.getPhysics().getPosition().getX()
+        graphics.getSprite().setTranslateX(physics.getPosition().getX() - camera.getPhysics().getPosition().getX()
                 + camera.getOffsetX() - Main.PLAYER_WIDTH / 2);
-        sprite.setTranslateY(physics.getPosition().getY() - camera.getPhysics().getPosition().getY()
+        graphics.getSprite().setTranslateY(physics.getPosition().getY() - camera.getPhysics().getPosition().getY()
                 + camera.getOffsetY() - Main.PLAYER_HEIGHT / 2);
     }
 
@@ -139,8 +142,10 @@ public class Player implements Physical, Collideable, Drawable {
             boundary.collisionWithPlayerEvent(this);
         }
     }
-    public void hurt(int damge){
-        hp -= damge;
+
+    @Override
+    public void hurt(int healthDamage) {
+        health -= healthDamage;
     }
 
     /**player is legal if the name is not empty string and difficulty is not -1
@@ -165,11 +170,15 @@ public class Player implements Physical, Collideable, Drawable {
     public DynamicCollisionBox getCollisionBox() {
         return collisionBox;
     }
-    /**
-     * @return Sprite associated with the player
-     */
-    public Sprite getSprite() {
-        return sprite;
+
+    @Override
+    public SpriteController getGraphics() {
+        return graphics;
+    }
+
+    @Override
+    public CharacterImageSheet getSpriteSheet() {
+        return spriteSheet;
     }
 
     /**
@@ -240,5 +249,10 @@ public class Player implements Physical, Collideable, Drawable {
      */
     public void setMoney(int money) {
         this.money = money;
+    }
+
+    @Override
+    public int getHealth() {
+        return health;
     }
 }

@@ -147,6 +147,13 @@ public class PhysicsController {
         return acceleration;
     }
 
+    /**
+     * @return object impulse (SEE: push() methods)
+     */
+    public Vector2D getImpulse() {
+        return impulse;
+    }
+
     // Setters
     /**
      * @param position new position of object

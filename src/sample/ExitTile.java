@@ -55,7 +55,6 @@ public class ExitTile extends Tile implements Passable {
 
     @Override
     public void collisionWithPlayerEvent(Player player) {
-        System.out.println("entering " + getLinkedRoom().getRoomId());
         GameMap.enterRoom(getLinkedRoom());
     }
 

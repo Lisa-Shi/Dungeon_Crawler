@@ -43,9 +43,6 @@ public class GameStage extends Stage {
     private HBox infoBar = new HBox();
     private Text text = new Text();
     private Text testingPurpose = new Text();
-    //for animation
-    private Timeline timeline = new Timeline();
-    private int imageindex = 0;
 
     public GameMap getMap() {
         return map;
@@ -63,12 +60,6 @@ public class GameStage extends Stage {
         room = new Room(20, 20);
         map = new GameMap(room);
         exitButton = new Button("finish");
-        /*
-        room.add(new ExitTile(room, 9, 0, null));
-        room.add(new ExitTile(room, 0, 9, null));
-        room.add(new ExitTile(room, 9, 19, null));
-        room.add(new ExitTile(room, 19, 9, null));
-         */
     }
 
     /**
@@ -81,7 +72,7 @@ public class GameStage extends Stage {
         this.stage = stage;
         scene = new Scene(createContent());
 
-        pane.getChildren().add(player.getSprite());
+        pane.getChildren().add(player.getGraphics().getSprite());
         text.setFont(new Font(20));
         text.setText("$" + player.getMoney());
         text.setX(0);
@@ -131,46 +122,53 @@ public class GameStage extends Stage {
      */
     private final List<Image> direction = new ArrayList<>();
     public void update() {
-        KeyFrame frame;
-        List<Image>[] direction = new List[1];
+        player.update(camera, room.getCollideables());
+
+        switchPlayerGraphicsStateToStill();
+
+        movePlayer();
+        moveMonsters();
+        teleportPlayerToEnteredRoom();
+
+        room.update(camera);
+        camera.update(null);
+    }
+    private void switchPlayerGraphicsStateToStill() {
+        double threshold = 0.1D;
+        //if (Math.abs(player.getPhysics().getVelocity().getX()) < threshold && Math.abs(player.getPhysics().getVelocity().getY()) < threshold) {
+        if (!playerIsMovingLeft && !playerIsMovingDown && !playerIsMovingRight && !playerIsMovingUp) {
+            ImageReel currReel = player.getGraphics().getCurrentReel();
+            if (currReel == player.getSpriteSheet().getWalkSheet().getLeftImage()) {
+                player.getGraphics().setCurrentReel(player.getSpriteSheet().getStandSheet().getLeftImage());
+            } else if (currReel == player.getSpriteSheet().getWalkSheet().getRightImage()) {
+                player.getGraphics().setCurrentReel(player.getSpriteSheet().getStandSheet().getRightImage());
+            } else if (currReel == player.getSpriteSheet().getWalkSheet().getUpImage()) {
+                player.getGraphics().setCurrentReel(player.getSpriteSheet().getStandSheet().getUpImage());
+            } else if (currReel == player.getSpriteSheet().getWalkSheet().getDownImage()) {
+                player.getGraphics().setCurrentReel(player.getSpriteSheet().getStandSheet().getDownImage());
+            }
+        }
+    }
+    private void movePlayer() {
+        if (playerIsMovingLeft) {
+            player.getPhysics().pushLeft(Main.DEFAULT_CONTROL_PLAYER_FORCE);
+        } else if (playerIsMovingRight) {
+            player.getPhysics().pushRight(Main.DEFAULT_CONTROL_PLAYER_FORCE);
+        }
 
         if (playerIsMovingUp) {
             player.getPhysics().pushUp(Main.DEFAULT_CONTROL_PLAYER_FORCE);
-            direction[0] = Main.WALKNORTH;
-        }
-        if (playerIsMovingDown) {
+        } else if (playerIsMovingDown) {
             player.getPhysics().pushDown(Main.DEFAULT_CONTROL_PLAYER_FORCE);
-            direction[0] = Main.WALKSOUTH;
         }
-        if (playerIsMovingLeft) {
-            player.getPhysics().pushLeft(Main.DEFAULT_CONTROL_PLAYER_FORCE);
-            direction[0] = Main.WALKWEST;
+    }
+    private void moveMonsters() {
+        for( Monster monster : room.getMonsters()) {
+            monster.face(player, room);
+            monster.update(camera);
         }
-        if (playerIsMovingRight) {
-            player.getPhysics().pushRight(Main.DEFAULT_CONTROL_PLAYER_FORCE);
-            direction[0] = Main.WALKEAST;
-        }
-        if( direction[0] != null) {
-            frame = new KeyFrame(Duration.millis(50), e -> {
-                player.getSprite().setImage(direction[0].get((imageindex++) % 2));
-
-            });
-            timeline.getKeyFrames().add(frame);
-            timeline.setCycleCount(Timeline.INDEFINITE);
-            timeline.play();
-        }
-        player.update(camera, room.getCollideables());
-        for( Monster monster : room.getMonsters()){
-            if( System.nanoTime() - monster.lastMove >= 1000000000) {
-                monster.lastMove = System.nanoTime();
-                String action = monster.heuristicSearch(player, room);
-                if (action.equals("A")) monster.getPhysics().pushLeft(3);
-                if (action.equals("D")) monster.getPhysics().pushRight(3);
-                if (action.equals("W")) monster.getPhysics().pushUp(3);
-                if (action.equals("S")) monster.getPhysics().pushDown(3);
-            }
-            monster.update(camera, player);
-        }
+    }
+    private void teleportPlayerToEnteredRoom() {
         if (!GameMap.enterRoom().equals(room)) {
             Room previous = room;
             room = GameMap.enterRoom();
@@ -178,8 +176,6 @@ public class GameStage extends Stage {
             player.update(camera, room.getCollideables());
             matchPlayerExit(previous);
         }
-        room.update(camera);
-        camera.update(null);
     }
 
     /**
@@ -193,18 +189,15 @@ public class GameStage extends Stage {
      */
     public void matchPlayerExit(Room previous) {
         LinkedList<ExitTile> exits = room.getExits();
-        System.out.println("NEW ROOM");
 
         for (ExitTile tile : exits) {
-            System.out.println("exit id:" + tile.getLinkedRoom().getRoomId());
-
             if (tile.getLinkedRoom().getRoomId() == previous.getRoomId()) {
                 GameObject obj = (GameObject) tile;
                 double x = obj.getPhysics().getPosition().getX();
                 double y = obj.getPhysics().getPosition().getY();
                 int exitX = tile.getExitX();
                 int exitY = tile.getExitY();
-                System.out.println("Exit simple x: " + exitX + " y:" + exitY);
+
                 double distance = 1;
                 boolean teleport = false;
                 Image image = null;
@@ -212,29 +205,27 @@ public class GameStage extends Stage {
                     //right wall
                     teleport = true;
                     x += distance * Main.TILE_WIDTH;
-                    image = Main.PLAYER_IMAGE.get(3);
+                    player.getGraphics().setCurrentReel(player.getSpriteSheet().getStandSheet().getLeftImage());
                 } else if (exitX == room.getWidth()) {
                     //left wall
                     teleport = true;
                     x -= distance * Main.TILE_WIDTH;
-                    image = Main.PLAYER_IMAGE.get(1);
+                    player.getGraphics().setCurrentReel(player.getSpriteSheet().getStandSheet().getRightImage());
                 } else if (exitY == -1) {
                     //top
                     teleport = true;
                     y += distance * Main.TILE_HEIGHT;
-                    image = Main.PLAYER_IMAGE.get(2);
+                    player.getGraphics().setCurrentReel(player.getSpriteSheet().getStandSheet().getDownImage());
                 } else if (exitY == room.getWidth()) {
                     //bottom
                     teleport = true;
                     y -= distance * Main.TILE_HEIGHT;
-                    image = Main.PLAYER_IMAGE.get(0);
+                    player.getGraphics().setCurrentReel(player.getSpriteSheet().getStandSheet().getUpImage());
                 }
                 if (teleport) {
-                    System.out.println("New x: " + x + " y:" + y);
                     Vector2D vec = new Vector2D(x, y);
                     player.getPhysics().setPosition(vec);
                     player.getPhysics().setVelocity(new Vector2D(0, 0));
-                    player.getSprite().setImage(image);
                 }
             }
         }
@@ -252,7 +243,7 @@ public class GameStage extends Stage {
         }
         text.setText("$" + player.getMoney());
         testingPurpose.setText("now in room " + room.getRoomId() + " \n");
-        pane.getChildren().add(player.getSprite());
+        pane.getChildren().add(player.getGraphics().getSprite());
         pane.getChildren().add(infoBar);
         scene.setOnKeyPressed(keyPressed);
         scene.setOnKeyReleased(keyReleased);
@@ -273,15 +264,19 @@ public class GameStage extends Stage {
         public void handle(KeyEvent event) {
             if (event.getCode() == KeyCode.A) {
                 playerIsMovingLeft = true;
+                player.getGraphics().setCurrentReel(player.getSpriteSheet().getWalkSheet().getLeftImage());
             }
             if (event.getCode() == KeyCode.D) {
                 playerIsMovingRight = true;
+                player.getGraphics().setCurrentReel(player.getSpriteSheet().getWalkSheet().getRightImage());
             }
             if (event.getCode() == KeyCode.W) {
                 playerIsMovingUp = true;
+                player.getGraphics().setCurrentReel(player.getSpriteSheet().getWalkSheet().getUpImage());
             }
             if (event.getCode() == KeyCode.S) {
                 playerIsMovingDown = true;
+                player.getGraphics().setCurrentReel(player.getSpriteSheet().getWalkSheet().getDownImage());
             }
         }
     };
@@ -291,30 +286,38 @@ public class GameStage extends Stage {
      *
      */
     private EventHandler<KeyEvent> keyReleased = new EventHandler<KeyEvent>() {
-
         @Override
         public void handle(KeyEvent event) {
-            Image image = null;
             if (event.getCode() == KeyCode.A) {
                 playerIsMovingLeft = false;
-                image = Main.PLAYER_IMAGE.get(3);
+                fixPlayerFacingDirection();
             }
             if (event.getCode() == KeyCode.D) {
                 playerIsMovingRight = false;
-                image = Main.PLAYER_IMAGE.get(1);
+                fixPlayerFacingDirection();
             }
             if (event.getCode() == KeyCode.W) {
                 playerIsMovingUp = false;
-                image = Main.PLAYER_IMAGE.get(0);
+                fixPlayerFacingDirection();
             }
             if (event.getCode() == KeyCode.S) {
                 playerIsMovingDown = false;
-                image = Main.PLAYER_IMAGE.get(2);
+                fixPlayerFacingDirection();
             }
-            player.getSprite().setImage(image);
-            timeline.stop();
         }
     };
+    private void fixPlayerFacingDirection() {
+        if (playerIsMovingUp) {
+            player.getGraphics().setCurrentReel(player.getSpriteSheet().getWalkSheet().getUpImage());
+        } else if (playerIsMovingDown) {
+            player.getGraphics().setCurrentReel(player.getSpriteSheet().getWalkSheet().getDownImage());
+        } else if (playerIsMovingLeft) {
+            player.getGraphics().setCurrentReel(player.getSpriteSheet().getWalkSheet().getLeftImage());
+        } else if (playerIsMovingRight) {
+            player.getGraphics().setCurrentReel(player.getSpriteSheet().getWalkSheet().getRightImage());
+        }
+    }
+
     public Button getExitButton() {
         return exitButton;
     }

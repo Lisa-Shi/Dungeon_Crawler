@@ -21,6 +21,7 @@ public class Main extends Application {
     public static final int GAME_HEIGHT = 500;
 
     public static final double DEFAULT_FORCE = 1;
+    public static final double ENEMY_CONTROL_FORCE = 0.19D;
     public static final double DEFAULT_FRICTIONAL_FORCE = 0.18D;
     public static final double DEFAULT_CAMERA_SLOWDOWN_FACTOR = 7; // similar to a frictional force
     public static final double DEFAULT_CONTROL_PLAYER_FORCE = 0.45D;
@@ -33,76 +34,89 @@ public class Main extends Application {
     public static final int TILE_WIDTH = 64;
     public static final int TILE_HEIGHT = 64;
 
+    public static final String REPLACE_DIRECTION_REGEX = "<direction>";
+
+    public static final int PLAYER_STARTING_HEALTH = 100;
+
     public static final int DEFAULT_COLLISION_PRECISION = 8;
 
     public static final PolygonWireframe TILE_WIREFRAME =
             new RectangleWireframe(Main.PLAYER_WIDTH, Main.PLAYER_HEIGHT);
 
-    public static final List<Image> PLAYER_IMAGE = new LinkedList<>(
-            List.of( new Image(Main.class.getResource("../image/PlayerFaceNorth.png").toExternalForm()),
-                new Image(Main.class.getResource("../image/PlayerFaceEast.png").toExternalForm()),
-                new Image(Main.class.getResource("../image/PlayerFaceSouth.png").toExternalForm()),
-                new Image(Main.class.getResource("../image/PlayerFaceWest.png").toExternalForm())
-            )
-    );
-    public static final List<Image> WALKSOUTH = new LinkedList<>(
-            List.of( new Image(Main.class.getResource("../image/PlayerWalkingSouthA.png").toExternalForm()),
-                    new Image(Main.class.getResource("../image/playerWalkingSouthB.png").toExternalForm())
-            ));
-    public static final List<Image> WALKNORTH = new LinkedList<>(
-            List.of( new Image(Main.class.getResource("../image/PlayerWalkingNorthA.png").toExternalForm()),
-                    new Image(Main.class.getResource("../image/playerWalkingNorthB.png").toExternalForm())
-            ));
-    public static final List<Image> WALKWEST = new LinkedList<>(
-            List.of( new Image(Main.class.getResource("../image/PlayerWalkingWestA.png").toExternalForm()),
-                    new Image(Main.class.getResource("../image/playerWalkingWestB.png").toExternalForm())
-            ));
-    public static final List<Image> WALKEAST = new LinkedList<>(
-            List.of( new Image(Main.class.getResource("../image/PlayerWalkingEastA.png").toExternalForm()),
-                    new Image(Main.class.getResource("../image/playerWalkingEastB.png").toExternalForm())
-            ));
+    public static final Image getImageFrom(String name) {
+        return new Image(Main.class.getResource(name).toExternalForm());
+    }
 
-    public static final List<List<Image>> MONSTERS_ATTACK = new LinkedList<>(
-            List.of(
-                    List.of(new Image(Main.class.getResource("../image/Monster/BuzzA.png").toExternalForm()),
-                            new Image(Main.class.getResource("../image/Monster/BuzzB.png").toExternalForm())),
-                    List.of(new Image(Main.class.getResource("../image/Monster/magicianAttackA.png").toExternalForm()),
-                            new Image(Main.class.getResource("../image/Monster/magicianAttackB.png").toExternalForm())),
-                    List.of(new Image(Main.class.getResource("../image/Monster/slimeAttackA.png").toExternalForm()),
-                            new Image(Main.class.getResource("../image/Monster/slimeAttackB.png").toExternalForm()),
-                            new Image(Main.class.getResource("../image/Monster/slimeAttackC.png").toExternalForm()),
-                            new Image(Main.class.getResource("../image/Monster/slimeAttackD.png").toExternalForm()),
-                            new Image(Main.class.getResource("../image/Monster/slimeAttackE.png").toExternalForm()))
-                    )
-    );
-    public static final List<List<Image>> MONSTERS_EAST = new LinkedList<>(
-            List.of(
-                    List.of(new Image(Main.class.getResource("../image/Monster/BuzzA.png").toExternalForm()),
-                            new Image(Main.class.getResource("../image/Monster/BuzzB.png").toExternalForm())),
-                    List.of(new Image(Main.class.getResource("../image/Monster/magicianFaceEastA.png").toExternalForm()),
-                            new Image(Main.class.getResource("../image/Monster/magicianFaceEastB.png").toExternalForm())),
-                    List.of(new Image(Main.class.getResource("../image/Monster/slimeEastA.png").toExternalForm()),
-                            new Image(Main.class.getResource("../image/Monster/slimeEastB.png").toExternalForm()),
-                            new Image(Main.class.getResource("../image/Monster/slimeEastC.png").toExternalForm()),
-                            new Image(Main.class.getResource("../image/Monster/slimeEastD.png").toExternalForm()),
-                            new Image(Main.class.getResource("../image/Monster/slimeEastE.png").toExternalForm())
-                    )
-            )
-    );
-    public static final List<List<Image>> MONSTERS_WEST = new LinkedList<>(
-            List.of(
-                    List.of(new Image(Main.class.getResource("../image/Monster/BuzzA.png").toExternalForm()),
-                            new Image(Main.class.getResource("../image/Monster/BuzzB.png").toExternalForm())),
-                    List.of(new Image(Main.class.getResource("../image/Monster/magicianFaceWestA.png").toExternalForm()),
-                            new Image(Main.class.getResource("../image/Monster/magicianFaceWestB.png").toExternalForm())),
-                    List.of(new Image(Main.class.getResource("../image/Monster/slimeWestA.png").toExternalForm()),
-                            new Image(Main.class.getResource("../image/Monster/slimeWestB.png").toExternalForm()),
-                            new Image(Main.class.getResource("../image/Monster/slimeWestC.png").toExternalForm()),
-                            new Image(Main.class.getResource("../image/Monster/slimeWestD.png").toExternalForm()),
-                            new Image(Main.class.getResource("../image/Monster/slimeWestE.png").toExternalForm())
-                            )
-            )
-    );
+
+    private static final DirectionalImageSheet PLAYER_STANDING_SHEET =
+            getDirectionalImageSheet(
+                    "../image/PlayerFace" + Main.REPLACE_DIRECTION_REGEX + ".png",
+                    1
+            );
+    private static final DirectionalImageSheet PLAYER_WALKING_SHEET =
+            getDirectionalImageSheet(
+                    "../image/PlayerWalking" + Main.REPLACE_DIRECTION_REGEX + ".png",
+                    2
+            );
+    public static final DirectionalImageSheet BUZZ_STANDING_SHEET =
+            getDirectionalImageSheet(
+                    "../image/Monster/Buzz" + Main.REPLACE_DIRECTION_REGEX + ".png",
+                    2
+            );
+    public static final DirectionalImageSheet MAGICIAN_STANDING_SHEET =
+            getDirectionalImageSheet(
+                    "../image/Monster/magicianFace" + Main.REPLACE_DIRECTION_REGEX + ".png",
+                    1
+            );
+    public static final DirectionalImageSheet SLIME_STANDING_SHEET =
+            getDirectionalImageSheet(
+                    "../image/Monster/slime" + Main.REPLACE_DIRECTION_REGEX + ".png",
+                    5
+            );
+
+    private static final DirectionalImageSheet getDirectionalImageSheet(String directionImageBase, int numDirectionFrames) {
+        // Find <direction> tag in direction image base address
+        int replaceIndex = directionImageBase.indexOf(REPLACE_DIRECTION_REGEX);
+
+        if (replaceIndex == -1) {
+            throw new IllegalArgumentException("No " + REPLACE_DIRECTION_REGEX + " regex to replace with direction"
+                    + " in the base address for the directional images.");
+        }
+
+        String leftStr = directionImageBase.substring(0, replaceIndex);
+        String rightStr = directionImageBase.substring(replaceIndex + REPLACE_DIRECTION_REGEX.length());
+
+        DirectionalImageSheet sheet = new DirectionalImageSheet();
+        String[] directions = new String[4];
+        directions[0] = "North";
+        directions[1] = "East";
+        directions[2] = "South";
+        directions[3] = "West";
+
+        ImageReel[] reels = new ImageReel[4];
+
+        for (int i = 0; i < directions.length; i++) {
+            ImageReel ir = new ImageReel();
+
+            for (int j = 0; j < numDirectionFrames; j++) {
+                char letter = (char) ('A' + j);
+                System.out.println(leftStr + directions[i] + letter + rightStr);
+                ir.add(getImageFrom(leftStr + directions[i] + letter + rightStr));
+            }
+
+            reels[i] = ir;
+        }
+
+        sheet.setUpImage(reels[0]);
+        sheet.setRightImage(reels[1]);
+        sheet.setDownImage(reels[2]);
+        sheet.setLeftImage(reels[3]);
+
+        return sheet;
+    }
+
+    public static final CharacterImageSheet PLAYER_IMAGE_SHEET = new CharacterImageSheet(PLAYER_STANDING_SHEET, PLAYER_WALKING_SHEET);
+
     public static final List<Image> CHEST_IMAGE = new LinkedList<>(
             List.of( new Image(Main.class.getResource("../image/closedChest.png").toExternalForm()),
                     new Image(Main.class.getResource("../image/openChest.png").toExternalForm()),
@@ -119,11 +133,8 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         mainWindow = primaryStage;
-        //Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-
         mainWindow.setTitle("Dungeon Crawler");
-        //primaryStage.setScene(new Scene(root, GAME_WIDTH, GAME_HEIGHT,
-        //false, SceneAntialiasing.DISABLED));
+
         goWelcome();
     }
 

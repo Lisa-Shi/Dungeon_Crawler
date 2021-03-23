@@ -1,119 +1,93 @@
 package sample;
 
-
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.scene.image.Image;
-import javafx.util.Duration;
 
 import java.util.*;
 
 
-public class Monster extends GameObject implements Physical, Collideable, Drawable {
-    //monster needs a name too. give some respect to the monster :)
-    private String name;
-    private int hp;
-    private int demage;
-    private Sprite sprite;
+public class Monster extends GameObject implements Damageable, Collideable, Drawable {
+    // no
+
+    // Variables
+    private int health;
+    private int damagePerHit;
     private DynamicCollisionBox collisionBox;
-    private boolean isDead = false;
-    private long lastAttack = System.nanoTime();
-    private Timeline timeline = new Timeline();
-    private KeyFrame frame;
+
     private int shootingRange = 3;
-    private DynamicCollisionBox attackRange =
-            new DynamicCollisionBox(getPhysics(),
+    private CollisionBox attackRange =
+            new CollisionBox(getPhysics(),
                     new RectangleWireframe(shootingRange * Main.TILE_WIDTH, shootingRange * Main.TILE_HEIGHT));
-    private int imageindex = 0;
-    private int monsterType;
-    private List<Image> attackImage;
-    private List<Image> EastImage;
-    private List<Image> WestImage;
-    private List<Image> imageFrom;
-    public long lastMove = System.nanoTime();
-    public Monster(Room room, String inputName, int hp, int inputDemage, double initialX, double initialY) {
-        //trivial image
+
+    private String facing;
+
+    public Monster(Room room, int health, int damagePerHit, double initialX, double initialY, DirectionalImageSheet sheet) {
         super(room, initialX * Main.TILE_WIDTH, initialY * Main.TILE_HEIGHT
-                    , Main.MONSTER_WIDTH / 2, Main.MONSTER_HEIGHT / 2, Main.FLOORTILE);
-        monsterType = new Random().nextInt(Main.MONSTERS_ATTACK.size());
-        attackImage = Main.MONSTERS_ATTACK.get(monsterType);
-        EastImage = Main.MONSTERS_EAST.get(monsterType);
-        WestImage = Main.MONSTERS_WEST.get(monsterType);
-        imageFrom = WestImage;
-        name = inputName;
-        this.hp = hp;
-        demage = inputDemage;
-        sprite = new Sprite((int) initialX, (int) initialY, (int) Main.MONSTER_WIDTH,
-                (int) Main.MONSTER_HEIGHT, WestImage.get(0));
+                    , Main.MONSTER_WIDTH / 2, Main.MONSTER_HEIGHT / 2, sheet);
+
+        this.health = health;
+        this.damagePerHit = damagePerHit;
+
         this.collisionBox = new DynamicCollisionBox(getPhysics(),
                 new RectangleWireframe(Main.MONSTER_WIDTH, Main.MONSTER_HEIGHT));
         this.collisionBox.generate();
-        attackRange.generate();
-        frame = new KeyFrame(Duration.millis(150), e -> {
-            sprite.setImage(imageFrom.get(((imageindex++) % imageFrom.size())));
-        });
-        timeline.getKeyFrames().add(frame);
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.play();
+        this.attackRange.generate();
+
+        this.facing = "A";
     }
-    public boolean playerInRange(Player player){
-        //attack every 1 second
-        if( (System.nanoTime() - lastAttack >= 1000000000)
-                && attackRange.containsPoint(player.getCollisionBox().getPhysics().getAbsolutePosition())){
-            imageFrom = attackImage;
-            lastAttack = System.nanoTime();
-            player.hurt(demage);
-            System.out.println("attacking " + player);
-        }
-        return attackRange.containsPoint(player.getCollisionBox().getPhysics().getAbsolutePosition());
+
+    // Misc.
+    private boolean damageableInRange(Damageable damageable) {
+        return attackRange.containsPoint(damageable.getPhysics().getPosition());
     }
-    public void update(Camera camera, Player player){
-        this.update(camera);
-        boolean playerInRange = playerInRange(player);
-        if( !playerInRange){
-            imageFrom = WestImage;
+    public void attack(Damageable damageable) {
+        if (damageableInRange(damageable)) {
+            damageable.hurt(damagePerHit);
         }
     }
+
     @Override
     public void update(Camera camera) {
-        if( hp <= 0){
-            isDead = true;
-            collisionBox.setSolid(false);
-            getSprite().setImage(Main.CHEST_IMAGE.get(0));
+        switch(facing) {
+            case "A": getPhysics().pushLeft(Main.ENEMY_CONTROL_FORCE);
+                      break;
+            case "D": getPhysics().pushRight(Main.ENEMY_CONTROL_FORCE);
+                      break;
+            case "W": getPhysics().pushUp(Main.ENEMY_CONTROL_FORCE);
+                      break;
+            case "S": getPhysics().pushDown(Main.ENEMY_CONTROL_FORCE);
+                      break;
         }
 
-        getPhysics().update();
-        updateSprite(camera);
+        super.update(camera);
     }
-    private void updateSprite(Camera camera) {
-        sprite.setTranslateX(getPhysics().getPosition().getX() - camera.getPhysics().getPosition().getX()
-                + camera.getOffsetX() - Main.MONSTER_WIDTH / 2);
-        sprite.setTranslateY(getPhysics().getPosition().getY() - camera.getPhysics().getPosition().getY()
-                + camera.getOffsetY() - Main.MONSTER_HEIGHT / 2);
-    }
+
     @Override
     public CollisionBox getCollisionBox() {
         return collisionBox;
     }
 
-    public Sprite getSprite() {
-        return sprite;
+    @Override
+    public int getHealth() {
+        return health;
     }
 
-    public String getName() {
-        return name;
+    @Override
+    public void hurt(int healthDamage) {
+        health -= healthDamage;
     }
+
 
     /**
      * using manhattan distance as heuristic. each path cost is one
      */
-    public String heuristicSearch(Player player, Room room){
-        Vector2D playerLoc = new Vector2D(Math.round(player.getPhysics().getPosition().getX() / 64)
-                , Math.round(player.getPhysics().getPosition().getY() / 64));
+    public void face(Damageable damageable, Room room){
+        Vector2D playerLoc = new Vector2D(Math.round(damageable.getPhysics().getPosition().getX() / 64)
+                , Math.round(damageable.getPhysics().getPosition().getY() / 64));
         Vector2D monsterLoc = new Vector2D(Math.round(getPhysics().getPosition().getX() / 64)
                 , Math.round(getPhysics().getPosition().getY() / 64));
         if( playerLoc.distanceSquared(monsterLoc) <= Math.pow(shootingRange / 2, 2) * 2){
-            return "";
+            facing = "";
+            return;
         }
         PriorityQueue<State> thePQ = new PriorityQueue<>(1, new Comparator<State>() {
             @Override
@@ -137,8 +111,8 @@ public class Monster extends GameObject implements Physical, Collideable, Drawab
             if( playerLoc.distanceSquared(current) <= 1){
                 if(currPath.size() >= 1) {
                     String a = currPath.remove(0);
-                    System.out.println(a);
-                    return a;
+                    facing = a;
+                    return;
                 }
             }
             ArrayList<Vector2D> successors = new ArrayList<>(
@@ -179,8 +153,10 @@ public class Monster extends GameObject implements Physical, Collideable, Drawab
                 }
             }
         }
-        return "";
+        facing = "";
+        return;
     }
+
     private class State{
         public Vector2D state;
         public LinkedList<String> path;

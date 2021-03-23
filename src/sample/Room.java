@@ -1,6 +1,5 @@
 package sample;
 
-import javafx.scene.control.RadioMenuItem;
 import javafx.scene.layout.Pane;
 import java.util.LinkedList;
 import java.util.*;
@@ -19,14 +18,7 @@ public class Room implements Physical {
     private LinkedList<ExitTile> exits = new LinkedList<>();
     private LinkedList<Monster> monsters = new LinkedList<>();
     private PhysicsController physics;
-    public boolean checkObstacle(Vector2D location){
-        for(Collideable collideable : collideables){
-            if( collideable.getCollisionBox().containsPoint(location)) {
-                return true;
-            }
-        }
-        return false;
-    }
+
     // Constructors
     /**
      * Constructs a dungeon room
@@ -52,7 +44,7 @@ public class Room implements Physical {
         this.physics = new PhysicsController(0, 0);
 
     }
-    public void generateMonster(){
+    public void generateMonsters() {
         if(monsters.isEmpty()) {
             Monster monster = null;
             if( roomId != 999) {
@@ -63,19 +55,19 @@ public class Room implements Physical {
                     do {
                         monsterX = ran.nextInt(width - 2) + 1;
                         monsterY = ran.nextInt(height - 2) + 1;
-                        monster = new Monster(this, "Monster", 100, 10, monsterX, monsterY);
+                        monster = new SlimeMonster(this, monsterX, monsterY);
                     } while (findExistingCollideable(monster));
                     add(monster);
                 }
             }else{
-                monster = new Monster(this, "boss", 1000, 100, width / 2, height / 2);
+                // Boss monster
+                monster = new BuzzMonster(this, width / 2, height / 2);
                 add(monster);
             }
         }
     }
-    public LinkedList<ExitTile> getExits() {
-        return exits;
-    }
+
+    // Methods
     public boolean findExistingCollideable(Monster monster){
         for( Collideable object: collideables){
             if( ((DynamicCollisionBox) monster.getCollisionBox()).collidedWith(object.getCollisionBox())){
@@ -84,7 +76,14 @@ public class Room implements Physical {
         }
         return false;
     }
-    // Methods
+    public boolean checkObstacle(Vector2D location){
+        for(Collideable collideable : collideables){
+            if( collideable.getCollisionBox().containsPoint(location)) {
+                return true;
+            }
+        }
+        return false;
+    }
     public void generateExits(List<Room> listOfExit) {
         if (exits.isEmpty()) {
             LinkedList<Vector2D> availableExits = new LinkedList<>();
@@ -129,7 +128,7 @@ public class Room implements Physical {
     public void finalize(Pane pane) {
         addRoomLayout();
         if( roomId != 999) {
-            generateMonster();
+            generateMonsters();
         }
         addFloorTiles();
 
@@ -164,7 +163,7 @@ public class Room implements Physical {
     }
     private void addAllSprites(Pane pane) {
         for (Drawable drawable : drawables) {
-            pane.getChildren().add(drawable.getSprite());
+            pane.getChildren().add(drawable.getGraphics().getSprite());
         }
     }
     /**
@@ -194,7 +193,6 @@ public class Room implements Physical {
 
 
     // Getters
-
     public Vector2D[][] getHeuristicMap() {
         return heuristicMap;
     }
@@ -205,6 +203,10 @@ public class Room implements Physical {
 
     public LinkedList<Monster> getMonsters() {
         return monsters;
+    }
+
+    public LinkedList<ExitTile> getExits() {
+        return exits;
     }
 
     /**

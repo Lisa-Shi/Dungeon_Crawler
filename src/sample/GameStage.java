@@ -4,6 +4,7 @@ import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -43,6 +44,8 @@ public class GameStage extends Stage {
     private HBox infoBar = new HBox();
     private Text text = new Text();
     private Text testingPurpose = new Text();
+
+    private ProgressBar pbar = new ProgressBar(0);
 
     public GameMap getMap() {
         return map;
@@ -87,7 +90,11 @@ public class GameStage extends Stage {
         testingPurpose.setTextAlignment(TextAlignment.LEFT);
         infoBar.getChildren().add(testingPurpose);
 
-        infoBar.getChildren().add(text);
+        Insets insets = new Insets(6);
+
+        pbar.setPadding(insets);
+
+        infoBar.getChildren().addAll(text, pbar);
         pane.getChildren().add(infoBar);
 
         scene.setOnKeyPressed(keyPressed);
@@ -235,6 +242,7 @@ public class GameStage extends Stage {
         pane.setPrefSize(Main.GAME_WIDTH, Main.GAME_HEIGHT);
         room.generateExits(map.getAdjRooms(room));
         room.finalize(pane);
+        pbar.setProgress(room.getRoomId() / 9.0);
         Scene scene = new Scene(pane);
         if (room.getRoomId() == 999) {
             infoBar.getChildren().add(exitButton);

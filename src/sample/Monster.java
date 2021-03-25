@@ -1,9 +1,11 @@
 package sample;
 
+/**
+ * the monster class
+ */
 import javafx.scene.image.Image;
 
 import java.util.*;
-
 
 public class Monster extends GameObject implements Damageable, Collideable, Drawable {
     // no
@@ -76,13 +78,17 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
         health -= healthDamage;
     }
 
-
     /**
-     * using manhattan distance as heuristic. each path cost is one
+     * using manhattan distance as heuristic funcytion. each path cost is one
+     * @param player the target that monster moving toward
+     * @room room room that player and monster are in
+     * @return string representation of next action
      */
+
     public void face(Damageable damageable, Room room){
         Vector2D playerLoc = new Vector2D(Math.round(damageable.getPhysics().getPosition().getX() / 64)
                 , Math.round(damageable.getPhysics().getPosition().getY() / 64));
+
         Vector2D monsterLoc = new Vector2D(Math.round(getPhysics().getPosition().getX() / 64)
                 , Math.round(getPhysics().getPosition().getY() / 64));
         if( playerLoc.distanceSquared(monsterLoc) <= Math.pow(shootingRange / 2, 2) * 2){
@@ -115,12 +121,14 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
                     return;
                 }
             }
+            //possible state (action)
             ArrayList<Vector2D> successors = new ArrayList<>(
                     List.of(new Vector2D(1, 0),
                             new Vector2D(-1, 0),
                             new Vector2D(0, 1),
                             new Vector2D(0, -1))
             );
+            //remove the action that will move the monster to the wall
             ArrayList<Vector2D> removeList = new ArrayList<>();
             for(Vector2D successor: successors){
                 if(room.checkObstacle(current.add(successor).multiply(Main.TILE_HEIGHT))){
@@ -167,4 +175,5 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
             cost = pathCost;
         }
     }
+
 }

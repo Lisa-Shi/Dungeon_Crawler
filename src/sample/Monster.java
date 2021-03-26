@@ -131,12 +131,12 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
                 }
             }
             //possible state (action)
-            ArrayList<Vector2D> successors = new ArrayList<>(
-                    List.of(new Vector2D(1, 0),
-                            new Vector2D(-1, 0),
-                            new Vector2D(0, 1),
-                            new Vector2D(0, -1))
-            );
+            ArrayList<Vector2D> successors = new ArrayList<Vector2D>() {{
+                add(new Vector2D(1, 0));
+                add(new Vector2D(-1, 0));
+                add(new Vector2D(0, 1));
+                add(new Vector2D(0, -1));
+            }};
             //remove the action that will move the monster to the wall
             ArrayList<Vector2D> removeList = new ArrayList<>();
             for(Vector2D successor: successors){

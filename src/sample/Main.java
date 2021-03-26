@@ -132,11 +132,11 @@ public class Main extends Application {
 
     public static final CharacterImageSheet PLAYER_IMAGE_SHEET = new CharacterImageSheet(PLAYER_STANDING_SHEET, PLAYER_WALKING_SHEET);
 
-    public static final List<Image> CHEST_IMAGE = new LinkedList<>(
-            List.of( new Image(Main.class.getResource("../image/closedChest.png").toExternalForm()),
-                    new Image(Main.class.getResource("../image/openChest.png").toExternalForm()),
-                    new Image(Main.class.getResource("../image/emptyChest.png").toExternalForm())
-            ));
+    public static final List<Image> CHEST_IMAGE = new LinkedList<Image>() {{
+        add(new Image(Main.class.getResource("../image/closedChest.png").toExternalForm()));
+        add(new Image(Main.class.getResource("../image/openChest.png").toExternalForm()));
+        add(new Image(Main.class.getResource("../image/emptyChest.png").toExternalForm()));
+    }};
     public static final Image WALLTILE =
             new Image(Main.class.getResource("../image/spr_dungeon_wall.png").toExternalForm());
     public static final Image EXITTILE =

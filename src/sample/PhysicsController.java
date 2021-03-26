@@ -154,6 +154,16 @@ public class PhysicsController {
         return impulse;
     }
 
+    public Vector2D getAbsolutePosition() {
+        return position;
+    }
+    public Vector2D getAbsoluteVelocity() {
+        return velocity;
+    }
+    public Vector2D getAbsoluteAcceleration() {
+        return acceleration;
+    }
+
     // Setters
     /**
      * @param position new position of object

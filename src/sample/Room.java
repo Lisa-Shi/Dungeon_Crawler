@@ -17,6 +17,7 @@ public class Room implements Physical {
     private LinkedList<Drawable> drawables = new LinkedList<>();
     private LinkedList<ExitTile> exits = new LinkedList<>();
     private LinkedList<Monster> monsters = new LinkedList<>();
+    private LinkedList<GameObject> toRemove = new LinkedList<>();
     private PhysicsController physics;
 
     // Constructors
@@ -34,6 +35,7 @@ public class Room implements Physical {
         // Physics so the camera works properly
         this.physics = new PhysicsController(0, 0);
 
+        this.toRemove = new LinkedList<>();
     }
     public Room(int width, int height, int inputId) {
         roomId = inputId;
@@ -43,6 +45,7 @@ public class Room implements Physical {
         // Physics so the camera works properly
         this.physics = new PhysicsController(0, 0);
 
+        this.toRemove = new LinkedList<>();
     }
     public void generateMonsters() {
         if(monsters.isEmpty()) {
@@ -180,6 +183,8 @@ public class Room implements Physical {
         for (Physical physical : physicals) {
             physical.update(camera);
         }
+
+        flushToRemove();
     }
 
     public void clear() {
@@ -234,13 +239,13 @@ public class Room implements Physical {
     public void add(GameObject obj) {
         if (obj instanceof Physical) {
             // so far, all game objects are physical
-            physicals.add((Physical) obj);
+            physicals.add(0, (Physical) obj);
         }
         if (obj instanceof Collideable) {
-            collideables.add((Collideable) obj);
+            collideables.add(0, (Collideable) obj);
         }
         if (obj instanceof ExitTile) {
-            exits.add((ExitTile) obj);
+            exits.add(0, (ExitTile) obj);
         }
         if (obj instanceof Drawable) {
             drawables.add(0, (Drawable) obj);
@@ -248,6 +253,31 @@ public class Room implements Physical {
         if( obj instanceof Monster) {
             monsters.add(0, (Monster) obj);
         }
+    }
+    public void remove(GameObject obj) {
+        toRemove.add(obj);
+    }
+    private void flushToRemove() {
+        for (GameObject obj : toRemove) {
+            if (obj instanceof Physical) {
+                // so far, all game objects are physical
+                physicals.remove((Physical) obj);
+            }
+            if (obj instanceof Collideable) {
+                collideables.remove((Collideable) obj);
+            }
+            if (obj instanceof ExitTile) {
+                exits.remove((ExitTile) obj);
+            }
+            if (obj instanceof Drawable) {
+                drawables.remove((Drawable) obj);
+            }
+            if (obj instanceof Monster) {
+                monsters.remove((Monster) obj);
+            }
+        }
+
+        toRemove.clear();
     }
     public String getLayout() {
         return layout;

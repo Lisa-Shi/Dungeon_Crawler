@@ -18,8 +18,9 @@ public class NextRoomTest extends ApplicationTest {
     private GameMap map;
     @Override
     public void start(Stage primaryStage) throws Exception {
-        player = new Player("unittest", new Weapon("unittest", "unittest", 1, 5), 0, 0, 0);
-        game = new GameStage(player);
+        Room r = new Room(20, 20);
+        player = new Player("unittest", new Weapon("unittest", "unittest", 1, 5), r, 0, 0, 0);
+        game = new GameStage(player, r);
         map = game.getMap();
         game.start(new Stage());
 

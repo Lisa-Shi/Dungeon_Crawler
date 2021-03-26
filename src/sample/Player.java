@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Player implements Damageable, Collideable, Drawable {
+public class Player extends GameObject implements Damageable, Collideable, Drawable {
 
     // Variables
     private String name;
@@ -13,11 +13,8 @@ public class Player implements Damageable, Collideable, Drawable {
     private int holdingWeapon; // index of weapon in the weapon list
     private int health;
 
-    private PhysicsController physics;
     private DynamicCollisionBox collisionBox;
 
-    private CharacterImageSheet spriteSheet;
-    private SpriteController graphics;
     private int money;
 
     /**
@@ -30,26 +27,19 @@ public class Player implements Damageable, Collideable, Drawable {
      * @param initialY y-location player starts at
      * @param difficulty difficulty for the game
      */
-    public Player(String name, Weapon initialWeapon,
+    public Player(String name, Weapon initialWeapon, Room room,
                   double initialX, double initialY,  int difficulty) {
+        super(room, initialX, initialY, Main.PLAYER_WIDTH / 2, Main.PLAYER_HEIGHT / 2, Main.PLAYER_IMAGE_SHEET);
         this.name = name;
         weaponList = new ArrayList<>();
         weaponList.add(initialWeapon);
 
-        spriteSheet = Main.PLAYER_IMAGE_SHEET;
-        Sprite sprite = new Sprite((int) initialX, (int) initialY, (int) Main.PLAYER_WIDTH,
-                (int) Main.PLAYER_HEIGHT, Main.PLAYER_IMAGE_SHEET.getStandSheet().getDownImage().getInitialImage());
-
-        graphics = new SpriteController(sprite, spriteSheet.getStandSheet().getDownImage());
-
-
         this.health = Main.PLAYER_STARTING_HEALTH;
 
-        this.physics = new PhysicsController(initialX, initialY);
         this.difficulty = difficulty;
         giveMoney(difficulty);
 
-        this.collisionBox = new DynamicCollisionBox(physics,
+        this.collisionBox = new DynamicCollisionBox(getPhysics(),
                 new RectangleWireframe(Main.PLAYER_WIDTH, Main.PLAYER_HEIGHT));
         this.collisionBox.generate();
     }
@@ -71,81 +61,39 @@ public class Player implements Damageable, Collideable, Drawable {
      *
      */
     public void update(Camera camera) {
-        physics.update();
+        getPhysics().update();
 
         updateSprite(camera);
 
-        if (physics.getVelocity().len() > Main.MAX_PLAYER_SPEED) {
-            Vector2D relenVel = physics.getVelocity().relen(Main.MAX_PLAYER_SPEED);
-            physics.setVelocity(relenVel);
+        if (getPhysics().getVelocity().len() > Main.MAX_PLAYER_SPEED) {
+            Vector2D relenVel = getPhysics().getVelocity().relen(Main.MAX_PLAYER_SPEED);
+            getPhysics().setVelocity(relenVel);
         }
     }
 
     public void update(Camera camera, LinkedList<Collideable> collideables) {
         update(camera);
-        raytraceCollision(collideables);
+        for (Collideable c : collideables) {
+            if (c instanceof Passable && getCollisionBox().collidedWith(c.getCollisionBox())) {
+                ((Passable) c).collisionWithPlayerEvent(this);
+            }
+        }
+        getCollisionBox().raytraceCollision(getPhysics(), collideables);
         updateSprite(camera);
     }
 
     private void updateSprite(Camera camera) {
-        graphics.getSprite().setTranslateX(physics.getPosition().getX() - camera.getPhysics().getPosition().getX()
+        getGraphics().getSprite().setTranslateX(getPhysics().getPosition().getX() - camera.getPhysics().getPosition().getX()
                 + camera.getOffsetX() - Main.PLAYER_WIDTH / 2);
-        graphics.getSprite().setTranslateY(physics.getPosition().getY() - camera.getPhysics().getPosition().getY()
+        getGraphics().getSprite().setTranslateY(getPhysics().getPosition().getY() - camera.getPhysics().getPosition().getY()
                 + camera.getOffsetY() - Main.PLAYER_HEIGHT / 2);
     }
 
-    private void raytraceCollision(LinkedList<Collideable> collideables) {
-        int backtracks = 0;
-        boolean hasCollidedWithSolid;
-        Vector2D backtrackVel = new Vector2D(0, 0);
-        LinkedList<Passable> boundaries = new LinkedList<>();
-
-        do {
-            hasCollidedWithSolid = false;
-            // Test if there are any collisions, and continue moving player back
-            for (Collideable collideable : collideables) {
-                boolean solid = collideable.getCollisionBox().isSolid();
-                boolean collided = getCollisionBox().collidedWith(collideable.getCollisionBox());
-                if (collided) {
-                    if (solid) {
-                        backtrackVel = backtrackVel.add(
-                                getCollisionBox().calculateCollisionVector(
-                                        collideable.getCollisionBox()).multiply(0.001D));
-                        hasCollidedWithSolid = true;
-                    }
-
-                    if (collideable instanceof Passable) {
-                        ((Passable) collideable).collisionWithPlayerEvent(this);
-                    }
-                }
-
-            }
-
-            if (hasCollidedWithSolid) {
-                // Move player back to test if safe from collisions
-                physics.setPosition(physics.getPosition().add(backtrackVel));
-                backtracks++;
-                boundaries.clear();
-            }
-
-            if (backtrackVel.getX() == 0 && backtrackVel.getY() == 0) {
-                break;
-            }
-        } while (hasCollidedWithSolid);
-
-        if (backtracks >= 1) {
-            physics.setVelocity(physics.getVelocity().projectOnto(backtrackVel.normal()));
-            physics.setAcceleration(physics.getAcceleration().projectOnto(backtrackVel.normal()));
-        }
-        // Activate boundaries
-        for (Passable boundary : boundaries) {
-            boundary.collisionWithPlayerEvent(this);
-        }
-    }
 
     @Override
     public void hurt(int healthDamage) {
         health -= healthDamage;
+
     }
 
     /**player is legal if the name is not empty string and difficulty is not -1
@@ -158,27 +106,11 @@ public class Player implements Damageable, Collideable, Drawable {
 
     // Getters
     /**
-     * @return Physics information
-     */
-    public PhysicsController getPhysics() {
-        return physics;
-    }
-    /**
      * @return Collision box
      */
     @Override
     public DynamicCollisionBox getCollisionBox() {
         return collisionBox;
-    }
-
-    @Override
-    public SpriteController getGraphics() {
-        return graphics;
-    }
-
-    @Override
-    public CharacterImageSheet getSpriteSheet() {
-        return spriteSheet;
     }
 
     /**
@@ -230,6 +162,9 @@ public class Player implements Damageable, Collideable, Drawable {
         return difficulty;
     }
 
+    public CharacterImageSheet getSpriteSheet() {
+        return (CharacterImageSheet) super.getSpriteSheet();
+    }
 
     // Setters
     /**

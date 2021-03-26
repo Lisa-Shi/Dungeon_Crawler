@@ -4,6 +4,7 @@ package sample;
  * the monster class
  */
 import javafx.scene.image.Image;
+import javafx.scene.layout.Pane;
 
 import java.util.*;
 
@@ -13,12 +14,13 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
     // Variables
     private int health;
     private int damagePerHit;
+    private Room room;
     private DynamicCollisionBox collisionBox;
 
     private int shootingRange = 3;
     private CollisionBox attackRange =
             new CollisionBox(getPhysics(),
-                    new RectangleWireframe(shootingRange * Main.TILE_WIDTH, shootingRange * Main.TILE_HEIGHT));
+                    new RectangleWireframe(shootingRange * Main.TILE_WIDTH, shootingRange * Main.TILE_HEIGHT), false);
 
     private String facing;
 
@@ -30,7 +32,7 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
         this.damagePerHit = damagePerHit;
 
         this.collisionBox = new DynamicCollisionBox(getPhysics(),
-                new RectangleWireframe(Main.MONSTER_WIDTH, Main.MONSTER_HEIGHT));
+                new RectangleWireframe(Main.MONSTER_WIDTH, Main.MONSTER_HEIGHT), false);
         this.collisionBox.generate();
         this.attackRange.generate();
 
@@ -45,6 +47,13 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
         if (damageableInRange(damageable)) {
             damageable.hurt(damagePerHit);
         }
+    }
+    public void launchProjectileTowardsPlayer(Room room, Pane pane, Player player) {
+        Projectile bullet = new Projectile(room, pane, getPhysics().getPosition().getX(), getPhysics().getPosition().getY(),
+                Main.BULLET_WIDTH/2, Main.BULLET_HEIGHT/2, Main.ENEMY_BULLET_DAMAGE);
+        room.add(bullet);
+        pane.getChildren().add(bullet.getGraphics().getSprite());
+        bullet.launchTowardsPoint(player.getPhysics().getPosition(), Main.ENEMY_BULLET_SPEED);
     }
 
     @Override

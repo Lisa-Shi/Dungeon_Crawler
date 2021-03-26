@@ -19,10 +19,14 @@ public abstract class GameObject implements Physical, Drawable {
 
         this.graphics = new SpriteController(sprite, sheet.getInitialReel());
         this.center = new Vector2D(centerX, centerY);
+        this.sheet = sheet;
     }
 
     public void update(Camera camera) {
-        physics.update();
+        update(camera, Main.DEFAULT_FRICTIONAL_FORCE);
+    }
+    public void update(Camera camera, double frictionalForce) {
+        physics.update(frictionalForce);
         graphics.getSprite().setTranslateX(physics.getPosition().getX() - camera.getPhysics().getPosition().getX()
                 + camera.getOffsetX() - center.getX());
         graphics.getSprite().setTranslateY(physics.getPosition().getY() - camera.getPhysics().getPosition().getY()

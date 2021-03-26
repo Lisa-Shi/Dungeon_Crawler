@@ -16,9 +16,10 @@ import java.util.List;
 public class Main extends Application {
     // Variables
     private Stage mainWindow;
+    private Room firstRoom;
 
-    public static final int GAME_WIDTH = 500;
-    public static final int GAME_HEIGHT = 500;
+    public static final int GAME_WIDTH = 650;
+    public static final int GAME_HEIGHT = 650;
 
     public static final double DEFAULT_FORCE = 1;
     public static final double ENEMY_CONTROL_FORCE = 0.19D;
@@ -29,10 +30,21 @@ public class Main extends Application {
 
     public static final double PLAYER_WIDTH = 40;
     public static final double PLAYER_HEIGHT = 40;
-    public static final double MONSTER_WIDTH = 40;
-    public static final double MONSTER_HEIGHT = 40;
+    public static final double MONSTER_WIDTH = 65;
+    public static final double MONSTER_HEIGHT = 65;
     public static final int TILE_WIDTH = 64;
     public static final int TILE_HEIGHT = 64;
+
+    public static final int BULLET_WIDTH = 15;
+    public static final int BULLET_HEIGHT = 15;
+    public static final int ENEMY_BULLET_SPEED = 5;
+    public static final int ENEMY_BULLET_FRICTION_FORCE = 0;
+    public static final int ENEMY_BULLET_DAMAGE = 10;
+
+    //public static final int BULLET_TIME_UNTIL_EXPIRATION = 1000;
+    public static final int ENEMY_BULLET_BOUNCES_UNTIL_EXPIRATION = 4;
+
+    public static final int MONSTER_ATTACK_TIME = 1000;
 
     public static final String REPLACE_DIRECTION_REGEX = "<direction>";
 
@@ -73,6 +85,9 @@ public class Main extends Application {
                     "../image/Monster/slime" + Main.REPLACE_DIRECTION_REGEX + ".png",
                     5
             );
+
+    public static final ImageSheet BULLET_SHEET = new SingularImageSheet(getImageFrom("../image/bullet.png"));
+
 
     private static final DirectionalImageSheet getDirectionalImageSheet(String directionImageBase, int numDirectionFrames) {
         // Find <direction> tag in direction image base address
@@ -117,11 +132,11 @@ public class Main extends Application {
 
     public static final CharacterImageSheet PLAYER_IMAGE_SHEET = new CharacterImageSheet(PLAYER_STANDING_SHEET, PLAYER_WALKING_SHEET);
 
-    public static final List<Image> CHEST_IMAGE = new LinkedList<>(
-            List.of( new Image(Main.class.getResource("../image/closedChest.png").toExternalForm()),
-                    new Image(Main.class.getResource("../image/openChest.png").toExternalForm()),
-                    new Image(Main.class.getResource("../image/emptyChest.png").toExternalForm())
-            ));
+    public static final List<Image> CHEST_IMAGE = new LinkedList<Image>() {{
+        add(new Image(Main.class.getResource("../image/closedChest.png").toExternalForm()));
+        add(new Image(Main.class.getResource("../image/openChest.png").toExternalForm()));
+        add(new Image(Main.class.getResource("../image/emptyChest.png").toExternalForm()));
+    }};
     public static final Image WALLTILE =
             new Image(Main.class.getResource("../image/spr_dungeon_wall.png").toExternalForm());
     public static final Image EXITTILE =
@@ -179,7 +194,8 @@ public class Main extends Application {
         //Button action for moving to Room
         goRoom.setOnAction(event -> {
             //initialize player
-            player = configScene.createChar();
+            firstRoom = new Room(20, 20);
+            player = configScene.createChar(firstRoom);
             if (player != null && !player.isLegal()) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 if (player.getName().equals("")) {
@@ -204,7 +220,7 @@ public class Main extends Application {
     private void goToRoom(Player player) {
         mainWindow.setScene(new Scene(new Pane(),
                 GAME_WIDTH, GAME_HEIGHT, false, SceneAntialiasing.DISABLED));
-        GameStage r = new GameStage(player);
+        GameStage r = new GameStage(player, firstRoom);
         try {
             r.start(mainWindow);
         } catch (Exception e) {

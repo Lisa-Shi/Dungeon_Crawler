@@ -162,7 +162,7 @@ public class ConfigurationScreen {
      *
      * @return  the player object created with the user inputs
      */
-    public Player createChar() {
+    public Player createChar(Room goRoom) {
         //get user input from button
         name = nameInput.getText();
         ToggleButton selectD = (ToggleButton) difficultyToggles.getSelectedToggle();
@@ -177,7 +177,7 @@ public class ConfigurationScreen {
         if (weapon != -1) {
             playerW = wOptions[weapon - 1];
         }
-        return new Player(name, playerW, 0, 0, difficulty);
+        return new Player(name, playerW, goRoom,0, 0, difficulty);
     }
 
     /**

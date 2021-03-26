@@ -6,6 +6,7 @@ import sample.Main;
 import javafx.stage.Stage;
 import org.junit.Test;
 import sample.Player;
+import sample.Room;
 import sample.Vector2D;
 import sample.Weapon;
 
@@ -17,8 +18,9 @@ public class PlayerPhysicsTest extends ApplicationTest {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        player = new Player("unittest", new Weapon("unittest", "unittest", 1, 5), 0, 0, 0);
-        game = new GameStage(player);
+        Room r = new Room(20, 20);
+        player = new Player("unittest", new Weapon("unittest", "unittest", 1, 5), r, 0, 0, 0);
+        game = new GameStage(player, r);
         game.start(new Stage());
     }
     @Test

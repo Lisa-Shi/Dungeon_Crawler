@@ -1,6 +1,7 @@
 package sample;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class DynamicCollisionBox extends CollisionBox {
     // Variables
@@ -8,8 +9,12 @@ public class DynamicCollisionBox extends CollisionBox {
 
     // Constructors
     public DynamicCollisionBox(PhysicsController physics, PolygonWireframe wireframe) {
+        this(physics, wireframe, true);
+    }
+    public DynamicCollisionBox(PhysicsController physics, PolygonWireframe wireframe, boolean solid) {
         super(physics, wireframe);
         this.collisionPoints = new ArrayList<>();
+        this.setSolid(solid);
     }
 
     // Misc.
@@ -25,7 +30,7 @@ public class DynamicCollisionBox extends CollisionBox {
             Vector2D targetEdge = getWireframe().getEdges().get(i);
             double edgeLength = targetEdge.len();
 
-            int numCollisionPoints = (int) (edgeLength / Main.DEFAULT_COLLISION_PRECISION);
+            int numCollisionPoints = (int) (edgeLength / Main.DEFAULT_COLLISION_PRECISION) + 1;
 
             double distBetweenCollisionPoints = edgeLength / (numCollisionPoints + 1);
 
@@ -51,6 +56,10 @@ public class DynamicCollisionBox extends CollisionBox {
     }
 
     public boolean collidedWith(CollisionBox other) {
+        if (other == this) {
+            return false;
+        }
+
         for (CollisionPoint cp : collisionPoints) {
             if (other.containsPoint(getPhysics().getAbsolutePosition().add(cp.getPosition()))) {
                 return true;
@@ -85,4 +94,46 @@ public class DynamicCollisionBox extends CollisionBox {
             return collisionVectorVertices.norm();
         }
     }
+
+    public void raytraceCollision(PhysicsController physics, LinkedList<Collideable> collideables) {
+        int backtracks = 0;
+        boolean hasCollidedWithSolid;
+        Vector2D backtrackVel = new Vector2D(0, 0);
+        LinkedList<Passable> boundaries = new LinkedList<>();
+
+        do {
+            hasCollidedWithSolid = false;
+            // Test if there are any collisions, and continue moving player back
+            for (Collideable collideable : collideables) {
+                boolean solid = collideable.getCollisionBox().isSolid();
+                boolean collided = collidedWith(collideable.getCollisionBox());
+                if (collided) {
+                    if (solid) {
+                        backtrackVel = backtrackVel.add(
+                                calculateCollisionVector(
+                                        collideable.getCollisionBox()).multiply(0.001D));
+                        hasCollidedWithSolid = true;
+                    }
+                }
+
+            }
+
+            if (hasCollidedWithSolid) {
+                // Move player back to test if safe from collisions
+                physics.setPosition(physics.getPosition().add(backtrackVel));
+                backtracks++;
+                boundaries.clear();
+            }
+
+            if (backtrackVel.getX() == 0 && backtrackVel.getY() == 0) {
+                break;
+            }
+        } while (hasCollidedWithSolid);
+
+        if (backtracks >= 1) {
+            physics.setVelocity(physics.getVelocity().projectOnto(backtrackVel.normal()));
+            physics.setAcceleration(physics.getAcceleration().projectOnto(backtrackVel.normal()));
+        }
+    }
+
 }

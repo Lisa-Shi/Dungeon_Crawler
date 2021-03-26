@@ -43,6 +43,7 @@ public class GameStage extends Stage {
     private Scene scene;
     private HBox infoBar = new HBox();
     private Text text = new Text();
+    private Text healthText = new Text();
     private Text testingPurpose = new Text();
 
     private ProgressBar pbar = new ProgressBar(0);
@@ -56,13 +57,18 @@ public class GameStage extends Stage {
      *
      * @param player the player user will be controlling in the game
      */
-    public GameStage(Player player) {
+    public GameStage(Player player, Room firstRoom) {
         this.player = player;
         camera = new Camera(Main.GAME_WIDTH / 2, Main.GAME_HEIGHT / 2, player);
 
-        room = new Room(20, 20);
+        room = firstRoom;
         map = new GameMap(room);
         exitButton = new Button("finish");
+
+        new Timeline(new KeyFrame(
+                Duration.millis(Main.MONSTER_ATTACK_TIME),
+                ae -> moveMonsters()))
+                .play();
     }
 
     /**
@@ -78,6 +84,7 @@ public class GameStage extends Stage {
         pane.getChildren().add(player.getGraphics().getSprite());
         text.setFont(new Font(20));
         text.setText("$" + player.getMoney());
+        healthText.setText("HP: " + player.getHealth());
         text.setX(0);
         text.setY(20);
         text.setTextAlignment(TextAlignment.LEFT);
@@ -94,11 +101,13 @@ public class GameStage extends Stage {
 
         pbar.setPadding(insets);
 
-        infoBar.getChildren().addAll(text, pbar);
+        infoBar.getChildren().addAll(text, healthText, pbar);
         pane.getChildren().add(infoBar);
 
         scene.setOnKeyPressed(keyPressed);
         scene.setOnKeyReleased(keyReleased);
+
+        room.getCollideables().add(player);
 
         stage.setScene(scene);
         stage.show();
@@ -134,11 +143,18 @@ public class GameStage extends Stage {
         switchPlayerGraphicsStateToStill();
 
         movePlayer();
-        moveMonsters();
+        //moveMonsters();
         teleportPlayerToEnteredRoom();
 
         room.update(camera);
         camera.update(null);
+
+        updateText();
+    }
+    private void updateText() {
+        text.setText("$" + player.getMoney());
+        healthText.setText("HP: " + player.getHealth());
+        testingPurpose.setText("now in room " + room.getRoomId() + " \n");
     }
     private void switchPlayerGraphicsStateToStill() {
         double threshold = 0.1D;
@@ -173,7 +189,12 @@ public class GameStage extends Stage {
         for( Monster monster : room.getMonsters()) {
             monster.face(player, room);
             monster.update(camera);
+            monster.launchProjectileTowardsPlayer(room, pane, player);
         }
+        new Timeline(new KeyFrame(
+                Duration.millis(Main.MONSTER_ATTACK_TIME),
+                ae -> moveMonsters()))
+                .play();
     }
     private void teleportPlayerToEnteredRoom() {
         if (!GameMap.enterRoom().equals(room)) {
@@ -182,6 +203,10 @@ public class GameStage extends Stage {
             enterRoom();
             player.update(camera, room.getCollideables());
             matchPlayerExit(previous);
+
+            if (!room.getCollideables().contains(player)) {
+                room.getCollideables().add(player);
+            }
         }
     }
 

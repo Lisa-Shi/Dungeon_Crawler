@@ -186,7 +186,7 @@ public class GameStage extends Stage {
         }
     }
     private void moveMonsters() {
-        for( Monster monster : room.getMonsters()) {
+        for (Monster monster : room.getMonsters()) {
             monster.face(player, room);
             monster.update(camera);
             monster.launchProjectileTowardsPlayer(room, pane, player);
@@ -196,6 +196,7 @@ public class GameStage extends Stage {
                 ae -> moveMonsters()))
                 .play();
     }
+
     private void teleportPlayerToEnteredRoom() {
         if (!GameMap.enterRoom().equals(room)) {
             Room previous = room;
@@ -311,6 +312,9 @@ public class GameStage extends Stage {
                 playerIsMovingDown = true;
                 player.getGraphics().setCurrentReel(player.getSpriteSheet().getWalkSheet().getDownImage());
             }
+            if (event.getCode() == KeyCode.ENTER) {
+                player.launchProjectile(room, pane, camera, room.getMonsters());
+            }
         }
     };
     /**
@@ -323,18 +327,22 @@ public class GameStage extends Stage {
         public void handle(KeyEvent event) {
             if (event.getCode() == KeyCode.A) {
                 playerIsMovingLeft = false;
+                player.setDirection(new Vector2D(-1,0));
                 fixPlayerFacingDirection();
             }
             if (event.getCode() == KeyCode.D) {
                 playerIsMovingRight = false;
+                player.setDirection(new Vector2D(1,0));
                 fixPlayerFacingDirection();
             }
             if (event.getCode() == KeyCode.W) {
                 playerIsMovingUp = false;
+                player.setDirection(new Vector2D(0,-1));
                 fixPlayerFacingDirection();
             }
             if (event.getCode() == KeyCode.S) {
                 playerIsMovingDown = false;
+                player.setDirection(new Vector2D(0,1));
                 fixPlayerFacingDirection();
             }
         }
@@ -353,6 +361,9 @@ public class GameStage extends Stage {
 
     public Button getExitButton() {
         return exitButton;
+    }
+    public Camera getCamera() {
+        return camera;
     }
 
 }

@@ -1,5 +1,7 @@
 package sample;
 
+import javafx.scene.layout.Pane;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,6 +14,7 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
     private int difficulty;
     private int holdingWeapon; // index of weapon in the weapon list
     private int health;
+    private Vector2D direction;
 
     private DynamicCollisionBox collisionBox;
 
@@ -33,7 +36,7 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
         this.name = name;
         weaponList = new ArrayList<>();
         weaponList.add(initialWeapon);
-
+        direction = new Vector2D(0, -1);
         this.health = Main.PLAYER_STARTING_HEALTH;
 
         this.difficulty = difficulty;
@@ -43,6 +46,7 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
                 new RectangleWireframe(Main.PLAYER_WIDTH, Main.PLAYER_HEIGHT));
         this.collisionBox.generate();
     }
+
     private void giveMoney(int difficulty) {
         if (difficulty == 1) {
             money = 100;
@@ -51,6 +55,21 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
         } else {
             money = 20;
         }
+    }
+
+    public void launchProjectile(Room room, Pane pane, Camera camera, LinkedList<Monster> monsters) {
+        Projectile bullet = new Projectile(this, room, pane);
+        room.add(bullet);
+        pane.getChildren().add(bullet.getGraphics().getSprite());
+//
+//        double range = Main.TILE_WIDTH * 10;
+//        Vector2D position = this.getPhysics().getPosition();
+//        Vector2D displacement = direction.multiply(range);
+//        System.out.println("Dis x:" + displacement.getX() + "   Aim y:" + displacement.getY());
+//        Vector2D aim = position.add(displacement);
+//        System.out.println("Aim x:" + aim.getX() + "   Aim y:" + aim.getY());
+        bullet.launch();
+        bullet.update(camera);
     }
 
     /**
@@ -186,6 +205,12 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
         this.money = money;
     }
 
+    public void setDirection(Vector2D direction) {
+        this.direction = direction;
+    }
+    public Vector2D getDirection() {
+        return direction;
+    }
     @Override
     public int getHealth() {
         return health;

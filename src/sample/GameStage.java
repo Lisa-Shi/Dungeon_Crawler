@@ -188,6 +188,7 @@ public class GameStage extends Stage {
         }
     }
     private void moveMonsters() {
+<<<<<<< HEAD
         for( Monster monster : room.getMonsters()) {
             if( monster.isDead()) {
                 monster.update(camera);
@@ -203,6 +204,12 @@ public class GameStage extends Stage {
                 fade.setNode(imageview);
                 fade.play();
             }
+=======
+        for (Monster monster : room.getMonsters()) {
+            monster.face(player, room);
+            monster.update(camera);
+            monster.launchProjectileTowardsPlayer(room, pane, player);
+>>>>>>> master
         }
         Timeline timeline = new Timeline(new KeyFrame(
                 Duration.millis(Main.MONSTER_ATTACK_TIME),
@@ -210,6 +217,7 @@ public class GameStage extends Stage {
         timeline.setCycleCount(1);
         timeline.play();
     }
+
     private void teleportPlayerToEnteredRoom() {
         if (!GameMap.enterRoom().equals(room)) {
             Room previous = room;
@@ -325,6 +333,9 @@ public class GameStage extends Stage {
                 playerIsMovingDown = true;
                 player.getGraphics().setCurrentReel(player.getSpriteSheet().getWalkSheet().getDownImage());
             }
+            if (event.getCode() == KeyCode.ENTER) {
+                player.launchProjectile(room, pane, camera, room.getMonsters());
+            }
         }
     };
     /**
@@ -337,18 +348,22 @@ public class GameStage extends Stage {
         public void handle(KeyEvent event) {
             if (event.getCode() == KeyCode.A) {
                 playerIsMovingLeft = false;
+                player.setDirection(new Vector2D(-1,0));
                 fixPlayerFacingDirection();
             }
             if (event.getCode() == KeyCode.D) {
                 playerIsMovingRight = false;
+                player.setDirection(new Vector2D(1,0));
                 fixPlayerFacingDirection();
             }
             if (event.getCode() == KeyCode.W) {
                 playerIsMovingUp = false;
+                player.setDirection(new Vector2D(0,-1));
                 fixPlayerFacingDirection();
             }
             if (event.getCode() == KeyCode.S) {
                 playerIsMovingDown = false;
+                player.setDirection(new Vector2D(0,1));
                 fixPlayerFacingDirection();
             }
         }
@@ -367,6 +382,9 @@ public class GameStage extends Stage {
 
     public Button getExitButton() {
         return exitButton;
+    }
+    public Camera getCamera() {
+        return camera;
     }
 
 }

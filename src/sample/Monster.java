@@ -42,8 +42,10 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
     }
 
     public void launchProjectileTowardsPlayer(Room room, Pane pane, Player player) {
-        Projectile bullet = new Projectile(room, pane, getPhysics().getPosition().getX(), getPhysics().getPosition().getY(),
-                Main.BULLET_WIDTH/2, Main.BULLET_HEIGHT/2, Main.ENEMY_BULLET_DAMAGE);
+        Projectile bullet = new Projectile(this, room, pane);
+
+//                room, pane, getPhysics().getPosition().getX(), getPhysics().getPosition().getY(),
+//                Main.BULLET_WIDTH/2, Main.BULLET_HEIGHT/2, Main.ENEMY_BULLET_DAMAGE);
         room.add(bullet);
         pane.getChildren().add(bullet.getGraphics().getSprite());
         bullet.launchTowardsPoint(player.getPhysics().getPosition(), Main.ENEMY_BULLET_SPEED);
@@ -91,15 +93,26 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
     }
     /**
      * using manhattan distance as heuristic funcytion. each path cost is one
+<<<<<<< HEAD
      * @room room room that player and monster are in
+=======
+     * @param damageable the target that monster moving toward
+     * @param room room that player and monster are in
+>>>>>>> master
      * @return string representation of next action
      */
 
 
+<<<<<<< HEAD
     public void face(Damageable damageable, Room room){
         Vector2D playerLoc = damageable.getPhysics().getPosition().round().multiply(1/Main.MONSTER_HEIGHT);
         Vector2D monsterLoc = getPhysics().getPosition().round().multiply(1/Main.MONSTER_HEIGHT);
         if( playerLoc.distanceSquared(monsterLoc) <= 3){
+=======
+        Vector2D monsterLoc = new Vector2D(Math.round(getPhysics().getPosition().getX() / 64)
+                , Math.round(getPhysics().getPosition().getY() / 64));
+        if (playerLoc.distanceSquared(monsterLoc) <= Math.pow(shootingRange / 2, 2) * 2){
+>>>>>>> master
             facing = "";
             return;
         }
@@ -176,7 +189,7 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
         return;
     }
 
-    private class State{
+    private class State {
         public Vector2D state;
         public LinkedList<String> path;
         public double cost;

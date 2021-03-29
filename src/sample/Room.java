@@ -49,9 +49,9 @@ public class Room implements Physical {
         this.toRemove = new LinkedList<>();
     }
     public void generateMonsters() {
-        if(monsters.isEmpty()) {
+        if (monsters.isEmpty()) {
             Monster monster = null;
-            if( roomId != 999) {
+            if (roomId != 999) {
                 Random ran = new Random();
                 int numOfMon = ran.nextInt(5);
                 for (int i = 1; i <= numOfMon; i++) {
@@ -68,7 +68,7 @@ public class Room implements Physical {
                     } while (findExistingCollideable(monster));
                     add(monster);
                 }
-            }else{
+            } else{
                 // Boss monster
                 monster = new BuzzMonster(this, width / 2, height / 2);
                 add(monster);
@@ -78,16 +78,22 @@ public class Room implements Physical {
 
     // Methods
     public boolean findExistingCollideable(Monster monster){
-        for( Collideable object: collideables){
+        for (Collideable object: collideables){
             if( ((DynamicCollisionBox) monster.getCollisionBox()).collidedWith(object.getCollisionBox())){
                 return true;
             }
         }
         return false;
     }
+<<<<<<< HEAD
     public boolean checkObstacle(WallTile state){
         for(Collideable collideable : collideables){
             if(collideable instanceof WallTile && collideable.equals(state)) {
+=======
+    public boolean checkObstacle(Vector2D location){
+        for (Collideable collideable : collideables){
+            if( collideable.getCollisionBox().containsPoint(location)) {
+>>>>>>> master
                 return true;
             }
         }

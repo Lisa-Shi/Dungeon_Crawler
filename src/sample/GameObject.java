@@ -7,7 +7,7 @@ public abstract class GameObject implements Physical, Drawable {
     private PhysicsControllerRelative physics;
     private SpriteController graphics;
     private ImageSheet sheet;
-
+    private Room room;
     private Vector2D center;
 
     // Constructors
@@ -16,7 +16,7 @@ public abstract class GameObject implements Physical, Drawable {
         this.physics = new PhysicsControllerRelative(initialX, initialY, room.getPhysics());
         Sprite sprite = new Sprite((int) initialX, (int) initialY,
                 (int) (centerX * 2), (int) (centerY * 2), Main.WALLTILE); // walltile = default no texture
-
+        this.room = room;
         this.graphics = new SpriteController(sprite, sheet.getInitialReel());
         this.center = new Vector2D(centerX, centerY);
         this.sheet = sheet;
@@ -49,4 +49,5 @@ public abstract class GameObject implements Physical, Drawable {
     public ImageSheet getSpriteSheet() {
         return sheet;
     }
+
 }

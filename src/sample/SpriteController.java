@@ -7,15 +7,12 @@ public class SpriteController {
     // Variables
     private Sprite sprite;
     private ImageReel reel;
-    private Timer animationTimer;
+    private static Timer animationTimer = new Timer();
 
     // Constructors
     public SpriteController(Sprite editSprite, ImageReel initialReel) {
         this.reel = initialReel;
         this.sprite = editSprite;
-
-        this.animationTimer = new Timer();
-
         sprite.setImage(initialReel.getInitialImage());
         startAnimation();
     }
@@ -24,6 +21,7 @@ public class SpriteController {
     public void startAnimation() {
         animationTimer.schedule(nextAnimationFrame, 100,100);
     }
+
     private TimerTask nextAnimationFrame = new TimerTask() {
         @Override
         public void run() {
@@ -45,6 +43,5 @@ public class SpriteController {
             this.reel = reel;
             sprite.setImage(reel.getInitialImage());
         }
-        //startAnimation();
     }
 }

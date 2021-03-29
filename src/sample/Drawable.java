@@ -1,5 +1,6 @@
 package sample;
 
 public interface Drawable {
-    Sprite getSprite();
+    SpriteController getGraphics();
+    ImageSheet getSpriteSheet();
 }

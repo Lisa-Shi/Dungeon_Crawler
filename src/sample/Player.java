@@ -1,30 +1,20 @@
 package sample;
 
-import javafx.scene.image.Image;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.sun.javafx.scene.control.skin.Utils.getResource;
-
-public class Player implements Physical, Collideable, Drawable {
+public class Player extends GameObject implements Damageable, Collideable, Drawable {
 
     // Variables
     private String name;
     private List<Weapon> weaponList;
     private int difficulty;
     private int holdingWeapon; // index of weapon in the weapon list
-    private int hp = 100;
+    private int health;
 
-    private PhysicsController physics;
     private DynamicCollisionBox collisionBox;
 
-    public List<Image> still = new ArrayList<>(
-            List.of(
-                    //new Image(Player.class.getResource("..\\..\\Resources\\character\\2.PNG").toExternalForm())
-            ));
-    private Sprite sprite;
     private int money;
 
     /**
@@ -37,29 +27,30 @@ public class Player implements Physical, Collideable, Drawable {
      * @param initialY y-location player starts at
      * @param difficulty difficulty for the game
      */
-    public Player(String name, Weapon initialWeapon,
+    public Player(String name, Weapon initialWeapon, Room room,
                   double initialX, double initialY,  int difficulty) {
+        super(room, initialX, initialY, Main.PLAYER_WIDTH / 2, Main.PLAYER_HEIGHT / 2, Main.PLAYER_IMAGE_SHEET);
         this.name = name;
         weaponList = new ArrayList<>();
         weaponList.add(initialWeapon);
-        sprite = new Sprite((int) initialX, (int) initialY, (int) Main.PLAYER_WIDTH,
-                (int) Main.PLAYER_HEIGHT, Main.PLAYER_IMAGE.get(2));
 
+        this.health = Main.PLAYER_STARTING_HEALTH;
 
-        this.physics = new PhysicsController(initialX, initialY);
         this.difficulty = difficulty;
+        giveMoney(difficulty);
+
+        this.collisionBox = new DynamicCollisionBox(getPhysics(),
+                new RectangleWireframe(Main.PLAYER_WIDTH, Main.PLAYER_HEIGHT));
+        this.collisionBox.generate();
+    }
+    private void giveMoney(int difficulty) {
         if (difficulty == 1) {
             money = 100;
         } else if (difficulty == 2) {
             money = 60;
-
         } else {
             money = 20;
         }
-
-        this.collisionBox = new DynamicCollisionBox(physics,
-                new RectangleWireframe(Main.PLAYER_WIDTH, Main.PLAYER_HEIGHT));
-        this.collisionBox.generate();
     }
 
     /**
@@ -70,77 +61,39 @@ public class Player implements Physical, Collideable, Drawable {
      *
      */
     public void update(Camera camera) {
-        physics.update();
+        getPhysics().update();
+
         updateSprite(camera);
-        if (physics.getVelocity().len() > Main.MAX_PLAYER_SPEED) {
-            Vector2D relenVel = physics.getVelocity().relen(Main.MAX_PLAYER_SPEED);
-            physics.setVelocity(relenVel);
+
+        if (getPhysics().getVelocity().len() > Main.MAX_PLAYER_SPEED) {
+            Vector2D relenVel = getPhysics().getVelocity().relen(Main.MAX_PLAYER_SPEED);
+            getPhysics().setVelocity(relenVel);
         }
     }
 
     public void update(Camera camera, LinkedList<Collideable> collideables) {
         update(camera);
-        raytraceCollision(collideables);
+        for (Collideable c : collideables) {
+            if (c instanceof Passable && getCollisionBox().collidedWith(c.getCollisionBox())) {
+                ((Passable) c).collisionWithPlayerEvent(this);
+            }
+        }
+        getCollisionBox().raytraceCollision(getPhysics(), collideables);
         updateSprite(camera);
     }
 
     private void updateSprite(Camera camera) {
-        sprite.setTranslateX(physics.getPosition().getX() - camera.getPhysics().getPosition().getX()
+        getGraphics().getSprite().setTranslateX(getPhysics().getPosition().getX() - camera.getPhysics().getPosition().getX()
                 + camera.getOffsetX() - Main.PLAYER_WIDTH / 2);
-        sprite.setTranslateY(physics.getPosition().getY() - camera.getPhysics().getPosition().getY()
+        getGraphics().getSprite().setTranslateY(getPhysics().getPosition().getY() - camera.getPhysics().getPosition().getY()
                 + camera.getOffsetY() - Main.PLAYER_HEIGHT / 2);
     }
 
-    private void raytraceCollision(LinkedList<Collideable> collideables) {
-        int backtracks = 0;
-        boolean hasCollidedWithSolid;
-        Vector2D backtrackVel = new Vector2D(0, 0);
-        LinkedList<Passable> boundaries = new LinkedList<>();
 
-        do {
-            hasCollidedWithSolid = false;
-            // Test if there are any collisions, and continue moving player back
-            for (Collideable collideable : collideables) {
-                boolean solid = collideable.getCollisionBox().isSolid();
-                boolean collided = getCollisionBox().collidedWith(collideable.getCollisionBox());
-                if (collided) {
-                    if (solid) {
-                        backtrackVel = backtrackVel.add(
-                                getCollisionBox().calculateCollisionVector(
-                                        collideable.getCollisionBox()).multiply(0.001D));
-                        hasCollidedWithSolid = true;
-                    }
+    @Override
+    public void hurt(int healthDamage) {
+        health -= healthDamage;
 
-                    if (collideable instanceof Passable) {
-                        ((Passable) collideable).collisionWithPlayerEvent(this);
-                    }
-                }
-
-            }
-
-            if (hasCollidedWithSolid) {
-                // Move player back to test if safe from collisions
-                physics.setPosition(physics.getPosition().add(backtrackVel));
-                backtracks++;
-                boundaries.clear();
-            }
-
-            if (backtrackVel.getX() == 0 && backtrackVel.getY() == 0) {
-                break;
-            }
-        } while (hasCollidedWithSolid);
-
-        if (backtracks >= 1) {
-            physics.setVelocity(physics.getVelocity().projectOnto(backtrackVel.normal()));
-            physics.setAcceleration(physics.getAcceleration().projectOnto(backtrackVel.normal()));
-        }
-        // Activate boundaries
-        for (Passable boundary : boundaries) {
-            boundary.collisionWithPlayerEvent(this);
-        }
-    }
-    public void hurt(int damge){
-        hp -= damge;
     }
 
     /**player is legal if the name is not empty string and difficulty is not -1
@@ -153,23 +106,11 @@ public class Player implements Physical, Collideable, Drawable {
 
     // Getters
     /**
-     * @return Physics information
-     */
-    public PhysicsController getPhysics() {
-        return physics;
-    }
-    /**
      * @return Collision box
      */
     @Override
     public DynamicCollisionBox getCollisionBox() {
         return collisionBox;
-    }
-    /**
-     * @return Sprite associated with the player
-     */
-    public Sprite getSprite() {
-        return sprite;
     }
 
     /**
@@ -221,6 +162,9 @@ public class Player implements Physical, Collideable, Drawable {
         return difficulty;
     }
 
+    public CharacterImageSheet getSpriteSheet() {
+        return (CharacterImageSheet) super.getSpriteSheet();
+    }
 
     // Setters
     /**
@@ -240,5 +184,10 @@ public class Player implements Physical, Collideable, Drawable {
      */
     public void setMoney(int money) {
         this.money = money;
+    }
+
+    @Override
+    public int getHealth() {
+        return health;
     }
 }

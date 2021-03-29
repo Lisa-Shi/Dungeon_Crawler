@@ -21,14 +21,14 @@ public class PhysicsControllerRelative extends PhysicsController {
     }
 
     public Vector2D getAbsolutePosition() {
-        return getPosition().add(relativeTo.getPosition());
+        return getPosition().add(relativeTo.getAbsolutePosition());
     }
 
     public Vector2D getAbsoluteVelocity() {
-        return getVelocity().add(relativeTo.getVelocity());
+        return getVelocity().add(relativeTo.getAbsoluteVelocity());
     }
 
     public Vector2D getAbsoluteAcceleration() {
-        return getAcceleration().add(relativeTo.getAcceleration());
+        return getAcceleration().add(relativeTo.getAbsoluteAcceleration());
     }
 }

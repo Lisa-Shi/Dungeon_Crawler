@@ -94,7 +94,12 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
     /**
      * using manhattan distance as heuristic funcytion. each path cost is one
 <<<<<<< HEAD
+<<<<<<< HEAD
      * @room room room that player and monster are in
+=======
+     * @param damageable the target that monster moving toward
+     * @param room room that player and monster are in
+>>>>>>> master
 =======
      * @param damageable the target that monster moving toward
      * @param room room that player and monster are in
@@ -112,6 +117,9 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
         Vector2D monsterLoc = new Vector2D(Math.round(getPhysics().getPosition().getX() / 64)
                 , Math.round(getPhysics().getPosition().getY() / 64));
         if (playerLoc.distanceSquared(monsterLoc) <= Math.pow(shootingRange / 2, 2) * 2){
+<<<<<<< HEAD
+>>>>>>> master
+=======
 >>>>>>> master
             facing = "";
             return;

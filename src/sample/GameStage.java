@@ -189,6 +189,7 @@ public class GameStage extends Stage {
     }
     private void moveMonsters() {
 <<<<<<< HEAD
+<<<<<<< HEAD
         for( Monster monster : room.getMonsters()) {
             if( monster.isDead()) {
                 monster.update(camera);
@@ -205,6 +206,8 @@ public class GameStage extends Stage {
                 fade.play();
             }
 =======
+=======
+>>>>>>> master
         for (Monster monster : room.getMonsters()) {
             monster.face(player, room);
             monster.update(camera);

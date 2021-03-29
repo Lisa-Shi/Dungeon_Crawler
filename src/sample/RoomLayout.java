@@ -186,7 +186,6 @@ public class RoomLayout {
     private static void verticalBar(Room room, int x, int y, int length) {
         for (int i = 0; i < length; i++) {
             room.add(new WallTile(room, x, y + i));
-            room.getHeuristicMap()[x][y + i] = new Vector2D(-999, -999);
         }
     }
 

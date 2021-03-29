@@ -21,13 +21,15 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
     private CollisionBox attackRange =
             new CollisionBox(getPhysics(),
                     new RectangleWireframe(shootingRange * Main.TILE_WIDTH, shootingRange * Main.TILE_HEIGHT), false);
-
+    private boolean isDead = false;
     private String facing;
+    private DirectionalImageSheet sheet;
 
     public Monster(Room room, int health, int damagePerHit, double initialX, double initialY, DirectionalImageSheet sheet) {
         super(room, initialX * Main.TILE_WIDTH, initialY * Main.TILE_HEIGHT
                     , Main.MONSTER_WIDTH / 2, Main.MONSTER_HEIGHT / 2, sheet);
-
+        this.room = room;
+        this.sheet = sheet;
         this.health = health;
         this.damagePerHit = damagePerHit;
 
@@ -39,15 +41,6 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
         this.facing = "A";
     }
 
-    // Misc.
-    private boolean damageableInRange(Damageable damageable) {
-        return attackRange.containsPoint(damageable.getPhysics().getPosition());
-    }
-    public void attack(Damageable damageable) {
-        if (damageableInRange(damageable)) {
-            damageable.hurt(damagePerHit);
-        }
-    }
     public void launchProjectileTowardsPlayer(Room room, Pane pane, Player player) {
         Projectile bullet = new Projectile(room, pane, getPhysics().getPosition().getX(), getPhysics().getPosition().getY(),
                 Main.BULLET_WIDTH/2, Main.BULLET_HEIGHT/2, Main.ENEMY_BULLET_DAMAGE);
@@ -58,18 +51,21 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
 
     @Override
     public void update(Camera camera) {
-        switch(facing) {
-            case "A": getPhysics().pushLeft(Main.ENEMY_CONTROL_FORCE);
-                      break;
-            case "D": getPhysics().pushRight(Main.ENEMY_CONTROL_FORCE);
-                      break;
-            case "W": getPhysics().pushUp(Main.ENEMY_CONTROL_FORCE);
-                      break;
-            case "S": getPhysics().pushDown(Main.ENEMY_CONTROL_FORCE);
-                      break;
+        switch (facing) {
+            case "A":
+                getPhysics().pushLeft(Main.ENEMY_CONTROL_FORCE);
+                break;
+            case "D":
+                getPhysics().pushRight(Main.ENEMY_CONTROL_FORCE);
+                break;
+            case "W":
+                getPhysics().pushUp(Main.ENEMY_CONTROL_FORCE);
+                break;
+            case "S":
+                getPhysics().pushDown(Main.ENEMY_CONTROL_FORCE);
+                break;
         }
-
-        super.update(camera);
+            super.update(camera);
     }
 
     @Override
@@ -82,25 +78,28 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
         return health;
     }
 
+    public boolean isDead() {
+        return isDead;
+    }
+
     @Override
     public void hurt(int healthDamage) {
         health -= healthDamage;
+        if( health <= 0){
+            isDead = true;
+        }
     }
-
     /**
      * using manhattan distance as heuristic funcytion. each path cost is one
-     * @param player the target that monster moving toward
      * @room room room that player and monster are in
      * @return string representation of next action
      */
 
-    public void face(Damageable damageable, Room room){
-        Vector2D playerLoc = new Vector2D(Math.round(damageable.getPhysics().getPosition().getX() / 64)
-                , Math.round(damageable.getPhysics().getPosition().getY() / 64));
 
-        Vector2D monsterLoc = new Vector2D(Math.round(getPhysics().getPosition().getX() / 64)
-                , Math.round(getPhysics().getPosition().getY() / 64));
-        if( playerLoc.distanceSquared(monsterLoc) <= Math.pow(shootingRange / 2, 2) * 2){
+    public void face(Damageable damageable, Room room){
+        Vector2D playerLoc = damageable.getPhysics().getPosition().round().multiply(1/Main.MONSTER_HEIGHT);
+        Vector2D monsterLoc = getPhysics().getPosition().round().multiply(1/Main.MONSTER_HEIGHT);
+        if( playerLoc.distanceSquared(monsterLoc) <= 3){
             facing = "";
             return;
         }
@@ -118,12 +117,12 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
         State currentState = new State( monsterLoc, path, 0);
         thePQ.add(currentState);
         locAndCost.put(monsterLoc, 0.0);
-        while( !thePQ.isEmpty()){
+        while( !thePQ.isEmpty() ){
             State popped = thePQ.poll();
-            Vector2D current = new Vector2D(popped.state.getX(), popped.state.getY());
+            Vector2D current = popped.state;
             LinkedList<String> currPath = popped.path;
             double cost = popped.cost;
-            if( playerLoc.distanceSquared(current) <= 1){
+            if( playerLoc.distanceSquared(current) <= 4){
                 if(currPath.size() >= 1) {
                     String a = currPath.remove(0);
                     facing = a;
@@ -140,16 +139,19 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
             //remove the action that will move the monster to the wall
             ArrayList<Vector2D> removeList = new ArrayList<>();
             for(Vector2D successor: successors){
-                if(room.checkObstacle(current.add(successor).multiply(Main.TILE_HEIGHT))){
+                current = current.add(successor);
+                WallTile temp = new WallTile(this.room, (int)current.getX(), (int)current.getY());
+                if(room.checkObstacle(temp)){
                     removeList.add(successor);
                 }
+
             }
             successors.removeAll(removeList);
             LinkedList<String> successorPath;
             for( Vector2D successor: successors){
                 successorPath = new LinkedList<>(currPath);
-                Vector2D successorStateV = current.add(successor);
-                double pathCost = cost + successorStateV.distanceSquared(playerLoc) - current.distanceSquared(playerLoc);
+                Vector2D successorPosition = current.add(successor);
+                double pathCost = cost + successorPosition.distanceSquared(playerLoc) - current.distanceSquared(playerLoc);
                 if( successor.getX() > 0){
                     successorPath.add("D");
                 } else if( successor.getX() < 0){
@@ -159,14 +161,14 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
                 } else if( successor.getY() < 0){
                     successorPath.add("W");
                 }
-                State successorState = new State(successorStateV, successorPath, pathCost);
-                if( !visited.contains(successorStateV)){
-                    thePQ.add(successorState);
-                    visited.add(successorStateV);
-                    locAndCost.put(successorStateV, pathCost);
-                } else if(locAndCost.get(successorStateV) > pathCost){
-                    thePQ.add(successorState);
-                    locAndCost.put(successorStateV, pathCost);
+                State newSuccessor = new State(successorPosition, successorPath, pathCost);
+                if( !visited.contains(successorPosition)){
+                    thePQ.add(newSuccessor);
+                    visited.add(successorPosition);
+                    locAndCost.put(successorPosition, pathCost);
+                } else if(locAndCost.get(successorPosition) > pathCost){
+                    thePQ.add(newSuccessor);
+                    locAndCost.put(successorPosition, pathCost);
                 }
             }
         }

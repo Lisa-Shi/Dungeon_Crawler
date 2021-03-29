@@ -1,6 +1,7 @@
 package sample;
 
 import javafx.animation.AnimationTimer;
+import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
@@ -8,6 +9,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
@@ -187,14 +189,26 @@ public class GameStage extends Stage {
     }
     private void moveMonsters() {
         for( Monster monster : room.getMonsters()) {
-            monster.face(player, room);
-            monster.update(camera);
-            monster.launchProjectileTowardsPlayer(room, pane, player);
+            if( monster.isDead()) {
+                monster.update(camera);
+                monster.face(player, room);
+                monster.launchProjectileTowardsPlayer(room, pane, player);
+            }else{
+                ImageView imageview = new ImageView(monster.getGraphics().getCurrentReel().getNextImage());
+                FadeTransition fade = new FadeTransition();
+                fade.setDuration(Duration.millis(2000));
+                fade.setFromValue(10);
+                fade.setToValue(0.1);
+                fade.setCycleCount(1000);
+                fade.setNode(imageview);
+                fade.play();
+            }
         }
-        new Timeline(new KeyFrame(
+        Timeline timeline = new Timeline(new KeyFrame(
                 Duration.millis(Main.MONSTER_ATTACK_TIME),
-                ae -> moveMonsters()))
-                .play();
+                ae -> moveMonsters()));
+        timeline.setCycleCount(1);
+        timeline.play();
     }
     private void teleportPlayerToEnteredRoom() {
         if (!GameMap.enterRoom().equals(room)) {

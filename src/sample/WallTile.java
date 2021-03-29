@@ -20,12 +20,19 @@ public class WallTile extends Tile implements Collideable {
     public int getInitialX() {
         return initialX;
     }
-
+    public Room getRoom(){return inRoom;}
     public int getInitialY() {
         return initialY;
     }
     @Override
     public CollisionBox getCollisionBox() {
         return collisionBox;
+    }
+    public boolean equals(Object other){
+        if(other instanceof WallTile){
+            return ((WallTile) other).getRoom().equals(inRoom)
+                    && ((WallTile) other).getInitialX() == initialX && ((WallTile) other).getInitialY() == initialY;
+        }
+        return false;
     }
 }

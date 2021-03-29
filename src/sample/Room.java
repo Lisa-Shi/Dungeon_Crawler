@@ -1,6 +1,8 @@
 package sample;
 
 import javafx.scene.layout.Pane;
+
+import java.lang.reflect.Constructor;
 import java.util.LinkedList;
 import java.util.*;
 
@@ -31,7 +33,6 @@ public class Room implements Physical {
         roomId = id++;
         this.width = width;
         this.height = height;
-        heuristicMap = new Vector2D[width][height];
         // Physics so the camera works properly
         this.physics = new PhysicsController(0, 0);
 
@@ -58,7 +59,12 @@ public class Room implements Physical {
                     do {
                         monsterX = ran.nextInt(width - 2) + 1;
                         monsterY = ran.nextInt(height - 2) + 1;
-                        monster = new SlimeMonster(this, monsterX, monsterY);
+                        int monsterType = ran.nextInt(2);
+                        if(monsterType == 0){
+                            monster = new SlimeMonster(this, monsterX, monsterY);
+                        } else{
+                            monster = new MagicianMonster(this, monsterX, monsterY);
+                        }
                     } while (findExistingCollideable(monster));
                     add(monster);
                 }
@@ -79,9 +85,9 @@ public class Room implements Physical {
         }
         return false;
     }
-    public boolean checkObstacle(Vector2D location){
+    public boolean checkObstacle(WallTile state){
         for(Collideable collideable : collideables){
-            if( collideable.getCollisionBox().containsPoint(location)) {
+            if(collideable instanceof WallTile && collideable.equals(state)) {
                 return true;
             }
         }
@@ -130,9 +136,7 @@ public class Room implements Physical {
      */
     public void finalize(Pane pane) {
         addRoomLayout();
-        if( roomId != 999) {
-            generateMonsters();
-        }
+        generateMonsters();
         addFloorTiles();
 
         addSurroundingWalls();
@@ -198,9 +202,6 @@ public class Room implements Physical {
 
 
     // Getters
-    public Vector2D[][] getHeuristicMap() {
-        return heuristicMap;
-    }
 
     public int getRoomId() {
         return roomId;

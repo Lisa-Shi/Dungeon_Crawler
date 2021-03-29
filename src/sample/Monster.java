@@ -49,8 +49,10 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
         }
     }
     public void launchProjectileTowardsPlayer(Room room, Pane pane, Player player) {
-        Projectile bullet = new Projectile(room, pane, getPhysics().getPosition().getX(), getPhysics().getPosition().getY(),
-                Main.BULLET_WIDTH/2, Main.BULLET_HEIGHT/2, Main.ENEMY_BULLET_DAMAGE);
+        Projectile bullet = new Projectile(this, room, pane);
+
+//                room, pane, getPhysics().getPosition().getX(), getPhysics().getPosition().getY(),
+//                Main.BULLET_WIDTH/2, Main.BULLET_HEIGHT/2, Main.ENEMY_BULLET_DAMAGE);
         room.add(bullet);
         pane.getChildren().add(bullet.getGraphics().getSprite());
         bullet.launchTowardsPoint(player.getPhysics().getPosition(), Main.ENEMY_BULLET_SPEED);
@@ -89,8 +91,8 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
 
     /**
      * using manhattan distance as heuristic funcytion. each path cost is one
-     * @param player the target that monster moving toward
-     * @room room room that player and monster are in
+     * @param damageable the target that monster moving toward
+     * @param room room that player and monster are in
      * @return string representation of next action
      */
 
@@ -100,7 +102,7 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
 
         Vector2D monsterLoc = new Vector2D(Math.round(getPhysics().getPosition().getX() / 64)
                 , Math.round(getPhysics().getPosition().getY() / 64));
-        if( playerLoc.distanceSquared(monsterLoc) <= Math.pow(shootingRange / 2, 2) * 2){
+        if (playerLoc.distanceSquared(monsterLoc) <= Math.pow(shootingRange / 2, 2) * 2){
             facing = "";
             return;
         }
@@ -174,7 +176,7 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
         return;
     }
 
-    private class State{
+    private class State {
         public Vector2D state;
         public LinkedList<String> path;
         public double cost;

@@ -40,6 +40,7 @@ public class Main extends Application {
     public static final int ENEMY_BULLET_SPEED = 5;
     public static final int ENEMY_BULLET_FRICTION_FORCE = 0;
     public static final int ENEMY_BULLET_DAMAGE = 10;
+    public static final int PLAYER_BULLET_DAMAGE = 5;
 
     //public static final int BULLET_TIME_UNTIL_EXPIRATION = 1000;
     public static final int ENEMY_BULLET_BOUNCES_UNTIL_EXPIRATION = 4;
@@ -86,7 +87,8 @@ public class Main extends Application {
                     5
             );
 
-    public static final ImageSheet BULLET_SHEET = new SingularImageSheet(getImageFrom("../image/bullet.png"));
+    public static final ImageSheet MONSTER_BULLET_SHEET = new SingularImageSheet(getImageFrom("../image/bulletM.png"));
+    public static final ImageSheet PLAYER_BULLET_SHEET = new SingularImageSheet(getImageFrom("../image/bulletP.png"));
 
 
     private static final DirectionalImageSheet getDirectionalImageSheet(String directionImageBase, int numDirectionFrames) {

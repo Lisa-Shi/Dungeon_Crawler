@@ -19,19 +19,12 @@ public class Projectile extends GameObject implements Collideable {
     //private ImageSheet img;
     //private double scale;
 
-    public Projectile(Player p, Room room, Pane pane) {
-        this(room, pane, p.getPhysics().getPosition().getX(), p.getPhysics().getPosition().getY(),
+    public Projectile(GameObject gameObject, Room room, Pane pane) {
+        this(room, pane, gameObject.getPhysics().getPosition().getX(), gameObject.getPhysics().getPosition().getY(),
                 0.5, Main.PLAYER_BULLET_DAMAGE, Main.PLAYER_BULLET_SHEET);
-        sprite = p;
+        sprite = gameObject;
         //this.bouncesLeft = p.getWeaponList()[p.getHoldingWeapon()].getPower();
         this.bouncesLeft = 2;
-    }
-
-    public Projectile(Monster m, Room room, Pane pane) {
-        this(room, pane, m.getPhysics().getPosition().getX(), m.getPhysics().getPosition().getY(),
-                0.5, Main.ENEMY_BULLET_DAMAGE, Main.MONSTER_BULLET_SHEET);
-        sprite = m;
-        this.bouncesLeft = Main.ENEMY_BULLET_BOUNCES_UNTIL_EXPIRATION;
     }
 
     private Projectile(Room room, Pane pane, double initialX, double initialY, double scale, int damage, ImageSheet img) {
@@ -81,7 +74,7 @@ public class Projectile extends GameObject implements Collideable {
                     isTarget = !(c instanceof Monster);
                 }
 
-                if (c instanceof Damageable && isTarget) {
+                if (c instanceof Damageable && isTarget && c.getCollisionBox().isSolid()) {
                     ((Damageable) c).hurt(damage);
                     expire();
                     return;

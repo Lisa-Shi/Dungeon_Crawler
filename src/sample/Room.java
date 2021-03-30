@@ -85,23 +85,6 @@ public class Room implements Physical {
         }
         return false;
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
-    public boolean checkObstacle(WallTile state){
-        for(Collideable collideable : collideables){
-            if(collideable instanceof WallTile && collideable.equals(state)) {
-=======
-=======
->>>>>>> master
-    public boolean checkObstacle(Vector2D location){
-        for (Collideable collideable : collideables){
-            if( collideable.getCollisionBox().containsPoint(location)) {
->>>>>>> master
-                return true;
-            }
-        }
-        return false;
-    }
     public void generateExits(List<Room> listOfExit) {
         if (exits.isEmpty()) {
             LinkedList<Vector2D> availableExits = new LinkedList<>();

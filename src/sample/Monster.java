@@ -16,11 +16,6 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
     private int damagePerHit;
     private Room room;
     private DynamicCollisionBox collisionBox;
-
-    private int shootingRange = 3;
-    private CollisionBox attackRange =
-            new CollisionBox(getPhysics(),
-                    new RectangleWireframe(shootingRange * Main.TILE_WIDTH, shootingRange * Main.TILE_HEIGHT), false);
     private boolean isDead = false;
     private String facing;
     private DirectionalImageSheet sheet;
@@ -34,9 +29,8 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
         this.damagePerHit = damagePerHit;
 
         this.collisionBox = new DynamicCollisionBox(getPhysics(),
-                new RectangleWireframe(Main.MONSTER_WIDTH, Main.MONSTER_HEIGHT), false);
+                new RectangleWireframe(Main.MONSTER_WIDTH, Main.MONSTER_HEIGHT), true);
         this.collisionBox.generate();
-        this.attackRange.generate();
 
         this.facing = "A";
     }
@@ -49,6 +43,10 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
         room.add(bullet);
         pane.getChildren().add(bullet.getGraphics().getSprite());
         bullet.launchTowardsPoint(player.getPhysics().getPosition(), Main.ENEMY_BULLET_SPEED);
+    }
+
+    public String getFacing() {
+        return facing;
     }
 
     @Override
@@ -89,40 +87,25 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
         health -= healthDamage;
         if( health <= 0){
             isDead = true;
+            facing = "";
+            this.collisionBox.setSolid(false);
         }
     }
+
     /**
      * using manhattan distance as heuristic funcytion. each path cost is one
-<<<<<<< HEAD
-<<<<<<< HEAD
      * @room room room that player and monster are in
-=======
      * @param damageable the target that monster moving toward
      * @param room room that player and monster are in
->>>>>>> master
-=======
-     * @param damageable the target that monster moving toward
-     * @param room room that player and monster are in
->>>>>>> master
      * @return string representation of next action
      */
 
-
-<<<<<<< HEAD
     public void face(Damageable damageable, Room room){
-        Vector2D playerLoc = damageable.getPhysics().getPosition().round().multiply(1/Main.MONSTER_HEIGHT);
-        Vector2D monsterLoc = getPhysics().getPosition().round().multiply(1/Main.MONSTER_HEIGHT);
-        if( playerLoc.distanceSquared(monsterLoc) <= 3){
-=======
-        Vector2D monsterLoc = new Vector2D(Math.round(getPhysics().getPosition().getX() / 64)
-                , Math.round(getPhysics().getPosition().getY() / 64));
-        if (playerLoc.distanceSquared(monsterLoc) <= Math.pow(shootingRange / 2, 2) * 2){
-<<<<<<< HEAD
->>>>>>> master
-=======
->>>>>>> master
+        Vector2D playerLoc = damageable.getPhysics().getPosition().multiply(1.0/Main.TILE_HEIGHT).round();
+        Vector2D monsterLoc = getPhysics().getPosition().multiply(1.0/Main.TILE_HEIGHT).round();
+        if( playerLoc.distanceSquared(monsterLoc) <= 1){
             facing = "";
-            return;
+            return ;
         }
         PriorityQueue<State> thePQ = new PriorityQueue<>(1, new Comparator<State>() {
             @Override
@@ -138,41 +121,40 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
         State currentState = new State( monsterLoc, path, 0);
         thePQ.add(currentState);
         locAndCost.put(monsterLoc, 0.0);
-        while( !thePQ.isEmpty() ){
+        while( !thePQ.isEmpty()){
             State popped = thePQ.poll();
-            Vector2D current = popped.state;
+            Vector2D current = new Vector2D(popped.state.getX(), popped.state.getY());
             LinkedList<String> currPath = popped.path;
             double cost = popped.cost;
-            if( playerLoc.distanceSquared(current) <= 4){
+            if( playerLoc.distanceSquared(current) <= 1){
                 if(currPath.size() >= 1) {
                     String a = currPath.remove(0);
                     facing = a;
                     return;
                 }
             }
-            //possible state (action)
-            ArrayList<Vector2D> successors = new ArrayList<Vector2D>() {{
-                add(new Vector2D(1, 0));
-                add(new Vector2D(-1, 0));
-                add(new Vector2D(0, 1));
-                add(new Vector2D(0, -1));
-            }};
-            //remove the action that will move the monster to the wall
+            ArrayList<Vector2D> successors = new ArrayList<>(
+                    List.of(new Vector2D(1, 0),
+                            new Vector2D(-1, 0),
+                            new Vector2D(0, 1),
+                            new Vector2D(0, -1))
+            );
             ArrayList<Vector2D> removeList = new ArrayList<>();
             for(Vector2D successor: successors){
                 current = current.add(successor);
-                WallTile temp = new WallTile(this.room, (int)current.getX(), (int)current.getY());
-                if(room.checkObstacle(temp)){
-                    removeList.add(successor);
+                for( Collideable collideable: room.getCollideables()) {
+                    if( collideable.getCollisionBox().containsPoint(current)){
+                        removeList.add(successor);
+                    }
                 }
-
+                current = current.subtract(successor);
             }
             successors.removeAll(removeList);
             LinkedList<String> successorPath;
             for( Vector2D successor: successors){
                 successorPath = new LinkedList<>(currPath);
-                Vector2D successorPosition = current.add(successor);
-                double pathCost = cost + successorPosition.distanceSquared(playerLoc) - current.distanceSquared(playerLoc);
+                Vector2D successorStateV = current.add(successor);
+                double pathCost = cost + successorStateV.distanceSquared(playerLoc) - current.distanceSquared(playerLoc);
                 if( successor.getX() > 0){
                     successorPath.add("D");
                 } else if( successor.getX() < 0){
@@ -182,19 +164,19 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
                 } else if( successor.getY() < 0){
                     successorPath.add("W");
                 }
-                State newSuccessor = new State(successorPosition, successorPath, pathCost);
-                if( !visited.contains(successorPosition)){
-                    thePQ.add(newSuccessor);
-                    visited.add(successorPosition);
-                    locAndCost.put(successorPosition, pathCost);
-                } else if(locAndCost.get(successorPosition) > pathCost){
-                    thePQ.add(newSuccessor);
-                    locAndCost.put(successorPosition, pathCost);
+                State successorState = new State(successorStateV, successorPath, pathCost);
+                if( !visited.contains(successorStateV)){
+                    thePQ.add(successorState);
+                    visited.add(successorStateV);
+                    locAndCost.put(successorStateV, pathCost);
+                } else if(locAndCost.get(successorStateV) > pathCost){
+                    thePQ.add(successorState);
+                    locAndCost.put(successorStateV, pathCost);
                 }
             }
         }
         facing = "";
-        return;
+        return ;
     }
 
     private class State {

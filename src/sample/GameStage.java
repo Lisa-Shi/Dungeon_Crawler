@@ -22,6 +22,8 @@ import javafx.stage.Stage;
 import javafx.scene.control.*;
 import javafx.util.Duration;
 
+import javax.xml.transform.Source;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -67,10 +69,10 @@ public class GameStage extends Stage {
         map = new GameMap(room);
         exitButton = new Button("finish");
 
-        new Timeline(new KeyFrame(
+        Timeline timeline = new Timeline(new KeyFrame(
                 Duration.millis(Main.MONSTER_ATTACK_TIME),
-                ae -> moveMonsters()))
-                .play();
+                ae -> moveMonsters()));
+        timeline.play();
     }
 
     /**
@@ -188,14 +190,12 @@ public class GameStage extends Stage {
         }
     }
     private void moveMonsters() {
-<<<<<<< HEAD
-<<<<<<< HEAD
         for( Monster monster : room.getMonsters()) {
-            if( monster.isDead()) {
-                monster.update(camera);
+            if (!monster.isDead()) {
                 monster.face(player, room);
+                monster.update(camera);
                 monster.launchProjectileTowardsPlayer(room, pane, player);
-            }else{
+            } else {
                 ImageView imageview = new ImageView(monster.getGraphics().getCurrentReel().getNextImage());
                 FadeTransition fade = new FadeTransition();
                 fade.setDuration(Duration.millis(2000));
@@ -205,19 +205,10 @@ public class GameStage extends Stage {
                 fade.setNode(imageview);
                 fade.play();
             }
-=======
-=======
->>>>>>> master
-        for (Monster monster : room.getMonsters()) {
-            monster.face(player, room);
-            monster.update(camera);
-            monster.launchProjectileTowardsPlayer(room, pane, player);
->>>>>>> master
         }
         Timeline timeline = new Timeline(new KeyFrame(
                 Duration.millis(Main.MONSTER_ATTACK_TIME),
                 ae -> moveMonsters()));
-        timeline.setCycleCount(1);
         timeline.play();
     }
 

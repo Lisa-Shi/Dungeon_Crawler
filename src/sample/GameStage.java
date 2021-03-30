@@ -4,6 +4,8 @@ import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
@@ -23,6 +25,7 @@ import javafx.scene.control.*;
 import javafx.util.Duration;
 
 import javax.xml.transform.Source;
+import java.beans.PropertyChangeListener;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -51,7 +54,7 @@ public class GameStage extends Stage {
     private Text testingPurpose = new Text();
 
     private ProgressBar pbar = new ProgressBar(0);
-
+    private LinkedList<ProgressBar> monsterHP = new LinkedList<>();
     public GameMap getMap() {
         return map;
     }
@@ -280,6 +283,13 @@ public class GameStage extends Stage {
         room.generateExits(map.getAdjRooms(room));
         room.finalize(pane);
         pbar.setProgress(room.getRoomId() / 9.0);
+        monsterHP.clear();
+        for( Monster monster: room.getMonsters()){
+            ProgressBar monsterHP = new ProgressBar(monster.getHealth()/(double)monster.getMaxHealth());
+            PropertyChangeListener listener = new monsterHPListener(monsterHP);
+            monster.addPropertyChangeListener(listener);
+            pane.getChildren().add(monsterHP);
+        }
         Scene scene = new Scene(pane);
         if (room.getRoomId() == 999) {
             infoBar.getChildren().add(exitButton);

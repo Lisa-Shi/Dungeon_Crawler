@@ -51,27 +51,27 @@ public class Room implements Physical {
     public void generateMonsters() {
         if (monsters.isEmpty()) {
             Monster monster = null;
-            if (roomId != 999) {
+            if( roomId == 999){
+                // Boss monster
+                monster = new BuzzMonster(this, width / 2, height / 2);
+                add(monster);
+            }else if (roomId != 0) {
                 Random ran = new Random();
-                int numOfMon = ran.nextInt(5);
+                int numOfMon = ran.nextInt(5) + 1;
                 for (int i = 1; i <= numOfMon; i++) {
                     int monsterX, monsterY;
                     do {
                         monsterX = ran.nextInt(width - 2) + 1;
                         monsterY = ran.nextInt(height - 2) + 1;
                         int monsterType = ran.nextInt(2);
-                        if(monsterType == 0){
+                        if (monsterType == 0) {
                             monster = new SlimeMonster(this, monsterX, monsterY);
-                        } else{
+                        } else {
                             monster = new MagicianMonster(this, monsterX, monsterY);
                         }
                     } while (findExistingCollideable(monster));
                     add(monster);
                 }
-            } else{
-                // Boss monster
-                monster = new BuzzMonster(this, width / 2, height / 2);
-                add(monster);
             }
         }
     }

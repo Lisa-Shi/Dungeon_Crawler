@@ -9,12 +9,16 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.*;
 
 public class Monster extends GameObject implements Damageable, Collideable, Drawable {
     // no
 
     // Variables
+    private int maxHealth;
     private int health;
     private int damagePerHit;
     private Room room;
@@ -23,9 +27,12 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
     private String facing;
     private DirectionalImageSheet sheet;
 
-    public Monster(Room room, int health, int damagePerHit, double initialX, double initialY, DirectionalImageSheet sheet) {
+    private PropertyChangeSupport support;
+
+    public Monster(Room room, int maxHealth, int health, int damagePerHit, double initialX, double initialY, DirectionalImageSheet sheet) {
         super(room, initialX * Main.TILE_WIDTH, initialY * Main.TILE_HEIGHT
                     , Main.MONSTER_WIDTH / 2, Main.MONSTER_HEIGHT / 2, sheet);
+        this.maxHealth = maxHealth;
         this.room = room;
         this.sheet = sheet;
         this.health = health;
@@ -36,6 +43,7 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
         this.collisionBox.generate();
 
         this.facing = "A";
+        this.support = new PropertyChangeSupport(this);
     }
 
     public void launchProjectileTowardsPlayer(Room room, Pane pane, Player player) {
@@ -84,9 +92,9 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
     public boolean isDead() {
         return isDead;
     }
-
     @Override
     public void hurt(int healthDamage) {
+        support.firePropertyChange("health", this.health / this.maxHealth, (this.health - healthDamage)/(double)this.maxHealth);
         health -= healthDamage;
         if( health <= 0){
             isDead = true;
@@ -94,7 +102,12 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
             this.collisionBox.setSolid(false);
         }
     }
-
+    public void addPropertyChangeListener(PropertyChangeListener pcl) {
+        support.addPropertyChangeListener(pcl);
+    }
+    public void removePropertyChangeListener(PropertyChangeListener pcl) {
+        support.removePropertyChangeListener(pcl);
+    }
     /**
      * using manhattan distance as heuristic funcytion. each path cost is one
      * @room room room that player and monster are in
@@ -193,4 +206,7 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
         }
     }
 
+    public int getMaxHealth() {
+        return maxHealth;
+    }
 }

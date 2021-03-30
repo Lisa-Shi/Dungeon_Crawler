@@ -195,15 +195,11 @@ public class GameStage extends Stage {
                 monster.face(player, room);
                 monster.update(camera);
                 monster.launchProjectileTowardsPlayer(room, pane, player);
-            } else {
-                ImageView imageview = new ImageView(monster.getGraphics().getCurrentReel().getNextImage());
-                FadeTransition fade = new FadeTransition();
-                fade.setDuration(Duration.millis(2000));
-                fade.setFromValue(10);
-                fade.setToValue(0.1);
-                fade.setCycleCount(1000);
-                fade.setNode(imageview);
-                fade.play();
+            } else{
+                monster.getGraphics().getSprite().setImage(Main.TRANSPARENT_IMAGE);
+                monster.getGraphics().setCurrentReel(new SingularImageSheet(Main.TRANSPARENT_IMAGE).getInitialReel());
+                room.getCollideables().remove(monster);
+                pane.getChildren().remove(monster);
             }
         }
         Timeline timeline = new Timeline(new KeyFrame(

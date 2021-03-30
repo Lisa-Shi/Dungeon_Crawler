@@ -86,11 +86,9 @@ public class Main extends Application {
                     "../image/Monster/slime" + Main.REPLACE_DIRECTION_REGEX + ".png",
                     5
             );
-
     public static final ImageSheet MONSTER_BULLET_SHEET = new SingularImageSheet(getImageFrom("../image/bulletM.png"));
     public static final ImageSheet PLAYER_BULLET_SHEET = new SingularImageSheet(getImageFrom("../image/bulletP.png"));
-
-
+    public static final Image TRANSPARENT_IMAGE = new Image(Main.class.getResource("../image/transparent.png").toExternalForm());
     private static final DirectionalImageSheet getDirectionalImageSheet(String directionImageBase, int numDirectionFrames) {
         // Find <direction> tag in direction image base address
         int replaceIndex = directionImageBase.indexOf(REPLACE_DIRECTION_REGEX);

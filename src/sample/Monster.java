@@ -3,8 +3,11 @@ package sample;
 /**
  * the monster class
  */
+import javafx.animation.FadeTransition;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.util.Duration;
 
 import java.util.*;
 
@@ -29,7 +32,7 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
         this.damagePerHit = damagePerHit;
 
         this.collisionBox = new DynamicCollisionBox(getPhysics(),
-                new RectangleWireframe(Main.MONSTER_WIDTH, Main.MONSTER_HEIGHT), true);
+                new RectangleWireframe(Main.MONSTER_WIDTH, Main.MONSTER_HEIGHT), false);
         this.collisionBox.generate();
 
         this.facing = "A";
@@ -51,20 +54,20 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
 
     @Override
     public void update(Camera camera) {
-        switch (facing) {
-            case "A":
-                getPhysics().pushLeft(Main.ENEMY_CONTROL_FORCE);
-                break;
-            case "D":
-                getPhysics().pushRight(Main.ENEMY_CONTROL_FORCE);
-                break;
-            case "W":
-                getPhysics().pushUp(Main.ENEMY_CONTROL_FORCE);
-                break;
-            case "S":
-                getPhysics().pushDown(Main.ENEMY_CONTROL_FORCE);
-                break;
-        }
+         switch (facing) {
+                case "A":
+                    getPhysics().pushLeft(Main.ENEMY_CONTROL_FORCE);
+                    break;
+                case "D":
+                    getPhysics().pushRight(Main.ENEMY_CONTROL_FORCE);
+                    break;
+                case "W":
+                    getPhysics().pushUp(Main.ENEMY_CONTROL_FORCE);
+                    break;
+                case "S":
+                    getPhysics().pushDown(Main.ENEMY_CONTROL_FORCE);
+                    break;
+            }
             super.update(camera);
     }
 

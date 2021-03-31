@@ -19,6 +19,7 @@ public class Room implements Physical {
     private LinkedList<Monster> monsters = new LinkedList<>();
     private LinkedList<GameObject> toRemove = new LinkedList<>();
     private PhysicsController physics;
+    private static int numOfMon;
 
     // Constructors
     /**
@@ -52,7 +53,7 @@ public class Room implements Physical {
             Monster monster = null;
             if (roomId != 999) {
                 Random ran = new Random();
-                int numOfMon = ran.nextInt(5);
+                numOfMon = ran.nextInt(5);
                 for (int i = 1; i <= numOfMon; i++) {
                     int monsterX, monsterY;
                     do {
@@ -195,8 +196,6 @@ public class Room implements Physical {
         this.monsters = new LinkedList<>();
     }
 
-
-
     // Getters
     public Vector2D[][] getHeuristicMap() {
         return heuristicMap;
@@ -204,6 +203,10 @@ public class Room implements Physical {
 
     public int getRoomId() {
         return roomId;
+    }
+
+    public int getNumOfMon() {
+        return numOfMon;
     }
 
     public LinkedList<Monster> getMonsters() {
@@ -220,6 +223,7 @@ public class Room implements Physical {
     public int getWidth() {
         return width;
     }
+
     /**
      * @return room height
      */
@@ -233,6 +237,10 @@ public class Room implements Physical {
 
     public LinkedList<Collideable> getCollideables() {
         return collideables;
+    }
+
+    public String getLayout() {
+        return layout;
     }
 
     // Setters
@@ -254,9 +262,15 @@ public class Room implements Physical {
             monsters.add(0, (Monster) obj);
         }
     }
+
+    public void setNumOfMon(int num) {
+        numOfMon = num;
+    }
+
     public void remove(GameObject obj) {
         toRemove.add(obj);
     }
+
     private void flushToRemove() {
         for (GameObject obj : toRemove) {
             if (obj instanceof Physical) {
@@ -278,9 +292,6 @@ public class Room implements Physical {
         }
 
         toRemove.clear();
-    }
-    public String getLayout() {
-        return layout;
     }
 
     /**

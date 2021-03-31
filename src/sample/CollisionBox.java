@@ -53,7 +53,7 @@ public class CollisionBox {
         this.solid = solid;
     }
     /**
-     * if physics (Position) and solid are the same, two collisionboxes are considered to be true
+     * if physics (Position) and solid are the same, two collision boxes are considered to be true
      * @param other object to compare to
      * @return true if equal. otherwise false
      */

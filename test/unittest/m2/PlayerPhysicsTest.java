@@ -1,14 +1,14 @@
 package unittest.m2;
 
 import org.testfx.framework.junit.ApplicationTest;
-import sample.GameStage;
-import sample.Main;
+import main.GameStage;
+import screens.Main;
 import javafx.stage.Stage;
 import org.junit.Test;
-import sample.Player;
-import sample.Room;
-import sample.Vector2D;
-import sample.Weapon;
+import gameobjects.Player;
+import gamemap.Room;
+import gameobjects.physics.Vector2D;
+import main.Weapon;
 
 import static org.junit.Assert.assertEquals;
 

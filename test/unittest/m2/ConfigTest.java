@@ -1,13 +1,13 @@
 package unittest.m2;
 
 import org.testfx.assertions.api.Assertions;
-import sample.Main;
+import screens.Main;
 import javafx.stage.Stage;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 import org.testfx.matcher.base.NodeMatchers;
-import sample.Player;
-import sample.Room;
+import gameobjects.Player;
+import gamemap.Room;
 
 
 import static org.testfx.api.FxAssert.verifyThat;

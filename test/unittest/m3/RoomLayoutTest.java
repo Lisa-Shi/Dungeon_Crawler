@@ -1,12 +1,15 @@
 package unittest.m3;
 
+import gamemap.Room;
+import gamemap.RoomLayout;
+import gameobjects.tiles.WallTile;
 import org.testfx.framework.junit.ApplicationTest;
-import sample.GameStage;
-import sample.*;
+import gameobjects.physics.collisions.Physical;
+import main.GameStage;
 import javafx.stage.Stage;
 import org.junit.Test;
-import sample.Player;
-import sample.Weapon;
+import gameobjects.Player;
+import main.Weapon;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;

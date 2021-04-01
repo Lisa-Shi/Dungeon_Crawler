@@ -1,11 +1,15 @@
 package unittest.m3;
 
+import gamemap.GameMap;
+import gamemap.Room;
+import gameobjects.tiles.ExitTile;
+import gameobjects.Player;
 import javafx.stage.Stage;
 import org.junit.Assert;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 import org.testfx.matcher.base.NodeMatchers;
-import sample.*;
+import main.*;
 
 import java.util.List;
 

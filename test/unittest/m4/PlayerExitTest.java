@@ -1,9 +1,13 @@
 package unittest.m4;
 
+import gamemap.Room;
+import gameobjects.tiles.ExitTile;
+import gameobjects.Player;
 import javafx.stage.Stage;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
-import sample.*;
+import main.*;
+import screens.Main;
 
 import java.util.LinkedList;
 

@@ -10,7 +10,7 @@ import java.util.TimerTask;
 
 public class SpriteController {
     // Variables
-    /**sprite is essential an image with position
+    /**sprite is essentially an image with position
      */
     private Sprite sprite;
     private ImageReel reel;

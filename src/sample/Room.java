@@ -153,7 +153,7 @@ public class Room implements Physical {
         addSurroundingWalls();
         addAllSprites(pane);
         for (Monster monster: monsters) {
-            monster.addHPBar(monster, this, pane);
+            monster.addHPBar( this, pane);
         }
     }
 

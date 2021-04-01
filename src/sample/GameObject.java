@@ -1,3 +1,6 @@
+/**parent class for most of the objects in the game
+ *
+ */
 package sample;
 
 public abstract class GameObject implements Physical, Drawable {
@@ -24,6 +27,7 @@ public abstract class GameObject implements Physical, Drawable {
     public void update(Camera camera) {
         update(camera, Main.DEFAULT_FRICTIONAL_FORCE);
     }
+
     public void update(Camera camera, double frictionalForce) {
         physics.update(frictionalForce);
         graphics.getSprite().setTranslateX(

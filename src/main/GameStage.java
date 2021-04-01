@@ -257,13 +257,6 @@ public class GameStage extends Stage {
         timeline.play();
     }
 
-//    private void stopMosters() {
-//        for (Monster monster : room.getMonsters()) {
-//            monster.getPhysics().setVelocity(new Vector2D(0.0, 0.0));
-//            monster.getPhysics().setAcceleration(new Vector2D(0.0, 0.0));
-//        }
-//    }
-
     private void teleportPlayerToEnteredRoom() {
         if (room != null && map != null && !GameMap.enterRoom().equals(room)) {
             prevRoom = room;

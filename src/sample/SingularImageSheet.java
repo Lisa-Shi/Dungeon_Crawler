@@ -1,3 +1,6 @@
+/**
+ * collection of one image source
+ */
 package sample;
 
 import javafx.scene.image.Image;

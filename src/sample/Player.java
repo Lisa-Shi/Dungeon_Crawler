@@ -1,3 +1,6 @@
+/**
+ *player object
+ */
 package sample;
 
 import javafx.scene.layout.Pane;
@@ -59,6 +62,13 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
         }
     }
 
+    /**
+     * shoot bullet
+     * @param room the room player is in
+     * @param pane the overall pane
+     * @param camera the camera
+     * @param monsters list of monster
+     */
     public void launchProjectile(Room room, Pane pane,
                                  Camera camera, LinkedList<Monster> monsters) {
         Projectile bullet = new Projectile(this, room, pane);
@@ -114,7 +124,10 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
                 + camera.getOffsetY() - Main.PLAYER_HEIGHT / 2);
     }
 
-
+    /**
+     * deduct player health point
+     * @param healthDamage amount of hp to deduct from player
+     */
     @Override
     public void hurt(int healthDamage) {
         health -= healthDamage;

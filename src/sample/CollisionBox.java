@@ -1,5 +1,9 @@
-package sample;
+/**essential attribute for collideable game object
+ *Term in javadoc:
+ *  owner: the game object which this collisionBox belong to
+ */
 
+package sample;
 public class CollisionBox {
     // Variables
     private PhysicsControllerRelative physics;
@@ -10,6 +14,15 @@ public class CollisionBox {
     public CollisionBox(PhysicsController physics, PolygonWireframe wireframe) {
         this(physics, wireframe, true);
     }
+
+    /**
+     * constructor
+     * must call generate() after instantiation
+     * @param physics usually same as the physics of the owner
+     * @param wireframe the actual box. height and weidth are usually the same as the owner
+     * @param solid if true, other game object with solid collisionBox will not be
+     *              able to get through the owner
+     */
     public CollisionBox(PhysicsController physics, PolygonWireframe wireframe, boolean solid) {
         this.physics = new PhysicsControllerRelative(
                 physics.getPosition().getX(), physics.getPosition().getY(), physics);
@@ -17,11 +30,19 @@ public class CollisionBox {
         this.solid = solid;
     }
 
+    /**
+     * must be called before construction
+     */
     public void generate() {
         getWireframe().generate();
         getPhysics().setPosition(getWireframe().getCenter());
     }
 
+    /**
+     * check if the given point is within the collisionBox
+     * @param absolutePoint point
+     * @return true if the point is inside the collisionBox
+     */
     public boolean containsPoint(Vector2D absolutePoint) {
         Vector2D relativePoint = absolutePoint.subtract(getPhysics().getAbsolutePosition());
         return wireframe.containsPoint(relativePoint);

@@ -1,3 +1,7 @@
+/**
+ * a type of wireFrame for the collisionbox
+ * it is a rectangle shape wireframe
+ */
 package sample;
 
 public class RectangleWireframe extends PolygonWireframe {

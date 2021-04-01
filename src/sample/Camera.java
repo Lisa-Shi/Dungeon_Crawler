@@ -1,3 +1,6 @@
+/**camera is for following object so it is inside the screen
+ *
+ */
 package sample;
 
 public class Camera implements Physical {

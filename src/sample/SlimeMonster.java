@@ -1,3 +1,6 @@
+/**class for buzz monster
+ *
+ */
 package sample;
 
 public class SlimeMonster extends Monster {

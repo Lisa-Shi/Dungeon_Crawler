@@ -16,6 +16,9 @@ public class Room implements Physical {
     private LinkedList<Collideable> collideables = new LinkedList<>();
     private LinkedList<Drawable> drawables = new LinkedList<>();
     private LinkedList<ExitTile> exits = new LinkedList<>();
+    /**
+     *monsters is empty when all monsters in this room die
+     */
     private LinkedList<Monster> monsters = new LinkedList<>();
     private LinkedList<GameObject> toRemove = new LinkedList<>();
     private LinkedList<HPBar> healthbars = new LinkedList<>();
@@ -49,6 +52,11 @@ public class Room implements Physical {
 
         this.toRemove = new LinkedList<>();
     }
+
+    /**
+     * add random amount (from 1 to 5) of monsters to the room.
+     * this method will not check if there is already monster in the room
+     */
     public void generateMonsters() {
         if (monsters.isEmpty()) {
             Monster monster = null;
@@ -78,7 +86,11 @@ public class Room implements Physical {
         }
     }
 
-    // Methods
+    /**
+     * check if the passed monster collides with any collideable object in the room
+     * @param monster target monster
+     * @return true if monster collides with one collideable.
+     */
     public boolean findExistingCollideable(Monster monster) {
         for (Collideable object: collideables) {
             if (((DynamicCollisionBox) monster.
@@ -88,6 +100,11 @@ public class Room implements Physical {
         }
         return false;
     }
+
+    /**
+     * it will make sure there is only one exit on one side of the room
+     * @param listOfExit list of rooms that are adjacent to this room
+     */
     public void generateExits(List<Room> listOfExit) {
         if (exits.isEmpty()) {
             LinkedList<Vector2D> availableExits = new LinkedList<>();
@@ -136,7 +153,7 @@ public class Room implements Physical {
         addSurroundingWalls();
         addAllSprites(pane);
         for (Monster monster: monsters) {
-            monster.addHPBar(monster, this, pane);
+            monster.addHPBar( this, pane);
         }
     }
 

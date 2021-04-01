@@ -25,6 +25,17 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
     private DirectionalImageSheet sheet;
     private HPBar hpBar;
     private PropertyChangeSupport support;
+
+    /**
+     * constructor
+     * @param room the room which the monster locates
+     * @param maxHealth the maximun health of the monster
+     * @param health the current health of the monster. always less than maxHealth
+     * @param damagePerHit damage caused by the monster
+     * @param initialX initial X position
+     * @param initialY initial Y position
+     * @param sheet image source for the monster
+     */
     public Monster(Room room, int maxHealth, int health,
                    int damagePerHit, double initialX,
                    double initialY, DirectionalImageSheet sheet) {
@@ -33,7 +44,11 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
         this.maxHealth = maxHealth;
         this.room = room;
         this.sheet = sheet;
-        this.health = health;
+        if( this.health > maxHealth){
+            this.health = maxHealth;
+        }else {
+            this.health = health;
+        }
         this.damagePerHit = damagePerHit;
 
         this.collisionBox = new DynamicCollisionBox(getPhysics(),
@@ -43,6 +58,12 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
         this.support = new PropertyChangeSupport(this);
     }
 
+    /**
+     * emmit bullet toward player
+     * @param room the room which the monster locats
+     * @param pane overall pane
+     * @param player player
+     */
     public void launchProjectileTowardsPlayer(Room room, Pane pane, Player player) {
         Projectile bullet = new Projectile(this, room, pane);
 
@@ -52,7 +73,13 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
         pane.getChildren().add(bullet.getGraphics().getSprite());
         bullet.launchTowardsPoint(player.getPhysics().getPosition(), Main.ENEMY_BULLET_SPEED);
     }
-    public void addHPBar(Monster monster, Room room, Pane pane) {
+
+    /**
+     * add the hp bar to the pane
+     * @param room the room which the monster locates
+     * @param pane overall pane
+     */
+    public void addHPBar(Room room, Pane pane) {
         hpBar = new HPBar(this, room, pane);
         addPropertyChangeListener(hpBar);
         room.add(hpBar);
@@ -64,6 +91,10 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
         return facing;
     }
 
+    /**
+     * the monster positiona and hp bar position are updated here
+     * @param camera camera that focuses on object
+     */
     @Override
     public void update(Camera camera) {
         switch (facing) {
@@ -88,6 +119,11 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
         super.update(camera);
     }
 
+    /**
+     * decrease the health of the monster
+     * health bar width changes here as well
+     * @param healthDamage the amount of damage to deduct from the monster
+     */
     @Override
     public void hurt(int healthDamage) {
         support.firePropertyChange("health", (double) this.health / this.maxHealth,
@@ -99,6 +135,11 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
             this.collisionBox.setSolid(false);
         }
     }
+
+    /**
+     * get the monster location relative to the scene
+     * @return monster location relative to the scene
+     */
     public Vector2D getLocalToScenePosition() {
         Bounds bounds = this.getGraphics().getSprite().localToScene(
                 this.getGraphics().getSprite().getBoundsInLocal());

@@ -2,8 +2,6 @@ package sample;
 
 import javafx.scene.image.Image;
 
-import java.awt.*;
-
 public abstract class Tile extends GameObject {
 
     // Constructors

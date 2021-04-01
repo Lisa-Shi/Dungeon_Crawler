@@ -3,13 +3,11 @@ package sample;
 /**
  * the monster class
  */
-import javafx.animation.FadeTransition;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.geometry.Bounds;
 import javafx.scene.layout.Pane;
-import javafx.util.Duration;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.*;
@@ -26,9 +24,8 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
     private boolean isDead = false;
     private String facing;
     private DirectionalImageSheet sheet;
-
+    private HPBar HPBar;
     private PropertyChangeSupport support;
-
     public Monster(Room room, int maxHealth, int health, int damagePerHit, double initialX, double initialY, DirectionalImageSheet sheet) {
         super(room, initialX * Main.TILE_WIDTH, initialY * Main.TILE_HEIGHT
                     , Main.MONSTER_WIDTH / 2, Main.MONSTER_HEIGHT / 2, sheet);
@@ -41,7 +38,6 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
         this.collisionBox = new DynamicCollisionBox(getPhysics(),
                 new RectangleWireframe(Main.MONSTER_WIDTH, Main.MONSTER_HEIGHT), false);
         this.collisionBox.generate();
-
         this.facing = "A";
         this.support = new PropertyChangeSupport(this);
     }
@@ -55,7 +51,14 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
         pane.getChildren().add(bullet.getGraphics().getSprite());
         bullet.launchTowardsPoint(player.getPhysics().getPosition(), Main.ENEMY_BULLET_SPEED);
     }
-
+    public void addHPBar(Monster monster, Room room, Pane pane) {
+        HPBar = new HPBar(this, room, pane);
+        addPropertyChangeListener(HPBar);
+        room.add(HPBar);
+        pane.getChildren().add(HPBar.getGraphics().getSprite());
+        pane.getChildren().add(HPBar.getOutter());
+        pane.getChildren().add(HPBar.getInner());
+    }
     public String getFacing() {
         return facing;
     }
@@ -64,21 +67,28 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
     public void update(Camera camera) {
          switch (facing) {
                 case "A":
+                    HPBar.getPhysics().pushLeft(Main.ENEMY_CONTROL_FORCE);
                     getPhysics().pushLeft(Main.ENEMY_CONTROL_FORCE);
                     break;
                 case "D":
+                    HPBar.getPhysics().pushRight(Main.ENEMY_CONTROL_FORCE);
                     getPhysics().pushRight(Main.ENEMY_CONTROL_FORCE);
                     break;
                 case "W":
+                    HPBar.getPhysics().pushUp(Main.ENEMY_CONTROL_FORCE);
                     getPhysics().pushUp(Main.ENEMY_CONTROL_FORCE);
                     break;
                 case "S":
+                    HPBar.getPhysics().pushDown(Main.ENEMY_CONTROL_FORCE);
                     getPhysics().pushDown(Main.ENEMY_CONTROL_FORCE);
                     break;
-            }
-            super.update(camera);
+         }
+         super.update(camera);
     }
-
+    public Vector2D getLocalToScenePosition(){
+        Bounds bounds = this.getGraphics().getSprite().localToScene(this.getGraphics().getSprite().getBoundsInLocal());
+        return new Vector2D(bounds.getCenterX(), bounds.getCenterY());
+    }
     @Override
     public CollisionBox getCollisionBox() {
         return collisionBox;
@@ -94,13 +104,16 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
     }
     @Override
     public void hurt(int healthDamage) {
-        support.firePropertyChange("health", this.health / this.maxHealth, (this.health - healthDamage)/(double)this.maxHealth);
+        support.firePropertyChange("health", (double)this.health / this.maxHealth, (this.health - healthDamage)/(double)this.maxHealth);
         health -= healthDamage;
         if( health <= 0){
             isDead = true;
             facing = "";
             this.collisionBox.setSolid(false);
         }
+    }
+    public HPBar getHPBar(){
+        return HPBar;
     }
     public void addPropertyChangeListener(PropertyChangeListener pcl) {
         support.addPropertyChangeListener(pcl);

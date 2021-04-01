@@ -13,15 +13,17 @@ public class Room implements Physical {
     private int width;
     private int height;
     private String layout;
-    private Vector2D[][] heuristicMap;
     private LinkedList<Physical> physicals = new LinkedList<>();
     private LinkedList<Collideable> collideables = new LinkedList<>();
     private LinkedList<Drawable> drawables = new LinkedList<>();
     private LinkedList<ExitTile> exits = new LinkedList<>();
     private LinkedList<Monster> monsters = new LinkedList<>();
     private LinkedList<GameObject> toRemove = new LinkedList<>();
+    private LinkedList<HPBar> healthbars = new LinkedList<>();
     private PhysicsController physics;
-
+    public LinkedList<HPBar> getHealthbars(){
+        return healthbars;
+    }
     // Constructors
     /**
      * Constructs a dungeon room
@@ -130,10 +132,13 @@ public class Room implements Physical {
         addRoomLayout();
         generateMonsters();
         addFloorTiles();
-
         addSurroundingWalls();
         addAllSprites(pane);
+        for( Monster monster: monsters){
+            monster.addHPBar(monster, this, pane);
+        }
     }
+
     private void addFloorTiles() {
         for (int r = 0; r < width; r++) {
             for (int c = 0; c < height; c++) {

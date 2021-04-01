@@ -8,14 +8,17 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -25,6 +28,7 @@ import javafx.scene.control.*;
 import javafx.util.Duration;
 
 import javax.xml.transform.Source;
+import java.awt.*;
 import java.beans.PropertyChangeListener;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
@@ -202,6 +206,8 @@ public class GameStage extends Stage {
                 monster.getGraphics().getSprite().setImage(Main.TRANSPARENT_IMAGE);
                 monster.getGraphics().setCurrentReel(new SingularImageSheet(Main.TRANSPARENT_IMAGE).getInitialReel());
                 room.getCollideables().remove(monster);
+                room.getHealthbars().remove(monster.getHPBar());
+                monster.getHPBar().expire();
                 pane.getChildren().remove(monster);
             }
         }
@@ -284,12 +290,13 @@ public class GameStage extends Stage {
         room.finalize(pane);
         pbar.setProgress(room.getRoomId() / 9.0);
         monsterHP.clear();
-        for( Monster monster: room.getMonsters()){
-            ProgressBar monsterHP = new ProgressBar(monster.getHealth()/(double)monster.getMaxHealth());
+        Rectangle monsterHP = new Rectangle(10, 10, 100, 100);
+    /*    for( Monster monster: room.getMonsters()){
+            Rectangle monsterHP = new Rectangle();
             PropertyChangeListener listener = new monsterHPListener(monsterHP);
             monster.addPropertyChangeListener(listener);
             pane.getChildren().add(monsterHP);
-        }
+        }*/
         Scene scene = new Scene(pane);
         if (room.getRoomId() == 999) {
             infoBar.getChildren().add(exitButton);

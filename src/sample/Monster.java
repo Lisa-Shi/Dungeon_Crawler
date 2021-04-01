@@ -25,6 +25,7 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
     private DirectionalImageSheet sheet;
     private HPBar hpBar;
     private PropertyChangeSupport support;
+
     public Monster(Room room, int maxHealth, int health,
                    int damagePerHit, double initialX,
                    double initialY, DirectionalImageSheet sheet) {

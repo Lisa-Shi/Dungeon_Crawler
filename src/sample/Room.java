@@ -19,7 +19,6 @@ public class Room implements Physical {
     private LinkedList<Monster> monsters = new LinkedList<>();
     private LinkedList<GameObject> toRemove = new LinkedList<>();
     private PhysicsController physics;
-    private static int numOfMon;
 
     // Constructors
     /**
@@ -53,7 +52,7 @@ public class Room implements Physical {
             Monster monster = null;
             if (roomId != 999) {
                 Random ran = new Random();
-                numOfMon = ran.nextInt(5);
+                int numOfMon = ran.nextInt(5);
                 for (int i = 1; i <= numOfMon; i++) {
                     int monsterX, monsterY;
                     do {
@@ -205,10 +204,6 @@ public class Room implements Physical {
         return roomId;
     }
 
-    public int getNumOfMon() {
-        return numOfMon;
-    }
-
     public LinkedList<Monster> getMonsters() {
         return monsters;
     }
@@ -261,10 +256,6 @@ public class Room implements Physical {
         if( obj instanceof Monster) {
             monsters.add(0, (Monster) obj);
         }
-    }
-
-    public void setNumOfMon(int num) {
-        numOfMon = num;
     }
 
     public void remove(GameObject obj) {

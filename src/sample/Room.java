@@ -197,8 +197,6 @@ public class Room implements Physical {
         this.monsters = new LinkedList<>();
     }
 
-
-
     // Getters
 
     public int getRoomId() {
@@ -219,6 +217,7 @@ public class Room implements Physical {
     public int getWidth() {
         return width;
     }
+
     /**
      * @return room height
      */
@@ -232,6 +231,10 @@ public class Room implements Physical {
 
     public LinkedList<Collideable> getCollideables() {
         return collideables;
+    }
+
+    public String getLayout() {
+        return layout;
     }
 
     // Setters
@@ -253,9 +256,11 @@ public class Room implements Physical {
             monsters.add(0, (Monster) obj);
         }
     }
+
     public void remove(GameObject obj) {
         toRemove.add(obj);
     }
+
     private void flushToRemove() {
         for (GameObject obj : toRemove) {
             if (obj instanceof Physical) {
@@ -277,9 +282,6 @@ public class Room implements Physical {
         }
 
         toRemove.clear();
-    }
-    public String getLayout() {
-        return layout;
     }
 
     /**

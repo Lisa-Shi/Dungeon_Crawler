@@ -17,7 +17,7 @@ public class ExitTile extends Tile implements Passable {
         exitY = initialY;
         this.linkedRoom = linkedRoom;
         this.collisionBox = new CollisionBox(getPhysics(),
-                new RectangleWireframe(Main.TILE_WIDTH, Main.TILE_HEIGHT), false);
+                new RectangleWireframe(Main.TILE_WIDTH, Main.TILE_HEIGHT), true);
         this.collisionBox.generate();
     }
 
@@ -55,7 +55,9 @@ public class ExitTile extends Tile implements Passable {
 
     @Override
     public void collisionWithPlayerEvent(Player player) {
-        GameMap.enterRoom(getLinkedRoom());
+        if (this.inRoom.getMonsters().size() == 0) {
+            GameMap.enterRoom(getLinkedRoom());
+        }
     }
 
     /**

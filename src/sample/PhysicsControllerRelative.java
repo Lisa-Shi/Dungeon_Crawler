@@ -1,3 +1,7 @@
+/**
+ * subclass of physicsController
+ * as named, the relative physics to another object
+ */
 package sample;
 
 public class PhysicsControllerRelative extends PhysicsController {
@@ -5,6 +9,13 @@ public class PhysicsControllerRelative extends PhysicsController {
     private PhysicsController relativeTo;
 
     // Constructors
+
+    /**
+     * constructor
+     * @param initialX initial X position
+     * @param initialY initial Y position
+     * @param relativeTo the physics of the object that this physics is calculated with respect to
+     */
     public PhysicsControllerRelative(
             double initialX, double initialY, PhysicsController relativeTo) {
         super(initialX, initialY);

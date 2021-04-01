@@ -1,3 +1,7 @@
+/**
+ * the bullet object
+ */
+
 package sample;
 
 import javafx.animation.KeyFrame;
@@ -16,6 +20,13 @@ public class Projectile extends GameObject implements Collideable {
     private GameObject sprite;
     //private ImageSheet img;
     //private double scale;
+
+    /**constructor
+     *
+     * @param player player object who shoots the bullet
+     * @param room the room in which player is
+     * @param pane the overall pane
+     */
     public Projectile(Player player, Room room, Pane pane) {
         this(room, pane, player.getPhysics().getPosition().getX(),
                 player.getPhysics().getPosition().getY(),
@@ -24,6 +35,13 @@ public class Projectile extends GameObject implements Collideable {
         //this.bouncesLeft = p.getWeaponList()[p.getHoldingWeapon()].getPower();
         this.bouncesLeft = 2;
     }
+
+    /**
+     * constructor
+     * @param monster monster who shoots the bullet
+     * @param room the room in which the monster is
+     * @param pane the overall pane
+     */
     public Projectile(Monster monster, Room room, Pane pane) {
         this(room, pane, monster.getPhysics().getPosition().getX(),
                 monster.getPhysics().getPosition().getY(), 0.5,
@@ -51,11 +69,19 @@ public class Projectile extends GameObject implements Collideable {
             .play();
     }
 
+    /**
+     * aiming toward the giving position
+     * @param launchTowards the target position
+     * @param vel scale
+     */
     // Misc.
     public void launchTowardsPoint(Vector2D launchTowards, int vel) {
         getPhysics().setVelocity(getPhysics().getPosition().subtract(launchTowards).relen(-vel));
     }
 
+    /**
+     * call to shoot the bullet
+     */
     public void launch() {
         Player player = (Player) sprite;
         Vector2D direction = player.getDirection();
@@ -66,6 +92,10 @@ public class Projectile extends GameObject implements Collideable {
                 sprite.getPhysics().getPosition().add(direction.multiply(Main.TILE_WIDTH / 2)));
 
     }
+
+    /**
+     * call when the bullet is being removed from the scene
+     */
     public void expire() {
         pane.getChildren().remove(getGraphics().getSprite());
         room.remove(this);

@@ -1,7 +1,7 @@
 package sample;
 
 /**
- * for the weapon in drungeon Crawler
+ * for the weapon in dungeon Crawler
  */
 public class Weapon {
     private String name;

@@ -1,3 +1,6 @@
+/**the Image source for the player object
+ *
+ */
 package sample;
 
 public class CharacterImageSheet extends ImageSheet {

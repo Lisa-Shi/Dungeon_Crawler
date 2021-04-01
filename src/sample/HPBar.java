@@ -1,3 +1,9 @@
+/**
+ * the hp bar that shows monster health point.
+ * it is essentially two rectangle
+ * Term in JavaDoc
+ *      parent: the monster that this hp bar belongs to
+ */
 package sample;
 
 import javafx.animation.KeyFrame;
@@ -19,6 +25,13 @@ public class HPBar extends GameObject implements PropertyChangeListener {
     private Rectangle inner;
     private Rectangle outter;
     private Monster sprite;
+
+    /**
+     * constructor
+     * @param monster parent
+     * @param room the room which the parent is in
+     * @param pane the game pane
+     */
     public HPBar(Monster monster, Room room, Pane pane) {
         this(room, pane, monster.getPhysics().getPosition().getX(),
                 monster.getPhysics().getPosition().getY(),
@@ -52,6 +65,9 @@ public class HPBar extends GameObject implements PropertyChangeListener {
             .play();
     }
 
+    /**
+     * the HP bar expires and disappears from the scene when the parent dies
+     */
     public void expire() {
         pane.getChildren().remove(getGraphics().getSprite());
         pane.getChildren().remove(inner);
@@ -66,6 +82,11 @@ public class HPBar extends GameObject implements PropertyChangeListener {
         inner.setX(monsterPositionToScene.getX() - 13.5);
         inner.setY(monsterPositionToScene.getY() - 48.5);
     }
+
+    /**
+     * the weidth of the inner rectangle changes when the parent's health changes.
+     * @param evt
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         this.setHealth((double) evt.getNewValue());

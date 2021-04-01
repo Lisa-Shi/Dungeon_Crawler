@@ -26,13 +26,15 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
      *
      * @param name Player name
      * @param initialWeapon Weapon player starts game with
+     * @param room the room player locates
      * @param initialX x-location player starts at
      * @param initialY y-location player starts at
      * @param difficulty difficulty for the game
      */
     public Player(String name, Weapon initialWeapon, Room room,
                   double initialX, double initialY,  int difficulty) {
-        super(room, initialX, initialY, Main.PLAYER_WIDTH / 2, Main.PLAYER_HEIGHT / 2, Main.PLAYER_IMAGE_SHEET);
+        super(room, initialX, initialY, Main.PLAYER_WIDTH / 2,
+                Main.PLAYER_HEIGHT / 2, Main.PLAYER_IMAGE_SHEET);
         this.name = name;
         weaponList = new ArrayList<>();
         weaponList.add(initialWeapon);
@@ -57,17 +59,19 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
         }
     }
 
-    public void launchProjectile(Room room, Pane pane, Camera camera, LinkedList<Monster> monsters) {
+    public void launchProjectile(Room room, Pane pane,
+                                 Camera camera, LinkedList<Monster> monsters) {
         Projectile bullet = new Projectile(this, room, pane);
         room.add(bullet);
         pane.getChildren().add(bullet.getGraphics().getSprite());
-//
-//        double range = Main.TILE_WIDTH * 10;
-//        Vector2D position = this.getPhysics().getPosition();
-//        Vector2D displacement = direction.multiply(range);
-//        System.out.println("Dis x:" + displacement.getX() + "   Aim y:" + displacement.getY());
-//        Vector2D aim = position.add(displacement);
-//        System.out.println("Aim x:" + aim.getX() + "   Aim y:" + aim.getY());
+        //
+        //        double range = Main.TILE_WIDTH * 10;
+        //        Vector2D position = this.getPhysics().getPosition();
+        //        Vector2D displacement = direction.multiply(range);
+        //        System.out.println("Dis x:" + displacement.getX() +
+        //        "   Aim y:" + displacement.getY());
+        //        Vector2D aim = position.add(displacement);
+        //        System.out.println("Aim x:" + aim.getX() + "   Aim y:" + aim.getY());
         bullet.launch();
         bullet.update(camera);
     }
@@ -102,9 +106,11 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
     }
 
     private void updateSprite(Camera camera) {
-        getGraphics().getSprite().setTranslateX(getPhysics().getPosition().getX() - camera.getPhysics().getPosition().getX()
+        getGraphics().getSprite().setTranslateX(getPhysics().getPosition().getX()
+                - camera.getPhysics().getPosition().getX()
                 + camera.getOffsetX() - Main.PLAYER_WIDTH / 2);
-        getGraphics().getSprite().setTranslateY(getPhysics().getPosition().getY() - camera.getPhysics().getPosition().getY()
+        getGraphics().getSprite().setTranslateY(getPhysics().getPosition().getY()
+                - camera.getPhysics().getPosition().getY()
                 + camera.getOffsetY() - Main.PLAYER_HEIGHT / 2);
     }
 

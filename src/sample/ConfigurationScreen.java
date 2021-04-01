@@ -160,6 +160,7 @@ public class ConfigurationScreen {
     /**
      * method will get the user input from the GUI objects and initial character for the game
      *
+     * @param goRoom the room in which player is born
      * @return  the player object created with the user inputs
      */
     public Player createChar(Room goRoom) {
@@ -177,7 +178,7 @@ public class ConfigurationScreen {
         if (weapon != -1) {
             playerW = wOptions[weapon - 1];
         }
-        return new Player(name, playerW, goRoom,0, 0, difficulty);
+        return new Player(name, playerW, goRoom, 0,  0, difficulty);
     }
 
     /**

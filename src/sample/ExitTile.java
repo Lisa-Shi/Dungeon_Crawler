@@ -77,7 +77,7 @@ public class ExitTile extends Tile implements Passable {
         return false;
     }
     @Override
-    public int hashCode(){
+    public int hashCode() {
         return this.exitX * 97 + this.exitY * 89;
     }
 }

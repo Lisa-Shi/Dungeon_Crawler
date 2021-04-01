@@ -71,6 +71,9 @@ public class Vector2D {
     public double squaredLen() {
         return x * x + y * y;
     }
+    public Vector2D round() {
+        return new Vector2D(Math.round(x), Math.round(y));
+    }
     /**
      * Normalizes a vector (finds its unit vector)
      *

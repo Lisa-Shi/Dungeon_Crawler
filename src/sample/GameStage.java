@@ -7,11 +7,13 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -47,7 +49,7 @@ public class GameStage extends Stage {
     private Text testingPurpose = new Text();
 
     private ProgressBar pbar = new ProgressBar(0);
-
+    private LinkedList<ProgressBar> monsterHP = new LinkedList<>();
     public GameMap getMap() {
         return map;
     }
@@ -56,6 +58,7 @@ public class GameStage extends Stage {
      * Adapted from https://www.youtube.com/watch?v=FVo1fm52hz0
      *
      * @param player the player user will be controlling in the game
+     * @param firstRoom first room in the game
      */
     public GameStage(Player player, Room firstRoom) {
         this.player = player;
@@ -65,10 +68,10 @@ public class GameStage extends Stage {
         map = new GameMap(room);
         exitButton = new Button("finish");
 
-        new Timeline(new KeyFrame(
-                Duration.millis(Main.MONSTER_ATTACK_TIME),
-                ae -> moveMonsters()))
-                .play();
+        Timeline timeline = new Timeline(new KeyFrame(
+            Duration.millis(Main.MONSTER_ATTACK_TIME),
+            ae -> moveMonsters()));
+        timeline.play();
     }
 
     /**
@@ -158,17 +161,23 @@ public class GameStage extends Stage {
     }
     private void switchPlayerGraphicsStateToStill() {
         double threshold = 0.1D;
-        //if (Math.abs(player.getPhysics().getVelocity().getX()) < threshold && Math.abs(player.getPhysics().getVelocity().getY()) < threshold) {
-        if (!playerIsMovingLeft && !playerIsMovingDown && !playerIsMovingRight && !playerIsMovingUp) {
+        //if (Math.abs(player.getPhysics().getVelocity().getX())
+        // < threshold && Math.abs(player.getPhysics().getVelocity().getY()) < threshold) {
+        if (!playerIsMovingLeft && !playerIsMovingDown
+                && !playerIsMovingRight && !playerIsMovingUp) {
             ImageReel currReel = player.getGraphics().getCurrentReel();
             if (currReel == player.getSpriteSheet().getWalkSheet().getLeftImage()) {
-                player.getGraphics().setCurrentReel(player.getSpriteSheet().getStandSheet().getLeftImage());
+                player.getGraphics().setCurrentReel(
+                        player.getSpriteSheet().getStandSheet().getLeftImage());
             } else if (currReel == player.getSpriteSheet().getWalkSheet().getRightImage()) {
-                player.getGraphics().setCurrentReel(player.getSpriteSheet().getStandSheet().getRightImage());
+                player.getGraphics().setCurrentReel(
+                        player.getSpriteSheet().getStandSheet().getRightImage());
             } else if (currReel == player.getSpriteSheet().getWalkSheet().getUpImage()) {
-                player.getGraphics().setCurrentReel(player.getSpriteSheet().getStandSheet().getUpImage());
+                player.getGraphics().setCurrentReel(
+                        player.getSpriteSheet().getStandSheet().getUpImage());
             } else if (currReel == player.getSpriteSheet().getWalkSheet().getDownImage()) {
-                player.getGraphics().setCurrentReel(player.getSpriteSheet().getStandSheet().getDownImage());
+                player.getGraphics().setCurrentReel(
+                        player.getSpriteSheet().getStandSheet().getDownImage());
             }
         }
     }
@@ -187,14 +196,24 @@ public class GameStage extends Stage {
     }
     private void moveMonsters() {
         for (Monster monster : room.getMonsters()) {
-            monster.face(player, room);
-            monster.update(camera);
-            monster.launchProjectileTowardsPlayer(room, pane, player);
+            if (!monster.isDead()) {
+                monster.face(player, room);
+                monster.update(camera);
+                monster.launchProjectileTowardsPlayer(room, pane, player);
+            } else {
+                monster.getGraphics().getSprite().setImage(Main.TRANSPARENT_IMAGE);
+                monster.getGraphics().setCurrentReel(
+                        new SingularImageSheet(Main.TRANSPARENT_IMAGE).getInitialReel());
+                room.getCollideables().remove(monster);
+                room.getHealthbars().remove(monster.getHPBar());
+                monster.getHPBar().expire();
+                pane.getChildren().remove(monster);
+            }
         }
-        new Timeline(new KeyFrame(
-                Duration.millis(Main.MONSTER_ATTACK_TIME),
-                ae -> moveMonsters()))
-                .play();
+        Timeline timeline = new Timeline(new KeyFrame(
+            Duration.millis(Main.MONSTER_ATTACK_TIME),
+            ae -> moveMonsters()));
+        timeline.play();
     }
 
     private void teleportPlayerToEnteredRoom() {
@@ -238,22 +257,26 @@ public class GameStage extends Stage {
                     //right wall
                     teleport = true;
                     x += distance * Main.TILE_WIDTH;
-                    player.getGraphics().setCurrentReel(player.getSpriteSheet().getStandSheet().getLeftImage());
+                    player.getGraphics().setCurrentReel(
+                            player.getSpriteSheet().getStandSheet().getLeftImage());
                 } else if (exitX == room.getWidth()) {
                     //left wall
                     teleport = true;
                     x -= distance * Main.TILE_WIDTH;
-                    player.getGraphics().setCurrentReel(player.getSpriteSheet().getStandSheet().getRightImage());
+                    player.getGraphics().setCurrentReel(
+                            player.getSpriteSheet().getStandSheet().getRightImage());
                 } else if (exitY == -1) {
                     //top
                     teleport = true;
                     y += distance * Main.TILE_HEIGHT;
-                    player.getGraphics().setCurrentReel(player.getSpriteSheet().getStandSheet().getDownImage());
+                    player.getGraphics().setCurrentReel(
+                            player.getSpriteSheet().getStandSheet().getDownImage());
                 } else if (exitY == room.getWidth()) {
                     //bottom
                     teleport = true;
                     y -= distance * Main.TILE_HEIGHT;
-                    player.getGraphics().setCurrentReel(player.getSpriteSheet().getStandSheet().getUpImage());
+                    player.getGraphics().setCurrentReel(
+                            player.getSpriteSheet().getStandSheet().getUpImage());
                 }
                 if (teleport) {
                     Vector2D vec = new Vector2D(x, y);
@@ -269,6 +292,14 @@ public class GameStage extends Stage {
         room.generateExits(map.getAdjRooms(room));
         room.finalize(pane);
         pbar.setProgress(room.getRoomId() / 9.0);
+        monsterHP.clear();
+        Rectangle monsterHP = new Rectangle(10, 10, 100, 100);
+        /*for( Monster monster: room.getMonsters()){
+            Rectangle monsterHP = new Rectangle();
+            PropertyChangeListener listener = new monsterHPListener(monsterHP);
+            monster.addPropertyChangeListener(listener);
+            pane.getChildren().add(monsterHP);
+        }*/
         Scene scene = new Scene(pane);
         if (room.getRoomId() == 999) {
             infoBar.getChildren().add(exitButton);
@@ -298,19 +329,23 @@ public class GameStage extends Stage {
         public void handle(KeyEvent event) {
             if (event.getCode() == KeyCode.A) {
                 playerIsMovingLeft = true;
-                player.getGraphics().setCurrentReel(player.getSpriteSheet().getWalkSheet().getLeftImage());
+                player.getGraphics().setCurrentReel(
+                        player.getSpriteSheet().getWalkSheet().getLeftImage());
             }
             if (event.getCode() == KeyCode.D) {
                 playerIsMovingRight = true;
-                player.getGraphics().setCurrentReel(player.getSpriteSheet().getWalkSheet().getRightImage());
+                player.getGraphics().setCurrentReel(
+                        player.getSpriteSheet().getWalkSheet().getRightImage());
             }
             if (event.getCode() == KeyCode.W) {
                 playerIsMovingUp = true;
-                player.getGraphics().setCurrentReel(player.getSpriteSheet().getWalkSheet().getUpImage());
+                player.getGraphics().setCurrentReel(
+                        player.getSpriteSheet().getWalkSheet().getUpImage());
             }
             if (event.getCode() == KeyCode.S) {
                 playerIsMovingDown = true;
-                player.getGraphics().setCurrentReel(player.getSpriteSheet().getWalkSheet().getDownImage());
+                player.getGraphics().setCurrentReel(
+                        player.getSpriteSheet().getWalkSheet().getDownImage());
             }
             if (event.getCode() == KeyCode.ENTER) {
                 player.launchProjectile(room, pane, camera, room.getMonsters());
@@ -327,35 +362,39 @@ public class GameStage extends Stage {
         public void handle(KeyEvent event) {
             if (event.getCode() == KeyCode.A) {
                 playerIsMovingLeft = false;
-                player.setDirection(new Vector2D(-1,0));
+                player.setDirection(new Vector2D(-1, 0));
                 fixPlayerFacingDirection();
             }
             if (event.getCode() == KeyCode.D) {
                 playerIsMovingRight = false;
-                player.setDirection(new Vector2D(1,0));
+                player.setDirection(new Vector2D(1, 0));
                 fixPlayerFacingDirection();
             }
             if (event.getCode() == KeyCode.W) {
                 playerIsMovingUp = false;
-                player.setDirection(new Vector2D(0,-1));
+                player.setDirection(new Vector2D(0, -1));
                 fixPlayerFacingDirection();
             }
             if (event.getCode() == KeyCode.S) {
                 playerIsMovingDown = false;
-                player.setDirection(new Vector2D(0,1));
+                player.setDirection(new Vector2D(0, 1));
                 fixPlayerFacingDirection();
             }
         }
     };
     private void fixPlayerFacingDirection() {
         if (playerIsMovingUp) {
-            player.getGraphics().setCurrentReel(player.getSpriteSheet().getWalkSheet().getUpImage());
+            player.getGraphics().setCurrentReel(
+                    player.getSpriteSheet().getWalkSheet().getUpImage());
         } else if (playerIsMovingDown) {
-            player.getGraphics().setCurrentReel(player.getSpriteSheet().getWalkSheet().getDownImage());
+            player.getGraphics().setCurrentReel(
+                    player.getSpriteSheet().getWalkSheet().getDownImage());
         } else if (playerIsMovingLeft) {
-            player.getGraphics().setCurrentReel(player.getSpriteSheet().getWalkSheet().getLeftImage());
+            player.getGraphics().setCurrentReel(
+                    player.getSpriteSheet().getWalkSheet().getLeftImage());
         } else if (playerIsMovingRight) {
-            player.getGraphics().setCurrentReel(player.getSpriteSheet().getWalkSheet().getRightImage());
+            player.getGraphics().setCurrentReel(
+                    player.getSpriteSheet().getWalkSheet().getRightImage());
         }
     }
 

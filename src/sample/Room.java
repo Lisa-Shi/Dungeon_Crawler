@@ -1,6 +1,7 @@
 package sample;
 
 import javafx.scene.layout.Pane;
+
 import java.util.LinkedList;
 import java.util.*;
 
@@ -11,15 +12,17 @@ public class Room implements Physical {
     private int width;
     private int height;
     private String layout;
-    private Vector2D[][] heuristicMap;
     private LinkedList<Physical> physicals = new LinkedList<>();
     private LinkedList<Collideable> collideables = new LinkedList<>();
     private LinkedList<Drawable> drawables = new LinkedList<>();
     private LinkedList<ExitTile> exits = new LinkedList<>();
     private LinkedList<Monster> monsters = new LinkedList<>();
     private LinkedList<GameObject> toRemove = new LinkedList<>();
+    private LinkedList<HPBar> healthbars = new LinkedList<>();
     private PhysicsController physics;
-
+    public LinkedList<HPBar> getHealthbars() {
+        return healthbars;
+    }
     // Constructors
     /**
      * Constructs a dungeon room
@@ -31,7 +34,6 @@ public class Room implements Physical {
         roomId = id++;
         this.width = width;
         this.height = height;
-        heuristicMap = new Vector2D[width][height];
         // Physics so the camera works properly
         this.physics = new PhysicsController(0, 0);
 
@@ -50,38 +52,37 @@ public class Room implements Physical {
     public void generateMonsters() {
         if (monsters.isEmpty()) {
             Monster monster = null;
-            if (roomId != 999) {
-                Random ran = new Random();
-                int numOfMon = ran.nextInt(5);
-                for (int i = 1; i <= numOfMon; i++) {
-                    int monsterX, monsterY;
-                    do {
-                        monsterX = ran.nextInt(width - 2) + 1;
-                        monsterY = ran.nextInt(height - 2) + 1;
-                        monster = new SlimeMonster(this, monsterX, monsterY);
-                    } while (findExistingCollideable(monster));
-                    add(monster);
-                }
-            } else{
+            if (roomId == 999) {
                 // Boss monster
                 monster = new BuzzMonster(this, width / 2, height / 2);
                 add(monster);
+            } else if (roomId != 0) {
+                Random ran = new Random();
+                int numOfMon = ran.nextInt(5) + 1;
+                for (int i = 1; i <= numOfMon; i++) {
+                    int monsterX;
+                    int monsterY;
+                    do {
+                        monsterX = ran.nextInt(width - 2) + 1;
+                        monsterY = ran.nextInt(height - 2) + 1;
+                        int monsterType = ran.nextInt(2);
+                        if (monsterType == 0) {
+                            monster = new SlimeMonster(this, monsterX, monsterY);
+                        } else {
+                            monster = new MagicianMonster(this, monsterX, monsterY);
+                        }
+                    } while (findExistingCollideable(monster));
+                    add(monster);
+                }
             }
         }
     }
 
     // Methods
-    public boolean findExistingCollideable(Monster monster){
-        for (Collideable object: collideables){
-            if( ((DynamicCollisionBox) monster.getCollisionBox()).collidedWith(object.getCollisionBox())){
-                return true;
-            }
-        }
-        return false;
-    }
-    public boolean checkObstacle(Vector2D location){
-        for (Collideable collideable : collideables){
-            if( collideable.getCollisionBox().containsPoint(location)) {
+    public boolean findExistingCollideable(Monster monster) {
+        for (Collideable object: collideables) {
+            if (((DynamicCollisionBox) monster.
+                    getCollisionBox()).collidedWith(object.getCollisionBox())) {
                 return true;
             }
         }
@@ -130,14 +131,15 @@ public class Room implements Physical {
      */
     public void finalize(Pane pane) {
         addRoomLayout();
-        if( roomId != 999) {
-            generateMonsters();
-        }
+        generateMonsters();
         addFloorTiles();
-
         addSurroundingWalls();
         addAllSprites(pane);
+        for (Monster monster: monsters) {
+            monster.addHPBar(monster, this, pane);
+        }
     }
+
     private void addFloorTiles() {
         for (int r = 0; r < width; r++) {
             for (int c = 0; c < height; c++) {
@@ -196,9 +198,6 @@ public class Room implements Physical {
     }
 
     // Getters
-    public Vector2D[][] getHeuristicMap() {
-        return heuristicMap;
-    }
 
     public int getRoomId() {
         return roomId;
@@ -253,7 +252,7 @@ public class Room implements Physical {
         if (obj instanceof Drawable) {
             drawables.add(0, (Drawable) obj);
         }
-        if( obj instanceof Monster) {
+        if (obj instanceof Monster) {
             monsters.add(0, (Monster) obj);
         }
     }

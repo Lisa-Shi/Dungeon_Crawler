@@ -1,7 +1,5 @@
 package sample;
 
-import javafx.scene.image.Image;
-
 public abstract class GameObject implements Physical, Drawable {
     // Variables
     private PhysicsControllerRelative physics;
@@ -14,8 +12,9 @@ public abstract class GameObject implements Physical, Drawable {
     public GameObject(Room room, double initialX, double initialY,
                       double centerX, double centerY, ImageSheet sheet) {
         this.physics = new PhysicsControllerRelative(initialX, initialY, room.getPhysics());
-        Sprite sprite = new Sprite((int) initialX, (int) initialY,
-                (int) (centerX * 2), (int) (centerY * 2), Main.WALLTILE); // walltile = default no texture
+        Sprite sprite = new Sprite((int) initialX,
+                (int) initialY, (int) (centerX * 2),
+                (int) (centerY * 2), Main.WALLTILE); // walltile = default no texture
         this.room = room;
         this.graphics = new SpriteController(sprite, sheet.getInitialReel());
         this.center = new Vector2D(centerX, centerY);
@@ -27,9 +26,11 @@ public abstract class GameObject implements Physical, Drawable {
     }
     public void update(Camera camera, double frictionalForce) {
         physics.update(frictionalForce);
-        graphics.getSprite().setTranslateX(physics.getPosition().getX() - camera.getPhysics().getPosition().getX()
+        graphics.getSprite().setTranslateX(
+                physics.getPosition().getX() - camera.getPhysics().getPosition().getX()
                 + camera.getOffsetX() - center.getX());
-        graphics.getSprite().setTranslateY(physics.getPosition().getY() - camera.getPhysics().getPosition().getY()
+        graphics.getSprite().setTranslateY(
+                physics.getPosition().getY() - camera.getPhysics().getPosition().getY()
                 + camera.getOffsetY() - center.getY());
     }
 

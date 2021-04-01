@@ -11,22 +11,22 @@ public class Chest {
     private boolean isOpen = false;
 
     // Constructors
-    public Chest(int money, String treasure){
+    public Chest(int money, String treasure) {
         this.money = money;
         this.treasure = treasure;
     }
 
     // Misc.
-    public int takeMoney(){
+    public int takeMoney() {
         int givePlayer = money;
         money = 0;
-        if( treasure.equals("")){
+        if (treasure.equals("")) {
             isOpen = true;
             image = Main.CHEST_IMAGE.get(2);
         }
         return givePlayer;
     }
-    public String takeTreasure(){
+    public String takeTreasure() {
         String givePlayer = treasure;
         treasure = "";
         isOpen = true;
@@ -35,7 +35,7 @@ public class Chest {
     }
 
     // Getters
-    public Image getImage(){
+    public Image getImage() {
         return image;
     }
     public boolean isOpen() {

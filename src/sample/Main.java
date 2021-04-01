@@ -86,21 +86,28 @@ public class Main extends Application {
                     "../image/Monster/slime" + Main.REPLACE_DIRECTION_REGEX + ".png",
                     5
             );
-    public static final ImageSheet MONSTER_BULLET_SHEET = new SingularImageSheet(getImageFrom("../image/bulletM.png"));
-    public static final ImageSheet PLAYER_BULLET_SHEET = new SingularImageSheet(getImageFrom("../image/bulletP.png"));
-    public static final ImageSheet TRANSPARENT_SHEET = new SingularImageSheet(getImageFrom("../image/transparent.png"));
-    public static final Image TRANSPARENT_IMAGE = new Image(Main.class.getResource("../image/transparent.png").toExternalForm());
-    private static final DirectionalImageSheet getDirectionalImageSheet(String directionImageBase, int numDirectionFrames) {
+    public static final ImageSheet MONSTER_BULLET_SHEET =
+            new SingularImageSheet(getImageFrom("../image/bulletM.png"));
+    public static final ImageSheet PLAYER_BULLET_SHEET =
+            new SingularImageSheet(getImageFrom("../image/bulletP.png"));
+    public static final ImageSheet TRANSPARENT_SHEET =
+            new SingularImageSheet(getImageFrom("../image/transparent.png"));
+    public static final Image TRANSPARENT_IMAGE =
+            new Image(Main.class.getResource("../image/transparent.png").toExternalForm());
+    private static final DirectionalImageSheet getDirectionalImageSheet(
+            String directionImageBase, int numDirectionFrames) {
         // Find <direction> tag in direction image base address
         int replaceIndex = directionImageBase.indexOf(REPLACE_DIRECTION_REGEX);
 
         if (replaceIndex == -1) {
-            throw new IllegalArgumentException("No " + REPLACE_DIRECTION_REGEX + " regex to replace with direction"
+            throw new IllegalArgumentException("No "
+                    + REPLACE_DIRECTION_REGEX + " regex to replace with direction"
                     + " in the base address for the directional images.");
         }
 
         String leftStr = directionImageBase.substring(0, replaceIndex);
-        String rightStr = directionImageBase.substring(replaceIndex + REPLACE_DIRECTION_REGEX.length());
+        String rightStr = directionImageBase.substring(replaceIndex
+                + REPLACE_DIRECTION_REGEX.length());
 
         DirectionalImageSheet sheet = new DirectionalImageSheet();
         String[] directions = new String[4];
@@ -131,13 +138,16 @@ public class Main extends Application {
         return sheet;
     }
 
-    public static final CharacterImageSheet PLAYER_IMAGE_SHEET = new CharacterImageSheet(PLAYER_STANDING_SHEET, PLAYER_WALKING_SHEET);
+    public static final CharacterImageSheet PLAYER_IMAGE_SHEET =
+            new CharacterImageSheet(PLAYER_STANDING_SHEET, PLAYER_WALKING_SHEET);
 
-    public static final List<Image> CHEST_IMAGE = new LinkedList<Image>() {{
-        add(new Image(Main.class.getResource("../image/closedChest.png").toExternalForm()));
-        add(new Image(Main.class.getResource("../image/openChest.png").toExternalForm()));
-        add(new Image(Main.class.getResource("../image/emptyChest.png").toExternalForm()));
-    }};
+    public static final List<Image> CHEST_IMAGE = new LinkedList<Image>() {
+        {
+            add(new Image(Main.class.getResource("../image/closedChest.png").toExternalForm()));
+            add(new Image(Main.class.getResource("../image/openChest.png").toExternalForm()));
+            add(new Image(Main.class.getResource("../image/emptyChest.png").toExternalForm()));
+        }
+    };
     public static final Image WALLTILE =
             new Image(Main.class.getResource("../image/spr_dungeon_wall.png").toExternalForm());
     public static final Image EXITTILE =

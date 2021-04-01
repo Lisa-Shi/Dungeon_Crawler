@@ -20,7 +20,8 @@ public class WallTile extends Tile implements Collideable {
     public int getInitialX() {
         return initialX;
     }
-    public Room getRoom(){return inRoom;}
+    public Room getRoom() {
+        return inRoom; }
     public int getInitialY() {
         return initialY;
     }
@@ -28,10 +29,11 @@ public class WallTile extends Tile implements Collideable {
     public CollisionBox getCollisionBox() {
         return collisionBox;
     }
-    public boolean equals(Object other){
-        if(other instanceof WallTile){
+    public boolean equals(Object other) {
+        if (other instanceof WallTile) {
             return ((WallTile) other).getRoom().equals(inRoom)
-                    && ((WallTile) other).getInitialX() == initialX && ((WallTile) other).getInitialY() == initialY;
+                    && ((WallTile) other).getInitialX() == initialX
+                    && ((WallTile) other).getInitialY() == initialY;
         }
         return false;
     }

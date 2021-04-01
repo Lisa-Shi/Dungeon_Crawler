@@ -184,8 +184,8 @@ public class PhysicsController {
         this.acceleration = acceleration;
     }
     @Override
-    public boolean equals(Object other){
-        if( other instanceof Vector2D){
+    public boolean equals(Object other) {
+        if (other instanceof Vector2D) {
             return ((Vector2D) other).equals(this.position);
         }
         return false;

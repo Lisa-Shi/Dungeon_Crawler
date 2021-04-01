@@ -11,7 +11,8 @@ public class DynamicCollisionBox extends CollisionBox {
     public DynamicCollisionBox(PhysicsController physics, PolygonWireframe wireframe) {
         this(physics, wireframe, true);
     }
-    public DynamicCollisionBox(PhysicsController physics, PolygonWireframe wireframe, boolean solid) {
+    public DynamicCollisionBox(PhysicsController physics,
+                               PolygonWireframe wireframe, boolean solid) {
         super(physics, wireframe);
         this.collisionPoints = new ArrayList<>();
         this.setSolid(solid);

@@ -19,7 +19,7 @@ public class SpriteController {
 
     // Misc.
     public void startAnimation() {
-        animationTimer.schedule(nextAnimationFrame, 100,100);
+        animationTimer.schedule(nextAnimationFrame, 100, 100);
     }
     private TimerTask nextAnimationFrame = new TimerTask() {
         @Override

@@ -2,7 +2,6 @@ package sample;
 
 import javafx.scene.layout.Pane;
 
-import java.lang.reflect.Constructor;
 import java.util.LinkedList;
 import java.util.*;
 
@@ -21,7 +20,7 @@ public class Room implements Physical {
     private LinkedList<GameObject> toRemove = new LinkedList<>();
     private LinkedList<HPBar> healthbars = new LinkedList<>();
     private PhysicsController physics;
-    public LinkedList<HPBar> getHealthbars(){
+    public LinkedList<HPBar> getHealthbars() {
         return healthbars;
     }
     // Constructors
@@ -53,15 +52,16 @@ public class Room implements Physical {
     public void generateMonsters() {
         if (monsters.isEmpty()) {
             Monster monster = null;
-            if( roomId == 999){
+            if (roomId == 999) {
                 // Boss monster
                 monster = new BuzzMonster(this, width / 2, height / 2);
                 add(monster);
-            }else if (roomId != 0) {
+            } else if (roomId != 0) {
                 Random ran = new Random();
                 int numOfMon = ran.nextInt(5) + 1;
                 for (int i = 1; i <= numOfMon; i++) {
-                    int monsterX, monsterY;
+                    int monsterX;
+                    int monsterY;
                     do {
                         monsterX = ran.nextInt(width - 2) + 1;
                         monsterY = ran.nextInt(height - 2) + 1;
@@ -79,9 +79,10 @@ public class Room implements Physical {
     }
 
     // Methods
-    public boolean findExistingCollideable(Monster monster){
-        for (Collideable object: collideables){
-            if( ((DynamicCollisionBox) monster.getCollisionBox()).collidedWith(object.getCollisionBox())){
+    public boolean findExistingCollideable(Monster monster) {
+        for (Collideable object: collideables) {
+            if (((DynamicCollisionBox) monster.
+                    getCollisionBox()).collidedWith(object.getCollisionBox())) {
                 return true;
             }
         }
@@ -134,7 +135,7 @@ public class Room implements Physical {
         addFloorTiles();
         addSurroundingWalls();
         addAllSprites(pane);
-        for( Monster monster: monsters){
+        for (Monster monster: monsters) {
             monster.addHPBar(monster, this, pane);
         }
     }
@@ -248,7 +249,7 @@ public class Room implements Physical {
         if (obj instanceof Drawable) {
             drawables.add(0, (Drawable) obj);
         }
-        if( obj instanceof Monster) {
+        if (obj instanceof Monster) {
             monsters.add(0, (Monster) obj);
         }
     }

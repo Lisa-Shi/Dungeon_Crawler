@@ -49,7 +49,7 @@ public class CollisionBox {
     }
 
     // Setters
-    public void setSolid(boolean solid){
+    public void setSolid(boolean solid) {
         this.solid = solid;
     }
     /**
@@ -58,8 +58,8 @@ public class CollisionBox {
      * @return true if equal. otherwise false
      */
     @Override
-    public boolean equals(Object other){
-        if( other instanceof CollisionBox){
+    public boolean equals(Object other) {
+        if (other instanceof CollisionBox) {
             return ((CollisionBox) other).getPhysics().equals(this.physics)
                     && ((CollisionBox) other).isSolid() == this.isSolid();
         }

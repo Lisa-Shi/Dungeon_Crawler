@@ -17,7 +17,7 @@ public class Main extends Application {
     // Variables
     private Stage mainWindow;
     private Room firstRoom;
-
+    private GameStage r;
     public static final int GAME_WIDTH = 650;
     public static final int GAME_HEIGHT = 650;
 
@@ -86,6 +86,10 @@ public class Main extends Application {
                     "../image/Monster/slime" + Main.REPLACE_DIRECTION_REGEX + ".png",
                     5
             );
+
+    public static final ImageSheet ALL_MONSTER_SHEET =
+            new SingularImageSheet(getImageFrom("../image/Monster/monstersAll.png"));
+
     public static final ImageSheet MONSTER_BULLET_SHEET =
             new SingularImageSheet(getImageFrom("../image/bulletM.png"));
     public static final ImageSheet PLAYER_BULLET_SHEET =
@@ -98,7 +102,6 @@ public class Main extends Application {
             String directionImageBase, int numDirectionFrames) {
         // Find <direction> tag in direction image base address
         int replaceIndex = directionImageBase.indexOf(REPLACE_DIRECTION_REGEX);
-
         if (replaceIndex == -1) {
             throw new IllegalArgumentException("No "
                     + REPLACE_DIRECTION_REGEX + " regex to replace with direction"
@@ -165,7 +168,7 @@ public class Main extends Application {
     }
 
     /**
-     *Sets the stage to welcome scene
+     * Sets the stage to welcome scene
      */
     private void goWelcome() {
         //Creates the welcome screen
@@ -231,17 +234,25 @@ public class Main extends Application {
     private void goToRoom(Player player) {
         mainWindow.setScene(new Scene(new Pane(),
                 GAME_WIDTH, GAME_HEIGHT, false, SceneAntialiasing.DISABLED));
-        GameStage r = new GameStage(player, firstRoom);
+        this.r = new GameStage(player, firstRoom);
         try {
             r.start(mainWindow);
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
         Button exit = r.getExitButton();
         exit.setOnAction(event -> {
             goCongrat();
         });
+
+        Button restart = r.getRestartButton();
+        restart.setOnAction(event -> {
+            r = null;
+            goConfigScreen();
+        });
     }
+
+
     private void goCongrat() {
         CongratScreen welcome = new CongratScreen();
 
@@ -252,6 +263,7 @@ public class Main extends Application {
 
         mainWindow.show();
     }
+
     public static void main(String[] args) {
         launch(args);
     }

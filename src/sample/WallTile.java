@@ -1,3 +1,6 @@
+/**one of the tiles that construct the room
+ *
+ */
 package sample;
 
 public class WallTile extends Tile implements Collideable {

@@ -1,3 +1,8 @@
+/**
+ * this class is responsible for any thing that is related to
+ * visualization of the game object
+ */
+
 package sample;
 
 import java.util.Timer;
@@ -5,6 +10,8 @@ import java.util.TimerTask;
 
 public class SpriteController {
     // Variables
+    /**sprite is essential an image with position
+     */
     private Sprite sprite;
     private ImageReel reel;
     private static Timer animationTimer = new Timer();

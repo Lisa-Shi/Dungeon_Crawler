@@ -102,7 +102,9 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
     public Vector2D getLocalToScenePosition() {
         Bounds bounds = this.getGraphics().getSprite().localToScene(
                 this.getGraphics().getSprite().getBoundsInLocal());
-        return new Vector2D(bounds.getCenterX(), bounds.getCenterY());
+        double centerX = bounds.getMinX() + bounds.getWidth() / 2.0;
+        double centerY = bounds.getMinY() + bounds.getHeight() / 2.0;
+        return new Vector2D(centerX, centerY);
     }
     @Override
     public CollisionBox getCollisionBox() {
@@ -176,12 +178,13 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
                     return;
                 }
             }
-            ArrayList<Vector2D> successors = new ArrayList<>(
-                    List.of(new Vector2D(1, 0),
-                            new Vector2D(-1, 0),
-                            new Vector2D(0, 1),
-                            new Vector2D(0, -1))
-            );
+            ArrayList<Vector2D> successors = new ArrayList() {{
+                add(new Vector2D(1, 0));
+                add(new Vector2D(-1, 0));
+                add(new Vector2D(0, 1));
+                add(new Vector2D(0, -1));
+            }};
+
             ArrayList<Vector2D> removeList = new ArrayList<>();
             for (Vector2D successor: successors) {
                 current = current.add(successor);

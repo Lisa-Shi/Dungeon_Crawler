@@ -54,7 +54,8 @@ public class LoseScreen {
         this.restart = restart;
         HBox buttonBox = LRNavigate.buildBox(restart, exit);
         try {
-            Image image = new Image(Main.class.getResource("../image/Monster/monstersAll.png").toExternalForm());
+            Image image = new Image(Main.class.getResource(
+                    "../image/Monster/monstersAll.png").toExternalForm());
             ImageView imageView = new ImageView(image);
             imageView.setFitHeight(Main.GAME_HEIGHT  / 1.5);
             imageView.setFitWidth(Main.GAME_WIDTH  / 1.5);

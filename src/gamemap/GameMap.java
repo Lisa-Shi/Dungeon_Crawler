@@ -32,6 +32,15 @@ public class GameMap {
         start.generateExits(adjList.get(start));
     }
 
+    public void restartMap() {
+        start = null;
+        end = null;
+        currentRoom = null;
+        rooms = null;
+        adjList = new HashMap<>();
+        edge = new HashSet<>();
+    }
+
     private void addRooms() {
         for (int i = 0; i < 6; i++) {
             rooms.add(new Room(20, 20));

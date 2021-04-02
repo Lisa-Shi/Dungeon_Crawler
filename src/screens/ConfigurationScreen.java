@@ -201,24 +201,4 @@ public class ConfigurationScreen {
     public Button getGoRoom() {
         return goRoom;
     }
-
-    /*
-    private ImageView createImage() {
-        StackPane base;
-        try {
-            Image titleImage = new Image(
-            new FileInputStream("file:/Resources/maxim-revin-saiph21.jpg"));
-            ImageView imageView = new ImageView(titleImage);
-            imageView.setPreserveRatio(true);
-            imageView.setFitHeight(height);
-            imageView.setFitWidth(width);
-            re
-        } catch (FileNotFoundException e) {
-            base = new StackPane();
-            base.setBackground();
-            System.out.println("Unable to load gameobjects.graphics.image");
-        }
-    }
-
-     */
 }

@@ -29,7 +29,7 @@ public class MonsterTest  extends ApplicationTest {
         game.start(new Stage());
     }
     @Test
-    public void monsterMoveTowardPlayer() {
+    public void monsterMove() {
         Room room = game.getRoom();
         ExitTile exit = room.getExits().get(0);
         player.getPhysics().setPosition(exit.getPhysics().getPosition());

@@ -5,8 +5,6 @@ import gameobjects.Player;
 import gameobjects.monsters.Monster;
 import gameobjects.physics.Vector2D;
 import gameobjects.tiles.ExitTile;
-import javafx.application.Platform;
-import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import main.GameStage;
 import main.Main;
@@ -21,7 +19,7 @@ import static org.testfx.api.FxAssert.verifyThat;
 /**
  * Unit test for checking that player behaves properly once health = 0
  */
-public class testLoseScreen extends ApplicationTest {
+public class LoseScreenTest extends ApplicationTest {
     private GameStage game;
     private Player player1;
     private Player player2;

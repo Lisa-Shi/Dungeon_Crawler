@@ -62,7 +62,10 @@ public class GameStage extends Stage {
     private Text text = new Text();
     private Text healthText = new Text();
     private Text testingPurpose = new Text();
-    public static Room prevRoom;
+
+
+
+    private static Room prevRoom;
 
     private ProgressBar pbar = new ProgressBar(0);
     private LinkedList<ProgressBar> monsterHP = new LinkedList<>();
@@ -458,5 +461,12 @@ public class GameStage extends Stage {
 
     public Button getRestartButton() {
         return restartButton;
+    }
+    public static Room getPrevRoom() {
+        return prevRoom;
+    }
+
+    public static void setPrevRoom(Room prevRoom) {
+        GameStage.prevRoom = prevRoom;
     }
 }

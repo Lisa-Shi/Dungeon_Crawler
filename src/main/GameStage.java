@@ -104,6 +104,7 @@ public class GameStage extends Stage {
         scene = new Scene(createContent());
 
         pane.getChildren().add(player.getGraphics().getSprite());
+
         text.setFont(new Font(20));
         text.setText("$" + player.getMoney());
         healthText.setText("HP: " + player.getHealth());

@@ -237,7 +237,9 @@ public class GameStage extends Stage {
         }
     }
     private void moveMonsters() {
-        for (Monster monster : room.getMonsters()) {
+        for (int i = 0; i < room.getMonsters().size(); i++) {
+            Monster monster = room.getMonsters().get(i);
+
             if (!monster.isDead()) {
                 monster.face(player, room);
                 monster.update(camera);
@@ -251,6 +253,8 @@ public class GameStage extends Stage {
                 room.getMonsters().remove(monster);
                 monster.getHPBar().expire();
                 pane.getChildren().remove(monster);
+
+                i--;
             }
         }
         Timeline timeline = new Timeline(new KeyFrame(

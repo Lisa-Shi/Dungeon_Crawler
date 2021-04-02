@@ -16,7 +16,7 @@ import org.testfx.framework.junit.ApplicationTest;
 
 import static org.junit.Assert.*;
 
-public class TestPlayerShoot extends ApplicationTest {
+public class PlayerShootTest extends ApplicationTest {
     private GameStage game;
     private Room room;
     private Player player1;

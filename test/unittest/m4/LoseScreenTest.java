@@ -19,7 +19,7 @@ import static org.testfx.api.FxAssert.verifyThat;
 /**
  * Unit test for checking that player behaves properly once health = 0
  */
-public class TestLoseScreen extends ApplicationTest {
+public class LoseScreenTest extends ApplicationTest {
     private GameStage game;
     private Player player1;
     private Player player2;

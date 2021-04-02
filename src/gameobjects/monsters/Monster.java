@@ -128,7 +128,7 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
                     hpBar.getPhysics().pushDown(Main.ENEMY_CONTROL_FORCE);
                     getPhysics().pushDown(Main.ENEMY_CONTROL_FORCE);
                 default:
-                    break;
+                break;
             }
         }
         super.update(camera);
@@ -234,12 +234,14 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
                     return;
                 }
             }
-            ArrayList<Vector2D> successors = new ArrayList() {{
-                add(new Vector2D(1, 0));
-                add(new Vector2D(-1, 0));
-                add(new Vector2D(0, 1));
-                add(new Vector2D(0, -1));
-            }};
+            ArrayList<Vector2D> successors = new ArrayList() {
+                {
+                    add(new Vector2D(1, 0));
+                    add(new Vector2D(-1, 0));
+                    add(new Vector2D(0, 1));
+                    add(new Vector2D(0, -1));
+                }
+            };
 
             ArrayList<Vector2D> removeList = new ArrayList<>();
             for (Vector2D successor: successors) {

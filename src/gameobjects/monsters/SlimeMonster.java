@@ -4,7 +4,6 @@
 package gameobjects.monsters;
 
 import gameobjects.Damageable;
-import gameobjects.Projectile;
 import gameobjects.graphics.functionality.CharacterImageSheet;
 import javafx.scene.layout.Pane;
 import main.Main;
@@ -15,7 +14,8 @@ public class SlimeMonster extends Monster {
         super(room, 50, 50, 10, initialX, initialY, Main.SLIME_IMAGE_SHEET);
     }
     public boolean inRange(Damageable other) {
-        return (Math.sqrt(other.getPhysics().getPosition().distanceSquared(getPhysics().getPosition())) < Main.SLIME_ATTACK_RADIUS);
+        return (Math.sqrt(other.getPhysics().getPosition().
+                distanceSquared(getPhysics().getPosition())) < Main.SLIME_ATTACK_RADIUS);
     }
     @Override
     public void attack(Room room, Pane pane, Damageable other) {
@@ -24,16 +24,21 @@ public class SlimeMonster extends Monster {
 
             // This can be refactored
             if (getFacing().equals("W")) {
-                getGraphics().setCurrentReel(((CharacterImageSheet) getSpriteSheet()).getAttackSheet().getUpImage());
+                getGraphics().setCurrentReel(
+                        ((CharacterImageSheet) getSpriteSheet()).getAttackSheet().getUpImage());
             } else if (getFacing().equals("A")) {
-                getGraphics().setCurrentReel(((CharacterImageSheet) getSpriteSheet()).getAttackSheet().getLeftImage());
+                getGraphics().setCurrentReel(
+                        ((CharacterImageSheet) getSpriteSheet()).getAttackSheet().getLeftImage());
             } else if (getFacing().equals("S")) {
-                getGraphics().setCurrentReel(((CharacterImageSheet) getSpriteSheet()).getAttackSheet().getDownImage());
+                getGraphics().setCurrentReel(
+                        ((CharacterImageSheet) getSpriteSheet()).getAttackSheet().getDownImage());
             } else {
-                getGraphics().setCurrentReel(((CharacterImageSheet) getSpriteSheet()).getAttackSheet().getRightImage());
+                getGraphics().setCurrentReel(
+                        ((CharacterImageSheet) getSpriteSheet()).getAttackSheet().getRightImage());
             }
         } else {
-            getGraphics().setCurrentReel(((CharacterImageSheet) getSpriteSheet()).getStandSheet().getInitialReel());
+            getGraphics().setCurrentReel(
+                    ((CharacterImageSheet) getSpriteSheet()).getStandSheet().getInitialReel());
         }
     }
 }

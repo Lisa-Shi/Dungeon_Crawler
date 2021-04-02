@@ -42,6 +42,10 @@ public class Room implements Physical {
 
         this.toRemove = new LinkedList<>();
     }
+    public void restart() {
+        clear();
+        id = 0;
+    }
     public Room(int width, int height, int inputId) {
         roomId = inputId;
         this.width = width;
@@ -317,5 +321,9 @@ public class Room implements Physical {
     @Override
     public int hashCode() {
         return roomId;
+    }
+
+    public LinkedList<Drawable> getDrawables() {
+        return drawables;
     }
 }

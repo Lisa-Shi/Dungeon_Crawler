@@ -36,7 +36,11 @@ public class GameStage extends Stage {
     private boolean playerIsMovingUp;
     private boolean playerIsMovingDown;
 
+    private Button winButton;
+    private Button restartButton;
     private Button exitButton;
+
+    private AnimationTimer timer;
     private Player player;
     private Camera camera;
     private Room room;
@@ -66,7 +70,10 @@ public class GameStage extends Stage {
 
         room = firstRoom;
         map = new GameMap(room);
-        exitButton = new Button("finish");
+
+        winButton = new Button("finish");
+        restartButton = new Button("restart");
+        exitButton = new Button("exit");
 
         Timeline timeline = new Timeline(new KeyFrame(
             Duration.millis(Main.MONSTER_ATTACK_TIME),
@@ -124,7 +131,7 @@ public class GameStage extends Stage {
      */
     private Parent createContent() {
         pane.setPrefSize(Main.GAME_WIDTH, Main.GAME_HEIGHT);
-        AnimationTimer timer = new AnimationTimer() {
+        timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
                 update();
@@ -135,25 +142,47 @@ public class GameStage extends Stage {
         return pane;
     }
 
+
     /**
      * Updates room physics, player movement from keyboard input,
      * etc.
      */
     private final List<Image> direction = new ArrayList<>();
     public void update() {
-        player.update(camera, room.getCollideables());
+        if (player.getHealth() <= 0) {
+            stop();
+        } else {
+            player.update(camera, room.getCollideables());
 
-        switchPlayerGraphicsStateToStill();
+            switchPlayerGraphicsStateToStill();
 
-        movePlayer();
-        //moveMonsters();
-        teleportPlayerToEnteredRoom();
+            movePlayer();
+            teleportPlayerToEnteredRoom();
 
-        room.update(camera);
-        camera.update(null);
+            room.update(camera);
+            camera.update(null);
 
-        updateText();
+            updateText();
+        }
+
     }
+
+    /**
+     * Helper method to stop the game.
+     *
+     * Clears the room so that all sprites will stop.
+     * Restarts the map so that game restarts in room 0.
+     * Creates the losing screen.
+     */
+    private void stop() {
+        timer.stop();
+        room.restart();
+        map.restartMap();
+        LoseScreen screen = new LoseScreen();
+        screen.createButton(exitButton, restartButton);
+        screen.setStage(stage);
+    }
+
     private void updateText() {
         text.setText("$" + player.getMoney());
         healthText.setText("HP: " + player.getHealth());
@@ -216,8 +245,15 @@ public class GameStage extends Stage {
         timeline.play();
     }
 
+//    private void stopMosters() {
+//        for (Monster monster : room.getMonsters()) {
+//            monster.getPhysics().setVelocity(new Vector2D(0.0, 0.0));
+//            monster.getPhysics().setAcceleration(new Vector2D(0.0, 0.0));
+//        }
+//    }
+
     private void teleportPlayerToEnteredRoom() {
-        if (!GameMap.enterRoom().equals(room)) {
+        if (room != null && map != null && !GameMap.enterRoom().equals(room)) {
             Room previous = room;
             room = GameMap.enterRoom();
             enterRoom();
@@ -302,9 +338,9 @@ public class GameStage extends Stage {
         }*/
         Scene scene = new Scene(pane);
         if (room.getRoomId() == 999) {
-            infoBar.getChildren().add(exitButton);
+            infoBar.getChildren().add(winButton);
         } else {
-            infoBar.getChildren().remove(exitButton);
+            infoBar.getChildren().remove(winButton);
         }
         text.setText("$" + player.getMoney());
         testingPurpose.setText("now in room " + room.getRoomId() + " \n");
@@ -312,9 +348,15 @@ public class GameStage extends Stage {
         pane.getChildren().add(infoBar);
         scene.setOnKeyPressed(keyPressed);
         scene.setOnKeyReleased(keyReleased);
+
+
+
         stage.setScene(scene);
         stage.show();
     }
+
+
+
     public Room getRoom() {
         return room;
     }
@@ -399,10 +441,16 @@ public class GameStage extends Stage {
     }
 
     public Button getExitButton() {
-        return exitButton;
+        return winButton;
     }
     public Camera getCamera() {
         return camera;
     }
+    public Player getPlayer() {
+        return player;
+    }
 
+    public Button getRestartButton() {
+        return restartButton;
+    }
 }

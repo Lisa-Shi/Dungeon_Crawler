@@ -17,6 +17,7 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
     private int difficulty;
     private int holdingWeapon; // index of weapon in the weapon list
     private int health;
+    private int damageAmt = 1;
     private Vector2D direction;
 
     private DynamicCollisionBox collisionBox;
@@ -130,8 +131,7 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
      */
     @Override
     public void hurt(int healthDamage) {
-        health -= healthDamage;
-
+        health -= healthDamage * damageAmt;
     }
 
     /**player is legal if the name is not empty string and difficulty is not -1

@@ -57,9 +57,9 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
         this.maxHealth = maxHealth;
         this.room = room;
         this.sheet = sheet;
-        if( this.health > maxHealth){
+        if (this.health > maxHealth) {
             this.health = maxHealth;
-        }else {
+        } else {
             this.health = health;
         }
         this.damagePerHit = damagePerHit;
@@ -112,23 +112,24 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
     public void update(Camera camera) {
         if (hpBar != null) {
             switch (facing) {
-                case "A":
-                    hpBar.getPhysics().pushLeft(Main.ENEMY_CONTROL_FORCE);
-                    getPhysics().pushLeft(Main.ENEMY_CONTROL_FORCE);
-                    break;
-                case "D":
-                    hpBar.getPhysics().pushRight(Main.ENEMY_CONTROL_FORCE);
-                    getPhysics().pushRight(Main.ENEMY_CONTROL_FORCE);
-                    break;
-                case "W":
-                    hpBar.getPhysics().pushUp(Main.ENEMY_CONTROL_FORCE);
-                    getPhysics().pushUp(Main.ENEMY_CONTROL_FORCE);
-                    break;
-                case "S":
-                    hpBar.getPhysics().pushDown(Main.ENEMY_CONTROL_FORCE);
-                    getPhysics().pushDown(Main.ENEMY_CONTROL_FORCE);
-                default:
-                    break;
+            case "A":
+                hpBar.getPhysics().pushLeft(Main.ENEMY_CONTROL_FORCE);
+                getPhysics().pushLeft(Main.ENEMY_CONTROL_FORCE);
+                break;
+            case "D":
+                hpBar.getPhysics().pushRight(Main.ENEMY_CONTROL_FORCE);
+                getPhysics().pushRight(Main.ENEMY_CONTROL_FORCE);
+                break;
+            case "W":
+                hpBar.getPhysics().pushUp(Main.ENEMY_CONTROL_FORCE);
+                getPhysics().pushUp(Main.ENEMY_CONTROL_FORCE);
+                break;
+            case "S":
+                hpBar.getPhysics().pushDown(Main.ENEMY_CONTROL_FORCE);
+                getPhysics().pushDown(Main.ENEMY_CONTROL_FORCE);
+                break;
+            default:
+                break;
             }
         }
         super.update(camera);
@@ -234,12 +235,14 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
                     return;
                 }
             }
-            ArrayList<Vector2D> successors = new ArrayList() {{
-                add(new Vector2D(1, 0));
-                add(new Vector2D(-1, 0));
-                add(new Vector2D(0, 1));
-                add(new Vector2D(0, -1));
-            }};
+            ArrayList<Vector2D> successors = new ArrayList() {
+                {
+                    add(new Vector2D(1, 0));
+                    add(new Vector2D(-1, 0));
+                    add(new Vector2D(0, 1));
+                    add(new Vector2D(0, -1));
+                }
+            };
 
             ArrayList<Vector2D> removeList = new ArrayList<>();
             for (Vector2D successor: successors) {

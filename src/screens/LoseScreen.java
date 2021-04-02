@@ -53,7 +53,9 @@ public class LoseScreen {
      */
     public void createButton(Button exit, Button restart) {
         this.exit = exit;
+        exit.setId("exit");
         this.restart = restart;
+        restart.setId("restart");
         HBox buttonBox = LRNavigate.buildBox(restart, exit);
         try {
             Image image = new Image(Main.class.getResource("../gameobjects/graphics/sprites/monster/monstersAll.png").toExternalForm());
@@ -74,6 +76,7 @@ public class LoseScreen {
             stage.close();
             Platform.exit();
         });
+
     }
 
     public Button getExit() {

@@ -104,6 +104,7 @@ public class GameStage extends Stage {
         scene = new Scene(createContent());
 
         pane.getChildren().add(player.getGraphics().getSprite());
+
         text.setFont(new Font(20));
         text.setText("$" + player.getMoney());
         healthText.setText("HP: " + player.getHealth());
@@ -256,13 +257,6 @@ public class GameStage extends Stage {
             ae -> moveMonsters()));
         timeline.play();
     }
-
-//    private void stopMosters() {
-//        for (Monster monster : room.getMonsters()) {
-//            monster.getPhysics().setVelocity(new Vector2D(0.0, 0.0));
-//            monster.getPhysics().setAcceleration(new Vector2D(0.0, 0.0));
-//        }
-//    }
 
     private void teleportPlayerToEnteredRoom() {
         if (room != null && map != null && !GameMap.enterRoom().equals(room)) {

@@ -143,7 +143,7 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
      */
     @Override
     public void hurt(int healthDamage) {
-        health -= healthDamage * damageAmt;
+        health -= (healthDamage * damageAmt);
     }
 
     /**player is legal if the name is not empty string and difficulty is not -1
@@ -245,5 +245,13 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
     @Override
     public int getHealth() {
         return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public void setDamageAmt(int damageAmt) {
+        this.damageAmt = health;
     }
 }

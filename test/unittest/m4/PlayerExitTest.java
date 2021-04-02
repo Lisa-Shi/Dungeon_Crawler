@@ -35,7 +35,8 @@ public class PlayerExitTest extends ApplicationTest {
         int exitNum = exits.size() - 1;
 
         for (int i = 0; i < exits.size() - 1; i++) {
-            if (exits.get(i).getCollisionBox() != null && exits.get(i).getCollisionBox().isSolid()) {
+            if (exits.get(i).getCollisionBox() != null
+                    && exits.get(i).getCollisionBox().isSolid()) {
                 cntr++;
             }
         }

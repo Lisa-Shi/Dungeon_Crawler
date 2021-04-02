@@ -248,6 +248,7 @@ public class GameStage extends Stage {
                         new SingularImageSheet(Main.TRANSPARENT_IMAGE).getInitialReel());
                 room.getCollideables().remove(monster);
                 room.getHealthbars().remove(monster.getHPBar());
+                room.getMonsters().remove(monster);
                 monster.getHPBar().expire();
                 pane.getChildren().remove(monster);
             }

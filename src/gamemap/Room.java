@@ -94,11 +94,13 @@ public class Room implements Physical {
                     do {
                         monsterX = ran.nextInt(width - 2) + 1;
                         monsterY = ran.nextInt(height - 2) + 1;
-                        int monsterType = ran.nextInt(2);
+                        int monsterType = ran.nextInt(3);
                         if (monsterType == 0) {
                             monster = new SlimeMonster(this, monsterX, monsterY);
-                        } else {
+                        } else if (monsterType == 1) {
                             monster = new MagicianMonster(this, monsterX, monsterY);
+                        } else {
+                            monster = new BuzzMonster(this, monsterX, monsterY);
                         }
                     } while (findExistingCollideable(monster));
                     add(monster);

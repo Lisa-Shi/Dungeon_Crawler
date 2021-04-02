@@ -239,7 +239,7 @@ public class GameStage extends Stage {
             if (!monster.isDead()) {
                 monster.face(player, room);
                 monster.update(camera);
-                monster.launchProjectileTowardsPlayer(room, pane, player);
+                monster.attack(room, pane, player);
             } else {
                 monster.getGraphics().getSprite().setImage(Main.TRANSPARENT_IMAGE);
                 monster.getGraphics().setCurrentReel(
@@ -255,13 +255,6 @@ public class GameStage extends Stage {
             ae -> moveMonsters()));
         timeline.play();
     }
-
-//    private void stopMosters() {
-//        for (Monster monster : room.getMonsters()) {
-//            monster.getPhysics().setVelocity(new Vector2D(0.0, 0.0));
-//            monster.getPhysics().setAcceleration(new Vector2D(0.0, 0.0));
-//        }
-//    }
 
     private void teleportPlayerToEnteredRoom() {
         if (room != null && map != null && !GameMap.enterRoom().equals(room)) {

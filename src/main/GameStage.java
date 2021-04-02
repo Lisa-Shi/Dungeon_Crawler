@@ -62,6 +62,7 @@ public class GameStage extends Stage {
     private Text text = new Text();
     private Text healthText = new Text();
     private Text testingPurpose = new Text();
+    public static Room prevRoom;
 
     private ProgressBar pbar = new ProgressBar(0);
     private LinkedList<ProgressBar> monsterHP = new LinkedList<>();
@@ -265,11 +266,11 @@ public class GameStage extends Stage {
 
     private void teleportPlayerToEnteredRoom() {
         if (room != null && map != null && !GameMap.enterRoom().equals(room)) {
-            Room previous = room;
+            prevRoom = room;
             room = GameMap.enterRoom();
             enterRoom();
             player.update(camera, room.getCollideables());
-            matchPlayerExit(previous);
+            matchPlayerExit(prevRoom);
 
             if (!room.getCollideables().contains(player)) {
                 room.getCollideables().add(player);

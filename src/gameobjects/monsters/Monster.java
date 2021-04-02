@@ -9,6 +9,7 @@ import gameobjects.GameObject;
 import gameobjects.HPBar;
 import gameobjects.Player;
 import gameobjects.Projectile;
+import gameobjects.graphics.functionality.ImageSheet;
 import gameobjects.physics.collisions.Collideable;
 import gameobjects.physics.collisions.CollisionBox;
 import gameobjects.physics.collisions.DynamicCollisionBox;
@@ -26,7 +27,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.*;
 
-public class Monster extends GameObject implements Damageable, Collideable, Drawable {
+public abstract class Monster extends GameObject implements Damageable, Collideable, Drawable {
     // Variables
     private int maxHealth;
     private int health;
@@ -35,7 +36,7 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
     private DynamicCollisionBox collisionBox;
     private boolean isDead = false;
     private String facing;
-    private DirectionalImageSheet sheet;
+    private ImageSheet sheet;
     private HPBar hpBar;
     private PropertyChangeSupport support;
     
@@ -51,7 +52,7 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
      */
     public Monster(Room room, int maxHealth, int health,
                    int damagePerHit, double initialX,
-                   double initialY, DirectionalImageSheet sheet) {
+                   double initialY, ImageSheet sheet) {
         super(room, initialX * Main.TILE_WIDTH, initialY * Main.TILE_HEIGHT,
                 Main.MONSTER_WIDTH / 2, Main.MONSTER_HEIGHT / 2, sheet);
         this.maxHealth = maxHealth;
@@ -72,20 +73,12 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
     }
 
     /**
-     * emmit bullet toward player
+     * attack player
      * @param room the room which the monster locats
      * @param pane overall pane
-     * @param player player
+     * @param other what to damage
      */
-    public void launchProjectileTowardsPlayer(Room room, Pane pane, Player player) {
-        Projectile bullet = new Projectile(this, room, pane);
-
-        //room, pane, getPhysics().getPosition().getX(), getPhysics().getPosition().getY(),
-        //Main.BULLET_WIDTH/2, Main.BULLET_HEIGHT/2, Main.ENEMY_BULLET_DAMAGE);
-        room.add(bullet);
-        pane.getChildren().add(bullet.getGraphics().getSprite());
-        bullet.launchTowardsPoint(player.getPhysics().getPosition(), Main.ENEMY_BULLET_SPEED);
-    }
+    public abstract void attack(Room room, Pane pane, Damageable other);
 
     /**
      * add the hp bar to the pane
@@ -174,6 +167,10 @@ public class Monster extends GameObject implements Damageable, Collideable, Draw
 
     public boolean isDead() {
         return isDead;
+    }
+
+    public int getDamagePerHit() {
+        return damagePerHit;
     }
 
     public HPBar getHPBar() {

@@ -129,7 +129,7 @@ public class Room implements Physical {
      * @param listOfExit list of rooms that are adjacent to this room
      */
     public void generateExits(List<Room> listOfExit) {
-        if (exits.isEmpty()) {
+        if (exits.isEmpty() && listOfExit != null) {
             LinkedList<Vector2D> availableExits = new LinkedList<>();
             availableExits.add(
                     new Vector2D((int) (Math.random() * (width - 2) + 1), -1));

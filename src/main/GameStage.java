@@ -450,6 +450,9 @@ public class GameStage extends Stage {
     public Camera getCamera() {
         return camera;
     }
+    public Pane getPane() {
+        return pane;
+    }
     public Player getPlayer() {
         return player;
     }

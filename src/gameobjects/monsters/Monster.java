@@ -7,14 +7,11 @@ package gameobjects.monsters;
 import gameobjects.Damageable;
 import gameobjects.GameObject;
 import gameobjects.HPBar;
-import gameobjects.Player;
-import gameobjects.Projectile;
 import gameobjects.graphics.functionality.ImageSheet;
 import gameobjects.physics.collisions.Collideable;
 import gameobjects.physics.collisions.CollisionBox;
 import gameobjects.physics.collisions.DynamicCollisionBox;
 import gameobjects.physics.collisions.RectangleWireframe;
-import gameobjects.graphics.functionality.DirectionalImageSheet;
 import javafx.geometry.Bounds;
 import javafx.scene.layout.Pane;
 import gameobjects.physics.Camera;
@@ -120,6 +117,7 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
             case "S":
                 hpBar.getPhysics().pushDown(Main.ENEMY_CONTROL_FORCE);
                 getPhysics().pushDown(Main.ENEMY_CONTROL_FORCE);
+                break;
             default:
                 break;
             }

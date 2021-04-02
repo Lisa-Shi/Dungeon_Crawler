@@ -4,17 +4,12 @@ import gamemap.Room;
 import gameobjects.Player;
 import gameobjects.monsters.SlimeMonster;
 import gameobjects.physics.Vector2D;
-import gameobjects.tiles.ExitTile;
 import javafx.stage.Stage;
 import main.GameStage;
 import main.Main;
 import main.Weapon;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
-
-import java.util.LinkedList;
-
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class EnemyTest extends ApplicationTest {
@@ -49,7 +44,7 @@ public class EnemyTest extends ApplicationTest {
     @Test
     public void testSlimeOutOfRange() {
         int playerHealthBack = player.getHealth();
-        Vector2D addVector = (new Vector2D(1,1)).relen(100);
+        Vector2D addVector = (new Vector2D(1, 1)).relen(100);
 
         monster.getPhysics().setPosition(player.getPhysics().getPosition().add(addVector));
         monster.attack(game.getRoom(), game.getPane(), player);

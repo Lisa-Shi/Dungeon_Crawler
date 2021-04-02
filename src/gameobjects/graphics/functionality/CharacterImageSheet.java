@@ -10,7 +10,8 @@ public class CharacterImageSheet extends ImageSheet {
     private DirectionalImageSheet attackSheet;
 
     // Constructors
-    public CharacterImageSheet(DirectionalImageSheet standSheet, DirectionalImageSheet walkSheet, DirectionalImageSheet attackSheet) {
+    public CharacterImageSheet(DirectionalImageSheet standSheet,
+                               DirectionalImageSheet walkSheet, DirectionalImageSheet attackSheet) {
         this.standSheet = standSheet;
         this.walkSheet = walkSheet;
         this.attackSheet = attackSheet;

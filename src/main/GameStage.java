@@ -241,7 +241,7 @@ public class GameStage extends Stage {
             if (!monster.isDead()) {
                 monster.face(player, room);
                 monster.update(camera);
-                monster.launchProjectileTowardsPlayer(room, pane, player);
+                monster.attack(room, pane, player);
             } else {
                 monster.getGraphics().getSprite().setImage(Main.TRANSPARENT_IMAGE);
                 monster.getGraphics().setCurrentReel(
@@ -455,6 +455,9 @@ public class GameStage extends Stage {
     }
     public Camera getCamera() {
         return camera;
+    }
+    public Pane getPane() {
+        return pane;
     }
     public Player getPlayer() {
         return player;

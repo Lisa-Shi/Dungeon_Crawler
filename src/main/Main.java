@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -54,10 +55,12 @@ public class Main extends Application {
     public static final int ENEMY_BULLET_DAMAGE = 10;
     public static final int PLAYER_BULLET_DAMAGE = 5;
 
+
     //public static final int BULLET_TIME_UNTIL_EXPIRATION = 1000;
     public static final int ENEMY_BULLET_BOUNCES_UNTIL_EXPIRATION = 4;
 
     public static final int MONSTER_ATTACK_TIME = 1000;
+    public static final int SLIME_ATTACK_RADIUS = 100;
 
     public static final String REPLACE_DIRECTION_REGEX = "<direction>";
 
@@ -97,6 +100,11 @@ public class Main extends Application {
             getDirectionalImageSheet(
                     "../gameobjects/graphics/sprites/monster/slime"
                             + Main.REPLACE_DIRECTION_REGEX + ".png", 5
+            );
+    public static final DirectionalImageSheet SLIME_ATTACKING_SHEET =
+            getDirectionalImageSheet(
+                    "../gameobjects/graphics/sprites/monster/slimeAttack" + Main.REPLACE_DIRECTION_REGEX + ".png",
+                    5
             );
 
     public static final ImageSheet ALL_MONSTER_SHEET =
@@ -156,7 +164,9 @@ public class Main extends Application {
     }
 
     public static final CharacterImageSheet PLAYER_IMAGE_SHEET =
-            new CharacterImageSheet(PLAYER_STANDING_SHEET, PLAYER_WALKING_SHEET);
+            new CharacterImageSheet(PLAYER_STANDING_SHEET, PLAYER_WALKING_SHEET, null);
+    public static final CharacterImageSheet SLIME_IMAGE_SHEET =
+            new CharacterImageSheet(SLIME_STANDING_SHEET, null, SLIME_ATTACKING_SHEET);
 
     public static final List<Image> CHEST_IMAGE = new LinkedList<Image>() {
         {

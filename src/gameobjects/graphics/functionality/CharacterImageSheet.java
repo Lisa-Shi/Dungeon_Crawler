@@ -7,11 +7,13 @@ public class CharacterImageSheet extends ImageSheet {
     // Variables
     private DirectionalImageSheet standSheet;
     private DirectionalImageSheet walkSheet;
+    private DirectionalImageSheet attackSheet;
 
     // Constructors
-    public CharacterImageSheet(DirectionalImageSheet standSheet, DirectionalImageSheet walkSheet) {
+    public CharacterImageSheet(DirectionalImageSheet standSheet, DirectionalImageSheet walkSheet, DirectionalImageSheet attackSheet) {
         this.standSheet = standSheet;
         this.walkSheet = walkSheet;
+        this.attackSheet = attackSheet;
         setInitialReel(standSheet.getInitialReel());
     }
 
@@ -21,5 +23,8 @@ public class CharacterImageSheet extends ImageSheet {
     }
     public DirectionalImageSheet getWalkSheet() {
         return walkSheet;
+    }
+    public DirectionalImageSheet getAttackSheet() {
+        return attackSheet;
     }
 }

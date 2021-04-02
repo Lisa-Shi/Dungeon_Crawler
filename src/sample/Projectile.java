@@ -14,8 +14,7 @@ public class Projectile extends GameObject implements Collideable {
     private int bouncesLeft;
     private boolean isPlayer;
     private GameObject sprite;
-    //private ImageSheet img;
-    //private double scale;
+
     public Projectile(Player player, Room room, Pane pane) {
         this(room, pane, player.getPhysics().getPosition().getX(),
                 player.getPhysics().getPosition().getY(),

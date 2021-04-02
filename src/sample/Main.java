@@ -188,7 +188,7 @@ public class Main extends Application {
     /**
      * Sets the stage to configuration scene
      */
-    private void goConfigScreen() {
+    public void goConfigScreen() {
         //Creates the configuration screen and layout
         ConfigurationScreen configScene = new ConfigurationScreen(GAME_WIDTH, GAME_HEIGHT);
 
@@ -247,7 +247,6 @@ public class Main extends Application {
 
         Button restart = r.getRestartButton();
         restart.setOnAction(event -> {
-            r = null;
             goConfigScreen();
         });
     }

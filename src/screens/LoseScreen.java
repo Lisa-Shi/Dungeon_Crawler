@@ -9,7 +9,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import screens.LRNavigate;
 import main.Main;
 
 /**
@@ -53,10 +52,13 @@ public class LoseScreen {
      */
     public void createButton(Button exit, Button restart) {
         this.exit = exit;
+        exit.setId("exit");
         this.restart = restart;
+        restart.setId("restart");
         HBox buttonBox = LRNavigate.buildBox(restart, exit);
         try {
-            Image image = new Image(Main.class.getResource("../gameobjects/graphics/sprites/monster/monstersAll.png").toExternalForm());
+            Image image = new Image(Main.class.getResource(
+                    "../gameobjects/graphics/sprites/monster/monstersAll.png").toExternalForm());
             ImageView imageView = new ImageView(image);
             imageView.setFitHeight(Main.GAME_HEIGHT  / 1.5);
             imageView.setFitWidth(Main.GAME_WIDTH  / 1.5);
@@ -74,6 +76,7 @@ public class LoseScreen {
             stage.close();
             Platform.exit();
         });
+
     }
 
     public Button getExit() {

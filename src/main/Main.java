@@ -78,28 +78,28 @@ public class Main extends Application {
 
     private static final DirectionalImageSheet PLAYER_STANDING_SHEET =
             getDirectionalImageSheet(
-                    "../gameobjects/graphics/sprites/PlayerFace" + Main.REPLACE_DIRECTION_REGEX + ".png",
-                    1
+                    "../gameobjects/graphics/sprites/PlayerFace"
+                            + Main.REPLACE_DIRECTION_REGEX + ".png", 1
             );
     private static final DirectionalImageSheet PLAYER_WALKING_SHEET =
             getDirectionalImageSheet(
-                    "../gameobjects/graphics/sprites/PlayerWalking" + Main.REPLACE_DIRECTION_REGEX + ".png",
-                    2
+                    "../gameobjects/graphics/sprites/PlayerWalking"
+                            + Main.REPLACE_DIRECTION_REGEX + ".png", 2
             );
     public static final DirectionalImageSheet BUZZ_STANDING_SHEET =
             getDirectionalImageSheet(
-                    "../gameobjects/graphics/sprites/monster/Buzz" + Main.REPLACE_DIRECTION_REGEX + ".png",
-                    2
+                    "../gameobjects/graphics/sprites/monster/Buzz"
+                            + Main.REPLACE_DIRECTION_REGEX + ".png", 2
             );
     public static final DirectionalImageSheet MAGICIAN_STANDING_SHEET =
             getDirectionalImageSheet(
-                    "../gameobjects/graphics/sprites/monster/magicianFace" + Main.REPLACE_DIRECTION_REGEX + ".png",
-                    1
+                    "../gameobjects/graphics/sprites/monster/magicianFace"
+                            + Main.REPLACE_DIRECTION_REGEX + ".png", 1
             );
     public static final DirectionalImageSheet SLIME_STANDING_SHEET =
             getDirectionalImageSheet(
-                    "../gameobjects/graphics/sprites/monster/slime" + Main.REPLACE_DIRECTION_REGEX + ".png",
-                    5
+                    "../gameobjects/graphics/sprites/monster/slime"
+                            + Main.REPLACE_DIRECTION_REGEX + ".png", 5
             );
     public static final DirectionalImageSheet SLIME_ATTACKING_SHEET =
             getDirectionalImageSheet(
@@ -108,7 +108,8 @@ public class Main extends Application {
             );
 
     public static final ImageSheet ALL_MONSTER_SHEET =
-            new SingularImageSheet(getImageFrom("../gameobjects/graphics/sprites/monster/monstersAll.png"));
+            new SingularImageSheet(getImageFrom(
+                    "../gameobjects/graphics/sprites/monster/monstersAll.png"));
 
     public static final ImageSheet MONSTER_BULLET_SHEET =
             new SingularImageSheet(getImageFrom("../gameobjects/graphics/sprites/bulletM.png"));
@@ -117,7 +118,8 @@ public class Main extends Application {
     public static final ImageSheet TRANSPARENT_SHEET =
             new SingularImageSheet(getImageFrom("../gameobjects/graphics/sprites/transparent.png"));
     public static final Image TRANSPARENT_IMAGE =
-            new Image(Main.class.getResource("../gameobjects/graphics/sprites/transparent.png").toExternalForm());
+            new Image(Main.class.getResource(
+                    "../gameobjects/graphics/sprites/transparent.png").toExternalForm());
     private static final DirectionalImageSheet getDirectionalImageSheet(
             String directionImageBase, int numDirectionFrames) {
         // Find <direction> tag in direction gameobjects.graphics.sprites base address
@@ -168,17 +170,23 @@ public class Main extends Application {
 
     public static final List<Image> CHEST_IMAGE = new LinkedList<Image>() {
         {
-            add(new Image(Main.class.getResource("../gameobjects/graphics/sprites/closedChest.png").toExternalForm()));
-            add(new Image(Main.class.getResource("../gameobjects/graphics/sprites/openChest.png").toExternalForm()));
-            add(new Image(Main.class.getResource("../gameobjects/graphics/sprites/emptyChest.png").toExternalForm()));
+            add(new Image(Main.class.getResource(
+                    "../gameobjects/graphics/sprites/closedChest.png").toExternalForm()));
+            add(new Image(Main.class.getResource(
+                    "../gameobjects/graphics/sprites/openChest.png").toExternalForm()));
+            add(new Image(Main.class.getResource(
+                    "../gameobjects/graphics/sprites/emptyChest.png").toExternalForm()));
         }
     };
     public static final Image WALLTILE =
-            new Image(Main.class.getResource("../gameobjects/graphics/sprites/spr_dungeon_wall.png").toExternalForm());
+            new Image(Main.class.getResource(
+                    "../gameobjects/graphics/sprites/spr_dungeon_wall.png").toExternalForm());
     public static final Image EXITTILE =
-            new Image(Main.class.getResource("../gameobjects/graphics/sprites/spr_dungeon_exit.png").toExternalForm());
+            new Image(Main.class.getResource(
+                    "../gameobjects/graphics/sprites/spr_dungeon_exit.png").toExternalForm());
     public static final Image FLOORTILE =
-            new Image(Main.class.getResource("../gameobjects/graphics/sprites/spr_dungeon_tile.png").toExternalForm());
+            new Image(Main.class.getResource(
+                    "../gameobjects/graphics/sprites/spr_dungeon_tile.png").toExternalForm());
     private Player player;
 
     @Override
@@ -210,7 +218,7 @@ public class Main extends Application {
     /**
      * Sets the stage to configuration scene
      */
-    private void goConfigScreen() {
+    public void goConfigScreen() {
         //Creates the configuration screen and layout
         ConfigurationScreen configScene = new ConfigurationScreen(GAME_WIDTH, GAME_HEIGHT);
 
@@ -269,7 +277,6 @@ public class Main extends Application {
 
         Button restart = r.getRestartButton();
         restart.setOnAction(event -> {
-            r = null;
             goConfigScreen();
         });
     }

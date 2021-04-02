@@ -11,8 +11,7 @@ import main.Main;
 
 import java.util.LinkedList;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class PlayerExitTest extends ApplicationTest {
 
@@ -26,17 +25,21 @@ public class PlayerExitTest extends ApplicationTest {
                 1, 5), r, 2 * Main.TILE_WIDTH, 2 * Main.TILE_HEIGHT, 0);
         stage = new GameStage(player, r);
         stage.start(new Stage());
-        stage.getRoom().clear();
     }
 
     @Test
     public void testExitsClosed() {
 
         LinkedList<ExitTile> exits = stage.getRoom().getExits();
+        int cntr = 0;
+        int exitNum = exits.size() - 1;
 
         for (int i = 0; i < exits.size() - 1; i++) {
-            assertTrue(exits.get(i).getCollisionBox().isSolid());
+            if (exits.get(i).getCollisionBox() != null && exits.get(i).getCollisionBox().isSolid()) {
+                cntr++;
+            }
         }
+        assertEquals(cntr, exitNum);
     }
 
     @Test

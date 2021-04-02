@@ -15,7 +15,7 @@ import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import gameobjects.physics.PhysicsController;
 import gameobjects.physics.Camera;
-import screens.Main;
+import main.Main;
 import gamemap.Room;
 import gameobjects.physics.Vector2D;
 

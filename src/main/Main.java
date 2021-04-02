@@ -1,4 +1,4 @@
-package screens;
+package main;
 
 import gamemap.Room;
 import gameobjects.Player;
@@ -18,7 +18,9 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import main.GameStage;
+import screens.ConfigurationScreen;
+import screens.CongratScreen;
+import screens.WelcomeScreen;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -98,7 +100,7 @@ public class Main extends Application {
             );
 
     public static final ImageSheet ALL_MONSTER_SHEET =
-            new SingularImageSheet(getImageFrom("../image/Monster/monstersAll.png"));
+            new SingularImageSheet(getImageFrom("../gameobjects/graphics/sprites/monster/monstersAll.png"));
 
     public static final ImageSheet MONSTER_BULLET_SHEET =
             new SingularImageSheet(getImageFrom("../gameobjects/graphics/sprites/bulletM.png"));

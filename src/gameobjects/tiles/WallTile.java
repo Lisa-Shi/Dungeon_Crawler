@@ -6,7 +6,7 @@ package gameobjects.tiles;
 import gameobjects.physics.collisions.Collideable;
 import gameobjects.physics.collisions.CollisionBox;
 import gameobjects.physics.collisions.RectangleWireframe;
-import screens.Main;
+import main.Main;
 import gamemap.Room;
 
 public class WallTile extends Tile implements Collideable {

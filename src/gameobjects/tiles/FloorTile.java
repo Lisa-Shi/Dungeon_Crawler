@@ -1,6 +1,6 @@
 package gameobjects.tiles;
 
-import screens.Main;
+import main.Main;
 import gamemap.Room;
 
 public class FloorTile extends Tile {

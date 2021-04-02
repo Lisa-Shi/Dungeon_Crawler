@@ -12,7 +12,7 @@ import gameobjects.graphics.functionality.CharacterImageSheet;
 import javafx.scene.layout.Pane;
 import gameobjects.physics.Camera;
 import gameobjects.graphics.functionality.Drawable;
-import screens.Main;
+import main.Main;
 import gamemap.Room;
 import gameobjects.physics.Vector2D;
 import main.Weapon;

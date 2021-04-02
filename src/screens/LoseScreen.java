@@ -1,4 +1,4 @@
-package sample;
+package screens;
 
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -9,6 +9,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import screens.LRNavigate;
+import main.Main;
 
 /**
  * Creates the scene that appears when the player is defeated.
@@ -54,7 +56,7 @@ public class LoseScreen {
         this.restart = restart;
         HBox buttonBox = LRNavigate.buildBox(restart, exit);
         try {
-            Image image = new Image(Main.class.getResource("../image/Monster/monstersAll.png").toExternalForm());
+            Image image = new Image(Main.class.getResource("../gameobjects/graphics/sprites/monster/monstersAll.png").toExternalForm());
             ImageView imageView = new ImageView(image);
             imageView.setFitHeight(Main.GAME_HEIGHT  / 1.5);
             imageView.setFitWidth(Main.GAME_WIDTH  / 1.5);

@@ -2,7 +2,7 @@ package unittest.m2;
 
 import org.testfx.framework.junit.ApplicationTest;
 import main.GameStage;
-import screens.Main;
+import main.Main;
 import javafx.stage.Stage;
 import org.junit.Test;
 import gameobjects.Player;

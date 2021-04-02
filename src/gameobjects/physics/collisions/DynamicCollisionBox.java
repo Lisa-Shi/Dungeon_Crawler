@@ -1,6 +1,6 @@
 package gameobjects.physics.collisions;
 
-import screens.Main;
+import main.Main;
 import gameobjects.physics.PhysicsController;
 import gameobjects.physics.Vector2D;
 

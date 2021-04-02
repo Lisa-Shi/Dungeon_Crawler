@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 import main.*;
-import screens.Main;
+import main.Main;
 
 import java.util.LinkedList;
 

@@ -4,7 +4,7 @@
 package gameobjects.physics;
 
 import gameobjects.physics.collisions.Physical;
-import screens.Main;
+import main.Main;
 
 public class Camera implements Physical {
     // Variables

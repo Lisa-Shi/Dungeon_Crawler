@@ -1,7 +1,7 @@
 package gameobjects;
 
 import javafx.scene.image.Image;
-import screens.Main;
+import main.Main;
 
 public class Chest {
     // Variables

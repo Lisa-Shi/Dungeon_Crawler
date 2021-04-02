@@ -11,7 +11,7 @@ import gameobjects.physics.PhysicsController;
 import gameobjects.physics.PhysicsControllerRelative;
 import gameobjects.physics.Camera;
 import gameobjects.graphics.functionality.Drawable;
-import screens.Main;
+import main.Main;
 import gamemap.Room;
 import gameobjects.physics.Vector2D;
 

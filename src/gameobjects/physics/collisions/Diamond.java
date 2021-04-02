@@ -1,7 +1,7 @@
 package gameobjects.physics.collisions;
 
 import gameobjects.GameObject;
-import screens.Main;
+import main.Main;
 import gamemap.Room;
 import gameobjects.graphics.functionality.SingularImageSheet;
 

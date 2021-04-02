@@ -31,7 +31,7 @@ import javafx.scene.control.*;
 import javafx.util.Duration;
 import gameobjects.monsters.Monster;
 import gameobjects.physics.Camera;
-import screens.Main;
+import screens.LoseScreen;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

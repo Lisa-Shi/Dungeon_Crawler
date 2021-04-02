@@ -6,7 +6,7 @@ import gameobjects.physics.collisions.CollisionBox;
 import gameobjects.physics.collisions.Passable;
 import gameobjects.physics.collisions.RectangleWireframe;
 import gamemap.GameMap;
-import screens.Main;
+import main.Main;
 import gamemap.Room;
 
 public class ExitTile extends Tile implements Passable {

@@ -19,7 +19,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.util.Duration;
 import gameobjects.physics.Camera;
-import screens.Main;
+import main.Main;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;

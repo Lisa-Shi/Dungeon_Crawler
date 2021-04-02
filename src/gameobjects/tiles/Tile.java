@@ -3,7 +3,7 @@ package gameobjects.tiles;
 import gameobjects.GameObject;
 import gameobjects.graphics.functionality.SingularImageSheet;
 import javafx.scene.image.Image;
-import screens.Main;
+import main.Main;
 import gamemap.Room;
 
 public abstract class Tile extends GameObject {

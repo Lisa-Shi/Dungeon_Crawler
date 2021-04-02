@@ -1,6 +1,6 @@
 package gameobjects.physics;
 
-import screens.Main;
+import main.Main;
 
 public class PhysicsController {
     // Variables

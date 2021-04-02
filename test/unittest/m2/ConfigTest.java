@@ -1,7 +1,7 @@
 package unittest.m2;
 
 import org.testfx.assertions.api.Assertions;
-import screens.Main;
+import main.Main;
 import javafx.stage.Stage;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;

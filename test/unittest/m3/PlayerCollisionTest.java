@@ -4,7 +4,7 @@ import javafx.stage.Stage;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 import main.GameStage;
-import screens.Main;
+import main.Main;
 import gameobjects.Player;
 import gamemap.Room;
 import gameobjects.physics.Vector2D;

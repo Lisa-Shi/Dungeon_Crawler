@@ -9,7 +9,6 @@ import gameobjects.GameObject;
 import gameobjects.HPBar;
 import gameobjects.Player;
 import gameobjects.Projectile;
-import gameobjects.physics.PhysicsController;
 import gameobjects.physics.collisions.Collideable;
 import gameobjects.physics.collisions.CollisionBox;
 import gameobjects.physics.collisions.DynamicCollisionBox;
@@ -19,7 +18,7 @@ import javafx.geometry.Bounds;
 import javafx.scene.layout.Pane;
 import gameobjects.physics.Camera;
 import gameobjects.graphics.functionality.Drawable;
-import screens.Main;
+import main.Main;
 import gamemap.Room;
 import gameobjects.physics.Vector2D;
 

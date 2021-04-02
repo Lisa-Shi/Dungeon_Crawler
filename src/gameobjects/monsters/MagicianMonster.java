@@ -1,6 +1,6 @@
 package gameobjects.monsters;
 
-import screens.Main;
+import main.Main;
 import gamemap.Room;
 
 public class MagicianMonster extends Monster {

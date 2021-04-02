@@ -4,6 +4,8 @@
 package gameobjects.monsters;
 
 import gameobjects.Damageable;
+import gameobjects.Player;
+import gameobjects.Projectile;
 import javafx.scene.layout.Pane;
 import main.Main;
 import gamemap.Room;

@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -102,8 +103,8 @@ public class Main extends Application {
             );
     public static final DirectionalImageSheet SLIME_ATTACKING_SHEET =
             getDirectionalImageSheet(
-                    "../gameobjects/graphics/sprites/monster/slimeAttack"
-                            + Main.REPLACE_DIRECTION_REGEX + ".png", 5
+                    "../gameobjects/graphics/sprites/monster/slimeAttack" + Main.REPLACE_DIRECTION_REGEX + ".png",
+                    5
             );
 
     public static final ImageSheet ALL_MONSTER_SHEET =

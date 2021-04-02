@@ -237,7 +237,6 @@ public class GameStage extends Stage {
         }
     }
     private void moveMonsters() {
-        LinkedList<Monster> remove = new LinkedList<>();
         for (Monster monster : room.getMonsters()) {
             if (!monster.isDead()) {
                 monster.face(player, room);
@@ -249,12 +248,11 @@ public class GameStage extends Stage {
                         new SingularImageSheet(Main.TRANSPARENT_IMAGE).getInitialReel());
                 room.getCollideables().remove(monster);
                 room.getHealthbars().remove(monster.getHPBar());
-                remove.add(monster);
+                room.getMonsters().remove(monster);
                 monster.getHPBar().expire();
                 pane.getChildren().remove(monster);
             }
         }
-        room.getMonsters().removeAll(remove);
         Timeline timeline = new Timeline(new KeyFrame(
             Duration.millis(Main.MONSTER_ATTACK_TIME),
             ae -> moveMonsters()));

@@ -1,12 +1,19 @@
 package unittest.m4;
 
+import gamemap.Room;
+import gameobjects.Player;
+import gameobjects.monsters.Monster;
+import gameobjects.physics.Vector2D;
+import gameobjects.tiles.ExitTile;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import main.GameStage;
+import main.Main;
+import main.Weapon;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 import org.testfx.matcher.base.NodeMatchers;
-import sample.*;
 
 import static org.junit.Assert.*;
 import static org.testfx.api.FxAssert.verifyThat;

@@ -1,16 +1,18 @@
 package unittest.m4;
 
-import com.sun.javafx.robot.FXRobot;
+import gamemap.Room;
+import gameobjects.Player;
+import gameobjects.Projectile;
+import gameobjects.monsters.Monster;
+import gameobjects.physics.collisions.Collideable;
+import gameobjects.tiles.ExitTile;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
+import main.GameStage;
+import main.Main;
+import main.Weapon;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
-import org.testfx.matcher.base.NodeMatchers;
-import org.testfx.robot.KeyboardRobot;
-import org.testfx.robot.impl.KeyboardRobotImpl;
-import sample.*;
-
-import java.security.Key;
 
 import static org.junit.Assert.*;
 import static org.testfx.api.FxAssert.verifyThat;
@@ -65,7 +67,7 @@ public class testPlayerShoot extends ApplicationTest {
      * Tests that game stops once player is defeated by monsters.
      */
     @Test(timeout = 3000)
-    public void testLoseInGame() {
+    public void testKillMonster() {
         //Going to a room with monsters
         Room start = game.getRoom();
         ExitTile exit = start.getExits().get(0);

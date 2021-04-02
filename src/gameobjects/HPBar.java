@@ -43,8 +43,8 @@ public class HPBar extends GameObject implements PropertyChangeListener {
         this(room, pane, monster.getPhysics().getPosition().getX(),
                 monster.getPhysics().getPosition().getY(),
                 0.5, Main.PLAYER_BULLET_DAMAGE,
-                new SingularImageSheet(Main.getImageFrom(
-                        "../gameobjects/graphics/sprites/transparent.png")
+                new SingularImageSheet(
+                        Main.getImageFrom("../gameobjects/graphics/sprites/transparent.png")
                 ));
         this.sprite = monster;
         this.getPhysics().setPosition(sprite.getPhysics().getPosition());
@@ -92,8 +92,8 @@ public class HPBar extends GameObject implements PropertyChangeListener {
     }
 
     /**
-     * the width of the inner rectangle changes when the parent's health changes.
-     * @param evt PropertyChangeEvent
+     * the weidth of the inner rectangle changes when the parent's health changes.
+     * @param evt event
      */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {

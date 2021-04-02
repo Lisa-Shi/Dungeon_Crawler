@@ -120,7 +120,6 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
             case "S":
                 hpBar.getPhysics().pushDown(Main.ENEMY_CONTROL_FORCE);
                 getPhysics().pushDown(Main.ENEMY_CONTROL_FORCE);
-                break;
             default:
                 break;
             }

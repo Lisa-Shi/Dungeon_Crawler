@@ -14,8 +14,8 @@ public class PhysicsControllerRelative extends PhysicsController {
      * constructor
      * @param initialX initial X position
      * @param initialY initial Y position
-     * @param relativeTo the gameobjects.physics of the object
-     *                   that this gameobjects.physics is calculated with respect to
+     * @param relativeTo physics of the object that this gameobject's
+     *                   physics is calculated with respect to
      */
     public PhysicsControllerRelative(
             double initialX, double initialY, PhysicsController relativeTo) {

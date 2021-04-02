@@ -13,12 +13,10 @@ import main.Main;
 import main.Weapon;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
+
 import static org.junit.Assert.*;
 
-/**
- * Tests that the player shooting functionality.
- */
-public class PlayerShootTest extends ApplicationTest {
+public class TestPlayerShoot extends ApplicationTest {
     private GameStage game;
     private Room room;
     private Player player1;
@@ -36,11 +34,6 @@ public class PlayerShootTest extends ApplicationTest {
 
     }
 
-    /**
-     * Shoots projectiles.
-     *
-     * Counts the number of objects in room to make sure projectiles apper.
-     */
     @Test
     public void testShootProjectile() {
         int n = 5;

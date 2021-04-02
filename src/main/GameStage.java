@@ -62,9 +62,6 @@ public class GameStage extends Stage {
     private Text text = new Text();
     private Text healthText = new Text();
     private Text testingPurpose = new Text();
-
-
-
     private static Room prevRoom;
 
     private ProgressBar pbar = new ProgressBar(0);
@@ -251,6 +248,7 @@ public class GameStage extends Stage {
                         new SingularImageSheet(Main.TRANSPARENT_IMAGE).getInitialReel());
                 room.getCollideables().remove(monster);
                 room.getHealthbars().remove(monster.getHPBar());
+                room.getMonsters().remove(monster);
                 monster.getHPBar().expire();
                 pane.getChildren().remove(monster);
             }
@@ -365,6 +363,9 @@ public class GameStage extends Stage {
     }
 
 
+    public static Room getPrevRoom() {
+        return prevRoom;
+    }
 
     public Room getRoom() {
         return room;
@@ -464,12 +465,5 @@ public class GameStage extends Stage {
 
     public Button getRestartButton() {
         return restartButton;
-    }
-    public static Room getPrevRoom() {
-        return prevRoom;
-    }
-
-    public static void setPrevRoom(Room prevRoom) {
-        GameStage.prevRoom = prevRoom;
     }
 }

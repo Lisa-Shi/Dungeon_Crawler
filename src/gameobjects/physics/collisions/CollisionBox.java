@@ -80,8 +80,7 @@ public class CollisionBox {
     }
     /**
      * if gameobjects.physics (Position) and solid are the same,
-     * then the two collision boxes are considered to be true
-     *
+     * two collision boxes are considered to be true
      * @param other object to compare to
      * @return true if equal. otherwise false
      */

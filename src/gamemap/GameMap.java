@@ -91,6 +91,9 @@ public class GameMap {
         }
     }
 
+    public Room getStart() {
+        return start;
+    }
 
     public static void enterRoom(Room entering) {
         currentRoom = entering;

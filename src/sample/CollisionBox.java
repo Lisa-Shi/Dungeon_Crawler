@@ -19,7 +19,7 @@ public class CollisionBox {
      * constructor
      * must call generate() after instantiation
      * @param physics usually same as the physics of the owner
-     * @param wireframe the actual box. height and weidth are usually the same as the owner
+     * @param wireframe the actual box. height and width are usually the same as the owner
      * @param solid if true, other game object with solid collisionBox will not be
      *              able to get through the owner
      */

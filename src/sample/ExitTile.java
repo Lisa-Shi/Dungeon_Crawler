@@ -1,6 +1,5 @@
 package sample;
 
-
 public class ExitTile extends Tile implements Passable {
     // Variables
     private Room linkedRoom;
@@ -55,7 +54,7 @@ public class ExitTile extends Tile implements Passable {
 
     @Override
     public void collisionWithPlayerEvent(Player player) {
-        if (this.inRoom.getMonsters().size() == 0) {
+        if (this.linkedRoom.equals(GameStage.prevRoom) || this.inRoom.getMonsters().size() == 0) {
             GameMap.enterRoom(getLinkedRoom());
         }
     }

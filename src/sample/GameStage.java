@@ -40,6 +40,7 @@ public class GameStage extends Stage {
     private Player player;
     private Camera camera;
     private Room room;
+    public static Room prevRoom;
     private GameMap map;
     private Stage stage;
     private Scene scene;
@@ -218,11 +219,11 @@ public class GameStage extends Stage {
 
     private void teleportPlayerToEnteredRoom() {
         if (!GameMap.enterRoom().equals(room)) {
-            Room previous = room;
+            prevRoom = room;
             room = GameMap.enterRoom();
             enterRoom();
             player.update(camera, room.getCollideables());
-            matchPlayerExit(previous);
+            matchPlayerExit(prevRoom);
 
             if (!room.getCollideables().contains(player)) {
                 room.getCollideables().add(player);
@@ -403,6 +404,9 @@ public class GameStage extends Stage {
     }
     public Camera getCamera() {
         return camera;
+    }
+    public Room getPreviousRoom() {
+        return prevRoom;
     }
 
 }

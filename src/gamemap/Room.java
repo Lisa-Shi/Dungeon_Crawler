@@ -33,6 +33,7 @@ public class Room implements Physical {
     private LinkedList<Collideable> collideables = new LinkedList<>();
     private LinkedList<Drawable> drawables = new LinkedList<>();
     private LinkedList<ExitTile> exits = new LinkedList<>();
+    private boolean generatedMonster = false;
     /**
      *gameobjects.monsters is empty when all gameobjects.monsters in this room die
      */
@@ -79,7 +80,7 @@ public class Room implements Physical {
      * this method will not check if there is already monster in the room
      */
     public void generateMonsters() {
-        if (monsters.isEmpty()) {
+        if (!generatedMonster) {
             Monster monster = null;
             if (roomId == 999) {
                 // Boss monster
@@ -106,6 +107,7 @@ public class Room implements Physical {
                     add(monster);
                 }
             }
+            generatedMonster = true;
         }
     }
 

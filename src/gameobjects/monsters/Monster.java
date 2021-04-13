@@ -8,6 +8,7 @@ import gameobjects.Damageable;
 import gameobjects.GameObject;
 import gameobjects.HPBar;
 import gameobjects.graphics.functionality.ImageSheet;
+import gameobjects.physics.PhysicsController;
 import gameobjects.physics.collisions.Collideable;
 import gameobjects.physics.collisions.CollisionBox;
 import gameobjects.physics.collisions.DynamicCollisionBox;
@@ -63,7 +64,7 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
         this.damagePerHit = damagePerHit;
 
         this.collisionBox = new DynamicCollisionBox(getPhysics(),
-                new RectangleWireframe(Main.MONSTER_WIDTH, Main.MONSTER_HEIGHT), false);
+                new RectangleWireframe(Main.MONSTER_WIDTH, Main.MONSTER_HEIGHT), true);
         this.collisionBox.generate();
         this.facing = "A";
         this.support = new PropertyChangeSupport(this);
@@ -122,6 +123,7 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
                 break;
             }
         }
+        ((DynamicCollisionBox)collisionBox).raytraceCollision(getPhysics(), room.getCollideables());
         super.update(camera);
     }
 
@@ -185,7 +187,7 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
         support.removePropertyChangeListener(pcl);
     }
     /**
-     * using manhattan distance as heuristic funcytion. each path cost is one
+     * using manhattan distance as heuristic function. each path cost is one
      * @room room room that player and monster are in
      * @param damageable the target that monster moving toward
      * @param room room that player and monster are in
@@ -193,9 +195,9 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
 
     public void face(Damageable damageable, Room room) {
         Vector2D playerLoc =
-                damageable.getPhysics().getPosition().multiply(1.0 / Main.TILE_HEIGHT).round();
-        Vector2D monsterLoc = getPhysics().getPosition().multiply(1.0 / Main.TILE_HEIGHT).round();
-        if (playerLoc.distanceSquared(monsterLoc) <= 1) {
+                damageable.getPhysics().getPosition().multiply(1.0 / Main.TILE_HEIGHT);
+        Vector2D monsterLoc = getPhysics().getPosition().multiply(1.0 / Main.TILE_HEIGHT);
+        if (playerLoc.distanceSquared(monsterLoc) <= 5) {
             facing = "";
             return;
         }
@@ -219,36 +221,18 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
         locAndCost.put(monsterLoc, 0.0);
         while (!thePQ.isEmpty()) {
             State popped = thePQ.poll();
-            Vector2D current = new Vector2D(popped.getState().getX(), popped.getState().getY());
+            Vector2D current = popped.getState();
             LinkedList<String> currPath = popped.getPath();
             double cost = popped.getCost();
-            if (playerLoc.distanceSquared(current) <= 1) {
+            if (playerLoc.distanceSquared(current) <= 5) {
                 if (currPath.size() >= 1) {
                     String a = currPath.remove(0);
                     facing = a;
                     return;
                 }
             }
-            ArrayList<Vector2D> successors = new ArrayList() {
-                {
-                    add(new Vector2D(1, 0));
-                    add(new Vector2D(-1, 0));
-                    add(new Vector2D(0, 1));
-                    add(new Vector2D(0, -1));
-                }
-            };
+            ArrayList<Vector2D> successors = popped.getPossibleAction();
 
-            ArrayList<Vector2D> removeList = new ArrayList<>();
-            for (Vector2D successor: successors) {
-                current = current.add(successor);
-                for (Collideable collideable: room.getCollideables()) {
-                    if (collideable.getCollisionBox().containsPoint(current)) {
-                        removeList.add(successor);
-                    }
-                }
-                current = current.subtract(successor);
-            }
-            successors.removeAll(removeList);
             LinkedList<String> successorPath;
             for (Vector2D successor: successors) {
                 successorPath = new LinkedList<>(currPath);
@@ -300,6 +284,32 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
 
         public Vector2D getState() {
             return state;
+        }
+        public ArrayList<Vector2D> getPossibleAction(){
+            ArrayList<Vector2D> successors = new ArrayList() {
+                {
+                    add(new Vector2D(1, 0));
+                    add(new Vector2D(-1, 0));
+                    add(new Vector2D(0, 1));
+                    add(new Vector2D(0, -1));
+                }
+            };
+
+            ArrayList<Vector2D> removeList = new ArrayList<>();
+            for (Vector2D successor: successors) {
+                Vector2D temp = state.add(successor);
+                DynamicCollisionBox dcb = new DynamicCollisionBox(
+                        new PhysicsController(temp.getX() * 64, temp.getY() * 64),
+                        new RectangleWireframe(10, 10));
+                dcb.generate();
+                for (Collideable collideable: room.getCollideables()) {
+                    if(dcb.collidedWith(collideable.getCollisionBox())){
+                        removeList.add(successor);
+                    }
+                }
+            }
+            successors.removeAll(removeList);
+            return successors;
         }
     }
 }

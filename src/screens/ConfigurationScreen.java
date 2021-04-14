@@ -1,5 +1,10 @@
 package screens;
 
+import gameobjects.*;
+import gameobjects.ProjectileLauncher.ProjectileLauncher;
+import gameobjects.ProjectileLauncher.ProjectileLauncherA;
+import gameobjects.ProjectileLauncher.ProjectileLauncherB;
+import gameobjects.ProjectileLauncher.ProjectileLauncherC;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -7,9 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import gameobjects.Player;
 import gamemap.Room;
-import main.Weapon;
 
 /**
  * set up for the configuration screen.
@@ -20,7 +23,7 @@ public class ConfigurationScreen {
     private int height;
     private int difficulty = 0;
     private String name;
-    private int weapon = 0;
+    private ProjectileLauncher weapon;
     private Player player;
     private TextField nameInput;
     private ToggleGroup difficultyToggles;
@@ -172,16 +175,24 @@ public class ConfigurationScreen {
         ToggleButton selectD = (ToggleButton) difficultyToggles.getSelectedToggle();
         difficulty = selectD == null ? -1 : Integer.parseInt(selectD.getText().charAt(0) + "");
         ToggleButton selectW = (ToggleButton) weaponToggles.getSelectedToggle();
-        weapon = selectW == null ? -1 : Integer.parseInt(selectW.getText().charAt(0) + "");
-        Weapon playerW = null;
-        Weapon[] wOptions = new Weapon[3];
-        wOptions[0] = new Weapon("1name", "1about", 1, 1);
-        wOptions[1] = new Weapon("2name", "2about", 1, 1);
-        wOptions[2] = new Weapon("3name", "3about", 1, 1);
-        if (weapon != -1) {
-            playerW = wOptions[weapon - 1];
+        int numWeapon = selectW == null ? -1 : Integer.parseInt(selectW.getText().charAt(0) + "");
+
+        if (numWeapon == -1) {
+            numWeapon = 1;
         }
-        return new Player(name, playerW, goRoom, 0,  0, difficulty);
+        Player p = new Player(name, goRoom, 0,  0, difficulty);
+
+        ProjectileLauncher weapon;
+        if (numWeapon == 0) {
+            weapon = new ProjectileLauncherA(p);
+        } else if (numWeapon == 1) {
+            weapon = new ProjectileLauncherB(p);
+        } else {
+            weapon = new ProjectileLauncherC(p);
+        }
+        p.obtainNewWeapon(weapon);
+
+        return p;
     }
 
     /**

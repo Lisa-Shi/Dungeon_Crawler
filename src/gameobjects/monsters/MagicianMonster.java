@@ -1,7 +1,7 @@
 package gameobjects.monsters;
 
 import gameobjects.Damageable;
-import gameobjects.Projectile;
+import gameobjects.ProjectileLauncher.Projectile;
 import javafx.scene.layout.Pane;
 import main.Main;
 import gamemap.Room;

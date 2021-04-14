@@ -2,8 +2,11 @@
  * the bullet object
  */
 
-package gameobjects;
+package gameobjects.ProjectileLauncher;
 
+import gameobjects.Damageable;
+import gameobjects.GameObject;
+import gameobjects.Player;
 import gameobjects.monsters.Monster;
 import gameobjects.physics.collisions.Collideable;
 import gameobjects.physics.collisions.DynamicCollisionBox;
@@ -26,28 +29,31 @@ public class Projectile extends GameObject implements Collideable {
     private Pane pane;
     private Room room;
     private int bouncesLeft;
-    private boolean isPlayer;
+    private int timeRange;
     private GameObject sprite;
-    //private ImageSheet img;
-    //private double scale;
 
     /**constructor
      *
      * @param player player object who shoots the bullet
      * @param room the room in which player is
      * @param pane the overall pane
+     * @param range a number between 1 - 5 determining range of weapon
+     * @param damage determines harm inflicted, range between 1 - 5
      */
-    public Projectile(Player player, Room room, Pane pane) {
+    public Projectile(Player player, Room room, Pane pane, int range, int damage, ImageSheet img) {
         this(room, pane, player.getPhysics().getPosition().getX(),
                 player.getPhysics().getPosition().getY(),
-                0.5, Main.PLAYER_BULLET_DAMAGE, Main.PLAYER_BULLET_SHEET);
+                0.2 * damage, damage, img);
         sprite = player;
         //this.bouncesLeft = p.getWeaponList()[p.getHoldingWeapon()].getPower();
-        this.bouncesLeft = 2;
+        range = range % 6;
+        this.bouncesLeft = range;
+        this.timeRange = range * 5000;
     }
 
     /**
      * constructor
+     *
      * @param monster monster who shoots the bullet
      * @param room the room in which the monster is
      * @param pane the overall pane
@@ -59,6 +65,7 @@ public class Projectile extends GameObject implements Collideable {
         sprite = monster;
         //this.bouncesLeft = p.getWeaponList()[p.getHoldingWeapon()].getPower();
         this.bouncesLeft = 2;
+        this.timeRange = 10000;
     }
 
     private Projectile(Room room, Pane pane, double initialX,
@@ -74,7 +81,7 @@ public class Projectile extends GameObject implements Collideable {
         this.pane = pane;
 
         new Timeline(new KeyFrame(
-            Duration.millis(10000),
+            Duration.millis(timeRange),
             ae -> expire()))
             .play();
     }
@@ -96,11 +103,9 @@ public class Projectile extends GameObject implements Collideable {
         Player player = (Player) sprite;
         Vector2D direction = player.getDirection();
         PhysicsController physics = this.getPhysics();
-        int vel = 10;
-        physics.setVelocity(direction.multiply(vel));
+        physics.setVelocity(direction.multiply(damage));
         physics.setPosition(
                 sprite.getPhysics().getPosition().add(direction.multiply(Main.TILE_WIDTH / 2)));
-
     }
 
     /**
@@ -129,6 +134,10 @@ public class Projectile extends GameObject implements Collideable {
                     ((Damageable) c).hurt(damage);
                     expire();
                     return;
+                }
+
+                if (c instanceof Projectile) {
+                    expire();
                 }
 
                 if (c.getCollisionBox().isSolid()) {

@@ -54,8 +54,10 @@ public class ConfigTest extends ApplicationTest {
         clickOn("#nameInput").write("name");
         clickOn("1: easy");
         clickOn("Go to room");
+//        Player temp = new Player("name", null,
+//                new Room(20, 20), 0, 0, 1);
         Player temp = new Player("name", null,
-                new Room(20, 20), 0, 0, 1);
+                0, 0, 0);
         Assertions.assertThat(game.getPlayer())
                 .isEqualToComparingOnlyGivenFields(temp, "name", "difficulty");
     }

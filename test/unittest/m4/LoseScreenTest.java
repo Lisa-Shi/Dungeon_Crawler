@@ -8,7 +8,6 @@ import gameobjects.tiles.ExitTile;
 import javafx.stage.Stage;
 import main.GameStage;
 import main.Main;
-import main.Weapon;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 import org.testfx.matcher.base.NodeMatchers;
@@ -28,7 +27,9 @@ public class LoseScreenTest extends ApplicationTest {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Room r = new Room(20, 20);
-        player1 = new Player("unittest", new Weapon("unittest", "unittest", 1, 5), r, 0, 0, 0);
+        //player1 = new Player("unittest", new Weapon("unittest", "unittest", 1, 5), r, 0, 0, 0);
+
+        player1 = new Player("unittest", r, 0, 0, 0);
         game = new GameStage(player1, r);
         this.stage = new Stage();
         game.start(stage);

@@ -31,7 +31,9 @@ public class GameMap {
 
         start.generateExits(adjList.get(start));
     }
+    public void addStore(Room room){
 
+    }
     public void restartMap() {
         start = null;
         end = null;

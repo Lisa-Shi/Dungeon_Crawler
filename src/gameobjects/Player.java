@@ -31,7 +31,7 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
     private int health;
     private int damageAmt = 1;
     private Vector2D direction;
-
+    private boolean moveability  = true;
     private DynamicCollisionBox collisionBox;
 
     private int money;
@@ -64,7 +64,9 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
                 new RectangleWireframe(Main.PLAYER_WIDTH, Main.PLAYER_HEIGHT));
         this.collisionBox.generate();
     }
-
+    public void addInventory(GameObject item, int quantity){
+        //implement this
+    }
     private void giveMoney(int difficulty) {
         if (difficulty == 1) {
             money = 100;
@@ -108,7 +110,6 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
      */
     public void update(Camera camera) {
         getPhysics().update();
-
         updateSprite(camera);
 
         if (getPhysics().getVelocity().len() > Main.MAX_PLAYER_SPEED) {
@@ -235,7 +236,12 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
     public void setMoney(int money) {
         this.money = money;
     }
-
+    public void setMoveability(boolean bool){
+        moveability = bool;
+    }
+    public boolean getMoveability(){
+        return moveability;
+    }
     public void setDirection(Vector2D direction) {
         this.direction = direction;
     }

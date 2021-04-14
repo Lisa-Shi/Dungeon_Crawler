@@ -12,13 +12,13 @@ public abstract class ProjectileLauncher {
     private String name;
     private String description;
 
-    public static ImageSheet defaultImg;
-    public static ImageSheet bulletImg;
-    Player player;
-    Room room;
-    Pane pane;
-    int damage;
-    int range;
+    private static ImageSheet defaultImg;
+    private static ImageSheet bulletImg;
+    private Player player;
+    private Room room;
+    private Pane pane;
+    private int damage;
+    private int range;
 
     /**
      * Projectile Launcher constructor
@@ -27,6 +27,7 @@ public abstract class ProjectileLauncher {
      * @param range determines number of bounces and travel time
      * @param damage inflicted on monster
      * @param img of bullet
+     * @param name of weapon
      */
     public ProjectileLauncher(Player player, int range, int damage, String img, String name) {
         this.player = player;

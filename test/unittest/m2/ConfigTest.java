@@ -7,7 +7,6 @@ import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 import org.testfx.matcher.base.NodeMatchers;
 import gameobjects.Player;
-import gamemap.Room;
 
 
 import static org.testfx.api.FxAssert.verifyThat;
@@ -19,7 +18,6 @@ public class ConfigTest extends ApplicationTest {
     public void start(Stage primaryStage) throws Exception {
         game = new Main();
         game.start(primaryStage);
-        //clickOn("Start Game");
     }
     @Test
     public void testNoName() {
@@ -54,27 +52,10 @@ public class ConfigTest extends ApplicationTest {
         clickOn("#nameInput").write("name");
         clickOn("1: easy");
         clickOn("Go to room");
-//        Player temp = new Player("name", null,
-//                new Room(20, 20), 0, 0, 1);
         Player temp = new Player("name", null,
                 0, 0, 0);
         Assertions.assertThat(game.getPlayer())
                 .isEqualToComparingOnlyGivenFields(temp, "name", "difficulty");
     }
 
-    /*
-    @BeforeEach
-    public void runAppToTests() throws Exception {
-        FxToolkit.registerPrimaryStage();
-        FxToolkit.setupApplication(Main::new);
-        FxToolkit.showStage();
-        WaitForAsyncUtils.waitForFxEvents(100);
-    }
-
-    @AfterEach
-    public void stopApp() throws TimeoutException {
-        FxToolkit.cleanupStages();
-    }
-
-     */
 }

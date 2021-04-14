@@ -20,9 +20,6 @@ public class PlayerCollisionTest extends ApplicationTest {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Room r = new Room(20, 20);
-//        player = new Player("unittest", new Weapon("unittest", "unittest",
-//                1, 5), r, 2 * Main.TILE_WIDTH, 2 * Main.TILE_HEIGHT, 0);
-
         player = new Player("unittest", r, 2 * Main.TILE_WIDTH, 2 * Main.TILE_HEIGHT, 0);
         game = new GameStage(player, r);
         game.start(new Stage());

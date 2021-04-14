@@ -39,6 +39,7 @@ public class Projectile extends GameObject implements Collideable {
      * @param pane the overall pane
      * @param range a number between 1 - 5 determining range of weapon
      * @param damage determines harm inflicted, range between 1 - 5
+     * @param img file name, ex: bullet.png
      */
     public Projectile(Player player, Room room, Pane pane, int range, int damage, ImageSheet img) {
         this(room, pane, player.getPhysics().getPosition().getX(),

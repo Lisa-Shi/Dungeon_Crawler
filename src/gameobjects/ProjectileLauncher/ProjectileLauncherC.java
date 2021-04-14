@@ -5,6 +5,6 @@ import gameobjects.Player;
 public class ProjectileLauncherC extends ProjectileLauncher {
 
     public ProjectileLauncherC(Player player) {
-        super(player, 1, 5, "bluejeans.png", "bluejeans");
+        super(player, 1, 5, "bulletP.png", "water");
     }
 }

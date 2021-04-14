@@ -174,22 +174,22 @@ public class ConfigurationScreen {
         name = nameInput.getText();
         ToggleButton selectD = (ToggleButton) difficultyToggles.getSelectedToggle();
         difficulty = selectD == null ? -1 : Integer.parseInt(selectD.getText().charAt(0) + "");
+
+        Player p = new Player(name, goRoom, 0,  0, difficulty);
+
+
         ToggleButton selectW = (ToggleButton) weaponToggles.getSelectedToggle();
         int numWeapon = selectW == null ? -1 : Integer.parseInt(selectW.getText().charAt(0) + "");
 
-        if (numWeapon == -1) {
-            numWeapon = 1;
-        }
-        Player p = new Player(name, goRoom, 0,  0, difficulty);
-
         ProjectileLauncher weapon;
-        if (numWeapon == 0) {
+        if (numWeapon == 1) {
             weapon = new ProjectileLauncherA(p);
-        } else if (numWeapon == 1) {
+        } else if (numWeapon == 2) {
             weapon = new ProjectileLauncherB(p);
         } else {
             weapon = new ProjectileLauncherC(p);
         }
+        System.out.println(weapon.getDescription());
         p.obtainNewWeapon(weapon);
 
         return p;

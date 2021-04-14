@@ -44,7 +44,7 @@ public class Projectile extends GameObject implements Collideable {
     public Projectile(Player player, Room room, Pane pane, int range, int damage, ImageSheet img) {
         this(room, pane, player.getPhysics().getPosition().getX(),
                 player.getPhysics().getPosition().getY(),
-                0.2 * damage, damage, img);
+                (damage % 3 + 1) * 0.5, damage, img);
         sprite = player;
         //this.bouncesLeft = p.getWeaponList()[p.getHoldingWeapon()].getPower();
         range = range % 6;

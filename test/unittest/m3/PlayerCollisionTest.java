@@ -3,12 +3,13 @@ package unittest.m3;
 import javafx.stage.Stage;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
-import main.GameStage;
-import main.Main;
-import gameobjects.Player;
-import gamemap.Room;
-import gameobjects.physics.Vector2D;
-import gameobjects.tiles.WallTile;
+import sample.GameStage;
+import sample.Main;
+import sample.Player;
+import sample.Room;
+import sample.Vector2D;
+import sample.WallTile;
+import sample.Weapon;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -20,7 +21,8 @@ public class PlayerCollisionTest extends ApplicationTest {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Room r = new Room(20, 20);
-        player = new Player("unittest", r, 2 * Main.TILE_WIDTH, 2 * Main.TILE_HEIGHT, 0);
+        player = new Player("unittest", new Weapon("unittest", "unittest",
+                1, 5), r, 2 * Main.TILE_WIDTH, 2 * Main.TILE_HEIGHT, 0);
         game = new GameStage(player, r);
         game.start(new Stage());
         game.getRoom().clear();

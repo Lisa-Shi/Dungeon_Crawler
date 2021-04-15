@@ -1,15 +1,12 @@
 package unittest.m3;
 
-import gamemap.Room;
-import gamemap.RoomLayout;
-import gameobjects.tiles.WallTile;
 import org.testfx.framework.junit.ApplicationTest;
-import gameobjects.physics.collisions.Physical;
-import main.GameStage;
+import sample.GameStage;
+import sample.*;
 import javafx.stage.Stage;
 import org.junit.Test;
-import gameobjects.Player;
-
+import sample.Player;
+import sample.Weapon;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
@@ -22,8 +19,7 @@ public class RoomLayoutTest extends ApplicationTest {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Room r = new Room(20, 20);
-        //player = new Player("unittest", new Weapon("unittest", "unittest", 1, 5), r, 0, 0, 0);
-        player = new Player("unittest", r, 0, 0, 0);
+        player = new Player("unittest", new Weapon("unittest", "unittest", 1, 5), r, 0, 0, 0);
         game = new GameStage(player, r);
         game.start(new Stage());
     }

@@ -1,13 +1,14 @@
 package unittest.m2;
 
 import org.testfx.framework.junit.ApplicationTest;
-import main.GameStage;
-import main.Main;
+import sample.GameStage;
+import sample.Main;
 import javafx.stage.Stage;
 import org.junit.Test;
-import gameobjects.Player;
-import gamemap.Room;
-import gameobjects.physics.Vector2D;
+import sample.Player;
+import sample.Room;
+import sample.Vector2D;
+import sample.Weapon;
 
 import static org.junit.Assert.assertEquals;
 
@@ -18,7 +19,7 @@ public class PlayerPhysicsTest extends ApplicationTest {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Room r = new Room(20, 20);
-        player = new Player("unittest", r, 0, 0, 0);
+        player = new Player("unittest", new Weapon("unittest", "unittest", 1, 5), r, 0, 0, 0);
         game = new GameStage(player, r);
         game.start(new Stage());
     }

@@ -1,15 +1,11 @@
 package unittest.m3;
 
-import gamemap.GameMap;
-import gamemap.Room;
-import gameobjects.tiles.ExitTile;
-import gameobjects.Player;
 import javafx.stage.Stage;
 import org.junit.Assert;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 import org.testfx.matcher.base.NodeMatchers;
-import main.*;
+import sample.*;
 
 import java.util.List;
 
@@ -23,8 +19,7 @@ public class NextRoomTest extends ApplicationTest {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Room r = new Room(20, 20);
-        //player = new Player("unittest", new Weapon("unittest", "unittest", 1, 5), r, 0, 0, 0);
-        player = new Player("unittest", r, 0, 0, 0);
+        player = new Player("unittest", new Weapon("unittest", "unittest", 1, 5), r, 0, 0, 0);
         game = new GameStage(player, r);
         map = game.getMap();
         game.start(new Stage());

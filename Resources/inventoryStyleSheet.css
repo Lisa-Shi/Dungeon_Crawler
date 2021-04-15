@@ -1,17 +1,16 @@
 .inventory {
+    -fx-background-size: 1000 1000;
     -fx-background-color: rgba(51, 51, 51, 0.5);
     -fx-background-radius: 10;
-    -fx-stroke: rgba(51, 51, 51, 0.5);
-    -fx-stroke-width: 100;
-
 }
 .button {
-    -fx-pref-width: 40px;
-    -fx-pref-height: 80px;
+    -fx-pref-width: 8px;
+    -fx-pref-height: 8px;
 }
+
 .item_button {
-    -fx-pref-width: 40px;
-    -fx-pref-height: 80px;
-    -fx-background-color: green;
-    -fx-background-radius: 10;
+    -fx-pref-width: 8px;
+    -fx-pref-height: 8px;
+    -fx-background-color: brown;
+    -fx-background-radius: 2;
 }

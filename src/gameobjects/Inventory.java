@@ -9,6 +9,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import main.Main;
 
 import java.util.Collection;
@@ -20,8 +21,8 @@ public class Inventory {
     private StackPane inv;
     private Pane pane;
     private Player player;
-    private Map<Potion, Integer> items;
-    public Inventory(Map<Potion, Integer> items, Pane pane, Player player){
+    private Map<GameObject, Integer> items;
+    public Inventory(Map<GameObject, Integer> items, Pane pane, Player player){
         this.items = items;
         this.pane = pane;
         this.player = player;
@@ -29,11 +30,15 @@ public class Inventory {
         Bounds bound = pane.getLayoutBounds();
         Rectangle rewardRec = new Rectangle();
         Button close = new Button("X");
-        close.setAlignment(Pos.TOP_RIGHT);
+        close.getStyleClass().add("button");
         close.setOnAction(event->{
             close();
         });
+        inv.setPrefSize(200, 200);
+        inv.setLayoutX(bound.getWidth() / 2 - bound.getWidth() / 4);
+        inv.setLayoutY(bound.getHeight() / 2 - bound.getHeight() / 4);
         GridPane inventory = new GridPane();
+        inventory.setAlignment(Pos.CENTER);
         inventory.setHgap(15);
         inventory.setVgap(20);
         inventory.getRowConstraints().add(new RowConstraints(5));
@@ -41,42 +46,47 @@ public class Inventory {
         inventory.getRowConstraints().add(new RowConstraints(5));
         inventory.getRowConstraints().add(new RowConstraints(5));
         inventory.getStylesheets().add("inventoryStyleSheet.css");
+        inventory.getStyleClass().add("inventory");
         inventory.add(close, 5, 0);
         int row = 1;
         int col = 0;
-        Iterator<Map.Entry<Potion, Integer>> iterator = items.entrySet().iterator();
-        for( int i = 0; i < 15 ; i++){
-            Map.Entry<Potion, Integer> entry;
+        Iterator<Map.Entry<GameObject, Integer>> iterator = items.entrySet().iterator();
+        for( int i = 0; i < 18 ; i++){
+            Map.Entry<GameObject, Integer> entry;
             if( iterator.hasNext()){
                 entry = iterator.next();
             } else{
                 entry = null;
             }
-            if( col == 0 || col == 6){
-                //Text spaceHolder = new Text("      ");
-                //inventory.add(spaceHolder, col, row);
+            if( col == 0 || col == 5){
+                Text spaceHolder = new Text("      ");
+                inventory.add(spaceHolder, col, row);
             } else {
-                ItemButton itembutton = new ItemButton(entry.getKey());
+                //ItemButton itembutton = new ItemButton(entry.getKey());
+                ItemButton itembutton = new ItemButton();
                 if( entry != null) {
-                    itembutton.setGraphic(entry.getKey().getGraphic());
+                    //itembutton.setGraphic(entry.getKey().getGraphic());
                 } else{
-                    itembutton.setGraphic(new ImageView(Main.TRANSPARENT_IMAGE));
+                    //itembutton.setGraphic(new ImageView(Main.TRANSPARENT_IMAGE));
                 }
                 itembutton.getStylesheets().add("inventoryStyleSheet.css");
                 itembutton.getStyleClass().add("item_button");
                 itembutton.setOnAction(event -> {
-                    Potion consumable = itembutton.getPotion();
-                    consumable.consume(player);
-                    loseItem(potion);
+                    //Potion consumable = itembutton.getPotion();
+                    //consumable.consume(player);
+                    //loseItem(potion);
                 });
                 inventory.add(itembutton, col, row);
             }
-            if( col == 4){
+            if( col == 5){
                 row++;
                 col = 0;
             } else{
                 col++;
             }
+        }
+        for( int i = 0 ; i< 6; i++){
+            inventory.add(new Text("      "), i, row);
         }
         /*rewardRec.setOpacity(0.8);
         rewardRec.setHeight(bound.getHeight() / 2);
@@ -95,6 +105,7 @@ public class Inventory {
         //pane.getChildren().remove(rewardRec);
         player.setMoveability(true);
     }
+    /**
     public void loseItem(Potion potion){
         if(items.containsKey(potion)){
             items.put(potion, items.get(potion) - 1);
@@ -109,7 +120,9 @@ public class Inventory {
             }
         }
     }
+     */
     private class ItemButton extends Button{
+     /**
         public Potion potion;
 
         public ItemButton(Potion potion){
@@ -123,5 +136,7 @@ public class Inventory {
         public void setPotion(Potion potion) {
             this.potion = potion;
         }
+     */
     }
+
 }

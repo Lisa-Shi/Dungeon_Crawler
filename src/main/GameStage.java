@@ -92,8 +92,8 @@ public class GameStage extends Stage {
         exitButton = new Button("exit");
 
         Timeline timeline = new Timeline(new KeyFrame(
-                Duration.millis(Main.MONSTER_ATTACK_TIME),
-                ae -> moveMonsters()));
+            Duration.millis(Main.MONSTER_ATTACK_TIME),
+            ae -> moveMonsters()));
         timeline.play();
     }
 
@@ -257,8 +257,8 @@ public class GameStage extends Stage {
             }
         }
         Timeline timeline = new Timeline(new KeyFrame(
-                Duration.millis(Main.MONSTER_ATTACK_TIME),
-                ae -> moveMonsters()));
+            Duration.millis(Main.MONSTER_ATTACK_TIME),
+            ae -> moveMonsters()));
         timeline.play();
     }
     private void openInventory(LinkedList<GameObject> items){

@@ -1,4 +1,3 @@
-
 /**essential attribute for collideable game object
  *Term in javadoc:
  *  owner: the game object which this collisionBox belong to

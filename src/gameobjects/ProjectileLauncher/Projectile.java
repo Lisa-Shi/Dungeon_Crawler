@@ -32,7 +32,6 @@ public class Projectile extends GameObject implements Collideable {
     private int timeRange;
     private GameObject sprite;
 
-    public Projectile(Player player, Room room, Pane pane) {
     /**constructor
      *
      * @param player player object who shoots the bullet
@@ -83,9 +82,9 @@ public class Projectile extends GameObject implements Collideable {
         this.pane = pane;
 
         new Timeline(new KeyFrame(
-            Duration.millis(timeRange),
-            ae -> expire()))
-            .play();
+                Duration.millis(timeRange),
+                ae -> expire()))
+                .play();
     }
 
     /**

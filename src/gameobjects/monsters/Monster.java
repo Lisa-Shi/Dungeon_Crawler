@@ -1,9 +1,7 @@
-/**
- * the monster class
+/**the monster class
  *
- */
+         */
 package gameobjects.monsters;
-
 import gameobjects.Damageable;
 import gameobjects.GameObject;
 import gameobjects.HPBar;
@@ -19,7 +17,6 @@ import gameobjects.graphics.functionality.Drawable;
 import main.Main;
 import gamemap.Room;
 import gameobjects.physics.Vector2D;
-
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.*;
@@ -36,7 +33,7 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
     private ImageSheet sheet;
     private HPBar hpBar;
     private PropertyChangeSupport support;
-    
+
     /**
      * constructor
      * @param room the room which the monster locates
@@ -100,45 +97,26 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
      */
     @Override
     public void update(Camera camera) {
-        switch (facing) {
-        case "A":
-            hpBar.getPhysics().pushLeft(Main.ENEMY_CONTROL_FORCE);
-            getPhysics().pushLeft(Main.ENEMY_CONTROL_FORCE);
-            break;
-        case "D":
-            hpBar.getPhysics().pushRight(Main.ENEMY_CONTROL_FORCE);
-            getPhysics().pushRight(Main.ENEMY_CONTROL_FORCE);
-            break;
-        case "W":
-            hpBar.getPhysics().pushUp(Main.ENEMY_CONTROL_FORCE);
-            getPhysics().pushUp(Main.ENEMY_CONTROL_FORCE);
-            break;
-        case "S":
-            hpBar.getPhysics().pushDown(Main.ENEMY_CONTROL_FORCE);
-            getPhysics().pushDown(Main.ENEMY_CONTROL_FORCE);
-            break;
-        default:
-            break;
         if (hpBar != null) {
             switch (facing) {
-            case "A":
-                hpBar.getPhysics().pushLeft(Main.ENEMY_CONTROL_FORCE);
-                getPhysics().pushLeft(Main.ENEMY_CONTROL_FORCE);
-                break;
-            case "D":
-                hpBar.getPhysics().pushRight(Main.ENEMY_CONTROL_FORCE);
-                getPhysics().pushRight(Main.ENEMY_CONTROL_FORCE);
-                break;
-            case "W":
-                hpBar.getPhysics().pushUp(Main.ENEMY_CONTROL_FORCE);
-                getPhysics().pushUp(Main.ENEMY_CONTROL_FORCE);
-                break;
-            case "S":
-                hpBar.getPhysics().pushDown(Main.ENEMY_CONTROL_FORCE);
-                getPhysics().pushDown(Main.ENEMY_CONTROL_FORCE);
-                break;
-            default:
-                break;
+                case "A":
+                    hpBar.getPhysics().pushLeft(Main.ENEMY_CONTROL_FORCE);
+                    getPhysics().pushLeft(Main.ENEMY_CONTROL_FORCE);
+                    break;
+                case "D":
+                    hpBar.getPhysics().pushRight(Main.ENEMY_CONTROL_FORCE);
+                    getPhysics().pushRight(Main.ENEMY_CONTROL_FORCE);
+                    break;
+                case "W":
+                    hpBar.getPhysics().pushUp(Main.ENEMY_CONTROL_FORCE);
+                    getPhysics().pushUp(Main.ENEMY_CONTROL_FORCE);
+                    break;
+                case "S":
+                    hpBar.getPhysics().pushDown(Main.ENEMY_CONTROL_FORCE);
+                    getPhysics().pushDown(Main.ENEMY_CONTROL_FORCE);
+                    break;
+                default:
+                    break;
             }
         }
         super.update(camera);

@@ -1,6 +1,5 @@
 package gamemap;
 
-import gameobjects.NPC;
 import gameobjects.tiles.ExitTile;
 import gameobjects.tiles.FloorTile;
 import gameobjects.GameObject;
@@ -38,7 +37,6 @@ public class Room implements Physical {
     /**
      *gameobjects.monsters is empty when all gameobjects.monsters in this room die
      */
-    private NPC npc;
     private LinkedList<Monster> monsters = new LinkedList<>();
     private LinkedList<GameObject> toRemove = new LinkedList<>();
     private LinkedList<HPBar> healthbars = new LinkedList<>();
@@ -55,9 +53,6 @@ public class Room implements Physical {
      */
     public Room(int width, int height) {
         roomId = id++;
-        if(roomId == 0){
-             npc = new NPC(this, width/2.0, height/2.0);
-        }
         this.width = width;
         this.height = height;
         // Physics so the camera works properly
@@ -89,7 +84,7 @@ public class Room implements Physical {
             Monster monster = null;
             if (roomId == 999) {
                 // Boss monster
-                monster = new BuzzMonster(this, width / 2, 5);
+                monster = new BuzzMonster(this, width / 2, height / 2);
                 add(monster);
             } else if (roomId != 0) {
                 Random ran = new Random();
@@ -185,9 +180,6 @@ public class Room implements Physical {
         for (Monster monster: monsters) {
             monster.addHPBar(this, pane);
         }
-        if(roomId == 0) {
-            add(npc);
-        }
     }
 
     private void addFloorTiles() {
@@ -273,10 +265,6 @@ public class Room implements Physical {
      */
     public int getHeight() {
         return height;
-    }
-
-    public NPC getNpc() {
-        return npc;
     }
 
     public LinkedList<Physical> getPhysicals() {

@@ -82,9 +82,9 @@ public class Projectile extends GameObject implements Collideable {
         this.pane = pane;
 
         new Timeline(new KeyFrame(
-            Duration.millis(timeRange),
-            ae -> expire()))
-            .play();
+                Duration.millis(timeRange),
+                ae -> expire()))
+                .play();
     }
 
     /**

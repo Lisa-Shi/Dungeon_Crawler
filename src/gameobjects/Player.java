@@ -257,5 +257,4 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
     public void setDamageAmt(int damageAmt) {
         this.damageAmt = health;
     }
-
 }

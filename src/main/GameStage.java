@@ -255,8 +255,7 @@ public class GameStage extends Stage {
                 i--;
             }
         }
-        Timeline timeline = new Timeline(new KeyFrame(
-            Duration.millis(Main.MONSTER_ATTACK_TIME),
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(Main.MONSTER_ATTACK_TIME),
             ae -> moveMonsters()));
         timeline.play();
     }

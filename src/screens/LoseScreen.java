@@ -57,6 +57,8 @@ public class LoseScreen {
         restart.setId("restart");
         HBox buttonBox = LRNavigate.buildBox(restart, exit);
         try {
+            //Image image = new Image(Main.class.getResource(
+            //        "../image/Monster/monstersAll.png").toExternalForm());
             Image image = new Image(Main.class.
                     getResource("../gameobjects/graphics/sprites/monster/monstersAll.png").
                             toExternalForm());

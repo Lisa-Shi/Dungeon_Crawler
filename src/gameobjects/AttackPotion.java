@@ -2,6 +2,7 @@ package gameobjects;
 
 import javafx.scene.image.Image;
 import main.Main;
+import main.Weapon;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -25,15 +26,16 @@ public class AttackPotion implements Consumable {
     }
 
     @Override
-    public void consume() {
-        player.getWeapon().setDamage(getDamage() * 2);
+    public void consume(Player player) {
+        Weapon playerWeapon = player.getWeaponList().get(player.getHoldingWeapon());
+        playerWeapon.setDamage(playerWeapon.getDamage() * 2);
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                player.getWeapon().setDamage(getDamage() / 2);
+                playerWeapon.setDamage(playerWeapon.getDamage() / 2);
             }
-        }, duration * 10000);
+        }, (long) (duration * 10000));
     }
 
     /**

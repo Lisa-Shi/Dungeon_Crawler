@@ -1,6 +1,7 @@
 package gameobjects;
 
 import javafx.scene.image.Image;
+import main.GameStage;
 import main.Main;
 
 /**
@@ -19,7 +20,7 @@ public class HealthPotion implements Consumable {
     }
 
     @Override
-    public void consume() {
+    public void consume(Player player) {
         player.setHealth(player.getHealth() + healthGained);
     }
 

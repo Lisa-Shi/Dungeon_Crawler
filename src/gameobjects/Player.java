@@ -183,8 +183,15 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
     /**
      * @return Index of the weapon the player is holding
      */
-    public int getHoldingWeapon() {
+    public int getHoldingWeaponIndex() {
         return holdingWeapon;
+    }
+
+    /**
+     * @return Index of the weapon the player is holding
+     */
+    public ProjectileLauncher getHoldingWeapon() {
+        return weaponList.get(holdingWeapon);
     }
 
     /**

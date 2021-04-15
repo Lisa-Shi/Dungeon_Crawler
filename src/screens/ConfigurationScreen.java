@@ -121,9 +121,9 @@ public class ConfigurationScreen {
      */
     private TilePane weaponField() {
         String[] wOptions = new String[3];
-        wOptions[0] = "1 weapon";
-        wOptions[1] = "2 weapon";
-        wOptions[2] = "3 weapon";
+        wOptions[0] = "1: weapon";
+        wOptions[1] = "2: weapon";
+        wOptions[2] = "3: weapon";
         TilePane wHb = new TilePane(Orientation.VERTICAL);
         Label groupLabel = new Label("Select weapon: ");
         wHb.getChildren().add(groupLabel);

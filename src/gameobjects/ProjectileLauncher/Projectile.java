@@ -47,8 +47,8 @@ public class Projectile extends GameObject implements Collideable {
                 (damage % 3 + 1) * 0.5, damage, img);
         sprite = player;
         //this.bouncesLeft = p.getWeaponList()[p.getHoldingWeapon()].getPower();
-        range = range % 6;
-        this.bouncesLeft = range;
+        range = range % 3;
+        this.bouncesLeft = range + 1;
         this.timeRange = range * 5000;
     }
 
@@ -125,6 +125,7 @@ public class Projectile extends GameObject implements Collideable {
             if (collisionBox.collidedWith(c.getCollisionBox())) {
 
                 boolean isTarget = false;
+
                 if (sprite instanceof Player) {
                     isTarget = !(c instanceof Player);
                 } else if (sprite instanceof Monster) {

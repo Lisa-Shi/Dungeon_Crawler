@@ -79,6 +79,18 @@ public abstract class ProjectileLauncher {
         return "Weapon name: " + name + "\nDamage: " + damage + "\nRange: " + range;
     }
 
+    @Override
+    public boolean equals (Object o) {
+        if (o instanceof ProjectileLauncher && o.getClass().equals(this.getClass())) {
+            ProjectileLauncher other = (ProjectileLauncher) o;
+
+            boolean isEqual = name.equals(other.getName()) &&
+                    damage == other.getDamage() && range == other.getRange();
+            return isEqual;
+        }
+        return false;
+    }
+
     /**
      * if the name and the damge of two weapons are equal, they are the same weapon
      * @param x the comparing weapon

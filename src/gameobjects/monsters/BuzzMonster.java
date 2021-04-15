@@ -4,6 +4,7 @@
 package gameobjects.monsters;
 
 import gameobjects.Damageable;
+import gameobjects.physics.Vector2D;
 import javafx.scene.layout.Pane;
 import main.Main;
 import gamemap.Room;
@@ -15,6 +16,14 @@ public class BuzzMonster extends Monster {
 
     @Override
     public void attack(Room room, Pane pane, Damageable other) {
-        other.hurt(1);
+        Vector2D playerPos = other.getPhysics().getPosition();
+        Vector2D monsterPos = this.getPhysics().getPosition();
+        double squareDisplace = playerPos.distanceSquared(monsterPos);
+        double tileDistanceSquared = Main.TILE_HEIGHT * Main.TILE_WIDTH;
+
+        if (squareDisplace <= tileDistanceSquared) {
+            other.hurt(1);
+        }
+
     }
 }

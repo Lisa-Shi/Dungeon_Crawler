@@ -100,13 +100,6 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
     }
 
     /**
-     * The player consumes the potion and gains its effects.
-     */
-    public void consumePotion() {
-
-    }
-
-    /**
      * Updates the player's position based on its gameobjects.physics as well
      * as the camera's
      *

@@ -31,7 +31,7 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
     private int health;
     private int damageAmt = 1;
     private Vector2D direction;
-
+    private boolean moveability = true;
     private DynamicCollisionBox collisionBox;
 
     private int money;
@@ -115,6 +115,13 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
             Vector2D relenVel = getPhysics().getVelocity().relen(Main.MAX_PLAYER_SPEED);
             getPhysics().setVelocity(relenVel);
         }
+    }
+    public void setMoveability(boolean input){
+        moveability = input;
+    }
+
+    public boolean isMoveable() {
+        return moveability;
     }
 
     public void update(Camera camera, LinkedList<Collideable> collideables) {

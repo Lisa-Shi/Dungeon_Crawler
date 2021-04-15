@@ -8,6 +8,7 @@ import gameobjects.Damageable;
 import gameobjects.GameObject;
 import gameobjects.HPBar;
 import gameobjects.graphics.functionality.ImageSheet;
+import gameobjects.graphics.functionality.SingularImageSheet;
 import gameobjects.physics.PhysicsController;
 import gameobjects.physics.collisions.Collideable;
 import gameobjects.physics.collisions.CollisionBox;
@@ -37,7 +38,7 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
     private ImageSheet sheet;
     private HPBar hpBar;
     private PropertyChangeSupport support;
-    
+    private Map<GameObject, Integer> carryReward;
     /**
      * constructor
      * @param room the room which the monster locates
@@ -68,6 +69,7 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
         this.collisionBox.generate();
         this.facing = "A";
         this.support = new PropertyChangeSupport(this);
+        carryReward = new TreeMap<>();
     }
 
     /**
@@ -123,10 +125,33 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
                 break;
             }
         }
-        ((DynamicCollisionBox)collisionBox).raytraceCollision(getPhysics(), room.getCollideables());
+        collisionBox.raytraceCollision(getPhysics(), room.getCollideables());
         super.update(camera);
     }
-
+    /**change graphic
+     * return the items that the monster is carrying
+     * @return list of items
+     */
+    public Map<GameObject, Integer> die(){
+        getGraphics().getSprite().setImage(Main.TRANSPARENT_IMAGE);
+        getGraphics().setCurrentReel(
+                new SingularImageSheet(Main.TRANSPARENT_IMAGE).getInitialReel());
+        getHPBar().expire();
+        room.getCollideables().remove(this);
+        room.getHealthbars().remove(getHPBar());
+        room.getMonsters().remove(this);
+        return carryReward;
+    }
+    private boolean checkDistance(Damageable damageable){
+        Vector2D playerLoc =
+                damageable.getPhysics().getPosition().multiply(1.0 / Main.TILE_HEIGHT);
+        Vector2D monsterLoc = getPhysics().getPosition().multiply(1.0 / Main.TILE_HEIGHT);
+        if (playerLoc.distanceSquared(monsterLoc) <= 5) {
+            facing = "";
+            return true;
+        }
+        return false;
+    }
     /**
      * decrease the health of the monster
      * health bar width changes here as well
@@ -197,8 +222,7 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
         Vector2D playerLoc =
                 damageable.getPhysics().getPosition().multiply(1.0 / Main.TILE_HEIGHT);
         Vector2D monsterLoc = getPhysics().getPosition().multiply(1.0 / Main.TILE_HEIGHT);
-        if (playerLoc.distanceSquared(monsterLoc) <= 5) {
-            facing = "";
+        if (checkDistance(damageable)){
             return;
         }
         PriorityQueue<State> thePQ = new PriorityQueue<>(1, new Comparator<State>() {

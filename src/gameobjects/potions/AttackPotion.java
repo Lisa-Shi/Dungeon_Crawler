@@ -1,5 +1,6 @@
-package gameobjects;
+package gameobjects.potions;
 
+import gameobjects.Player;
 import javafx.scene.image.Image;
 import main.Main;
 import main.Weapon;
@@ -10,8 +11,9 @@ import java.util.TimerTask;
  * Attack potion for Dungeon Crawler. Can be held in inventory and when used, increases the damage of the weapon that
  * the player is wielding.
  */
-public class AttackPotion implements Consumable {
+public class AttackPotion extends Potion {
 
+    private String name;
     private Image image;
     private double duration;
     private double damageAmp;
@@ -21,6 +23,7 @@ public class AttackPotion implements Consumable {
      */
     public AttackPotion() {
 //        image =;
+        name = "Attack Potion";
         duration = Main.ATTACK_POTION_DURATION;
         damageAmp = Main.ATTACK_POTION_AMP;
     }
@@ -78,5 +81,11 @@ public class AttackPotion implements Consumable {
         this.damageAmp = damage;
     }
 
-
+    /**
+     * Getter method the name variable.
+     * @return name of the potion
+     */
+    public String getName() {
+        return name;
+    }
 }

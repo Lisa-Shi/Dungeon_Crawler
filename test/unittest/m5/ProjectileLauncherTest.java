@@ -50,12 +50,12 @@ public class ProjectileLauncherTest extends ApplicationTest {
 
         Player p = game.getPlayer();
         ProjectileLauncher weapon = p.getHoldingWeapon();
-        ProjectileLauncher expectedW1 = new ProjectileLauncherA(p);
+        ProjectileLauncher expectedW1 = ProjectileLauncherA.getInstance(p);
         assertEquals(expectedW1, weapon);
 
         moveAndShoot();
 
-        ProjectileLauncher expectedW2 = new ProjectileLauncherB(p);
+        ProjectileLauncher expectedW2 = ProjectileLauncherB.getInstance(p);
         p.obtainNewWeapon(expectedW2);
         p.equipWeapon(expectedW2);
         weapon = p.getHoldingWeapon();
@@ -63,7 +63,7 @@ public class ProjectileLauncherTest extends ApplicationTest {
 
         moveAndShoot();
 
-        ProjectileLauncher expectedW3 = new ProjectileLauncherC(p);
+        ProjectileLauncher expectedW3 = ProjectileLauncherC.getInstance(p);
         p.obtainNewWeapon(expectedW3);
         p.equipWeapon(expectedW3);
         weapon = p.getHoldingWeapon();

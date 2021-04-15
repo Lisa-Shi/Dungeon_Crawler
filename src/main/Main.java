@@ -54,6 +54,10 @@ public class Main extends Application {
     public static final int ENEMY_BULLET_DAMAGE = 10;
     public static final int PLAYER_BULLET_DAMAGE = 5;
 
+    public static final int HEALTH_POTION_HEAL = 25;
+    public static final double ATTACK_POTION_AMP = 2.0;
+    public static final double ATTACK_POTION_DURATION = 15;
+
 
     //public static final int BULLET_TIME_UNTIL_EXPIRATION = 1000;
     public static final int ENEMY_BULLET_BOUNCES_UNTIL_EXPIRATION = 4;

@@ -5,5 +5,5 @@ public interface Consumable {
     /**
      * Allows player to consume the object.
      */
-    void consume();
+    void consume(Player player);
 }

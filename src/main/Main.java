@@ -117,9 +117,9 @@ public class Main extends Application {
     public static final ImageSheet MONSTER_BULLET_SHEET =
             new SingularImageSheet(
                     getImageFrom("../gameobjects/graphics/sprites/bulletM.png"));
-    public static final ImageSheet PLAYER_BULLET_SHEET =
-            new SingularImageSheet(
-                    getImageFrom("../gameobjects/graphics/sprites/bulletP.png"));
+//    public static final ImageSheet PLAYER_BULLET_SHEET =
+//            new SingularImageSheet(
+//                    getImageFrom("../gameobjects/graphics/sprites/bulletP.png"));
     public static final ImageSheet TRANSPARENT_SHEET =
             new SingularImageSheet(
                     getImageFrom("../gameobjects/graphics/sprites/transparent.png"));

@@ -1,5 +1,10 @@
 package screens;
 
+import gameobjects.*;
+import gameobjects.ProjectileLauncher.ProjectileLauncher;
+import gameobjects.ProjectileLauncher.ProjectileLauncherA;
+import gameobjects.ProjectileLauncher.ProjectileLauncherB;
+import gameobjects.ProjectileLauncher.ProjectileLauncherC;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -7,9 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import gameobjects.Player;
 import gamemap.Room;
-import main.Weapon;
 
 /**
  * set up for the configuration screen.
@@ -20,7 +23,7 @@ public class ConfigurationScreen {
     private int height;
     private int difficulty = 0;
     private String name;
-    private int weapon = 0;
+    private ProjectileLauncher weapon;
     private Player player;
     private TextField nameInput;
     private ToggleGroup difficultyToggles;
@@ -118,9 +121,9 @@ public class ConfigurationScreen {
      */
     private TilePane weaponField() {
         String[] wOptions = new String[3];
-        wOptions[0] = "1 weapon";
-        wOptions[1] = "2 weapon";
-        wOptions[2] = "3 weapon";
+        wOptions[0] = "1: weapon";
+        wOptions[1] = "2: weapon";
+        wOptions[2] = "3: weapon";
         TilePane wHb = new TilePane(Orientation.VERTICAL);
         Label groupLabel = new Label("Select weapon: ");
         wHb.getChildren().add(groupLabel);
@@ -171,17 +174,25 @@ public class ConfigurationScreen {
         name = nameInput.getText();
         ToggleButton selectD = (ToggleButton) difficultyToggles.getSelectedToggle();
         difficulty = selectD == null ? -1 : Integer.parseInt(selectD.getText().charAt(0) + "");
+
+        Player p = new Player(name, goRoom, 0,  0, difficulty);
+
+
         ToggleButton selectW = (ToggleButton) weaponToggles.getSelectedToggle();
-        weapon = selectW == null ? -1 : Integer.parseInt(selectW.getText().charAt(0) + "");
-        Weapon playerW = null;
-        Weapon[] wOptions = new Weapon[3];
-        wOptions[0] = new Weapon("1name", "1about", 1, 1);
-        wOptions[1] = new Weapon("2name", "2about", 1, 1);
-        wOptions[2] = new Weapon("3name", "3about", 1, 1);
-        if (weapon != -1) {
-            playerW = wOptions[weapon - 1];
+        int numWeapon = selectW == null ? -1 : Integer.parseInt(selectW.getText().charAt(0) + "");
+
+        ProjectileLauncher weapon;
+        if (numWeapon == 1) {
+            weapon = ProjectileLauncherA.getInstance(p);
+        } else if (numWeapon == 2) {
+            weapon = ProjectileLauncherB.getInstance(p);
+        } else {
+            weapon = ProjectileLauncherC.getInstance(p);
         }
-        return new Player(name, playerW, goRoom, 0,  0, difficulty);
+        System.out.println(weapon.getDescription());
+        p.obtainNewWeapon(weapon);
+
+        return p;
     }
 
     /**

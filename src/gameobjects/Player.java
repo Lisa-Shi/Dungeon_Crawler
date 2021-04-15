@@ -3,6 +3,8 @@
  */
 package gameobjects;
 
+import gameobjects.ProjectileLauncher.ProjectileLauncher;
+import gameobjects.ProjectileLauncher.ProjectileLauncherA;
 import gameobjects.monsters.Monster;
 import gameobjects.physics.collisions.Collideable;
 import gameobjects.physics.collisions.DynamicCollisionBox;
@@ -15,7 +17,6 @@ import gameobjects.graphics.functionality.Drawable;
 import main.Main;
 import gamemap.Room;
 import gameobjects.physics.Vector2D;
-import main.Weapon;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -25,7 +26,7 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
 
     // Variables
     private String name;
-    private List<Weapon> weaponList;
+    private List<ProjectileLauncher> weaponList;
     private int difficulty;
     private int holdingWeapon; // index of weapon in the weapon list
     private int health;
@@ -41,19 +42,19 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
      * to explore and escape the dungeon
      *
      * @param name Player name
-     * @param initialWeapon Weapon player starts game with
      * @param room the room player locates
      * @param initialX x-location player starts at
      * @param initialY y-location player starts at
      * @param difficulty difficulty for the game
      */
-    public Player(String name, Weapon initialWeapon, Room room,
+    public Player(String name, Room room,
                   double initialX, double initialY,  int difficulty) {
         super(room, initialX, initialY, Main.PLAYER_WIDTH / 2,
                 Main.PLAYER_HEIGHT / 2, Main.PLAYER_IMAGE_SHEET);
         this.name = name;
         weaponList = new ArrayList<>();
-        weaponList.add(initialWeapon);
+        holdingWeapon = 0;
+
         direction = new Vector2D(0, -1);
         this.health = Main.PLAYER_STARTING_HEALTH;
 
@@ -84,19 +85,14 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
      */
     public void launchProjectile(Room room, Pane pane,
                                  Camera camera, LinkedList<Monster> monsters) {
-        Projectile bullet = new Projectile(this, room, pane);
-        room.add(bullet);
-        pane.getChildren().add(bullet.getGraphics().getSprite());
-        //
-        //        double range = Main.TILE_WIDTH * 10;
-        //        Vector2D position = this.getPhysics().getPosition();
-        //        Vector2D displacement = direction.multiply(range);
-        //        System.out.println("Dis x:" + displacement.getX() +
-        //        "   Aim y:" + displacement.getY());
-        //        Vector2D aim = position.add(displacement);
-        //        System.out.println("Aim x:" + aim.getX() + "   Aim y:" + aim.getY());
-        bullet.launch();
-        bullet.update(camera);
+
+        if (weaponList.size() < 0 || weaponList.get(holdingWeapon) == null) {
+            ProjectileLauncher weapon = ProjectileLauncherA.getInstance(this);
+            weaponList.add(weapon);
+            holdingWeapon = weaponList.size() - 1;
+        }
+        ProjectileLauncher weapon = weaponList.get(holdingWeapon);
+        weapon.shoot(room, pane, camera);
     }
 
     /**
@@ -173,29 +169,36 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
     /**
      * @param newWeapon Weapon to add to player's collection
      */
-    public void obtainNewWeapon(Weapon newWeapon) {
+    public void obtainNewWeapon(ProjectileLauncher newWeapon) {
         weaponList.add(newWeapon);
     }
 
     /**
      * @param target Weapon player will now hold
      */
-    public void equipWeapon(Weapon target) {
+    public void equipWeapon(ProjectileLauncher target) {
         holdingWeapon = weaponList.indexOf(target);
     }
 
     /**
      * @return Player's collection of weapons
      */
-    public List<Weapon> getWeaponList() {
+    public List<ProjectileLauncher> getWeaponList() {
         return weaponList;
     }
 
     /**
      * @return Index of the weapon the player is holding
      */
-    public int getHoldingWeapon() {
+    public int getHoldingWeaponIndex() {
         return holdingWeapon;
+    }
+
+    /**
+     * @return Index of the weapon the player is holding
+     */
+    public ProjectileLauncher getHoldingWeapon() {
+        return weaponList.get(holdingWeapon);
     }
 
     /**

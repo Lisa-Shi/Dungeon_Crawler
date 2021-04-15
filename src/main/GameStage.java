@@ -2,6 +2,7 @@ package main;
 
 import gamemap.GameMap;
 import gamemap.Room;
+import gameobjects.NPC;
 import gameobjects.physics.Vector2D;
 import gameobjects.tiles.ExitTile;
 import gameobjects.GameObject;
@@ -12,15 +13,18 @@ import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -50,7 +54,7 @@ public class GameStage extends Stage {
     private Button winButton;
     private Button restartButton;
     private Button exitButton;
-
+    private StackPane inv = new StackPane();
     private AnimationTimer timer;
     private Player player;
     private Camera camera;
@@ -245,15 +249,10 @@ public class GameStage extends Stage {
                 monster.update(camera);
                 monster.attack(room, pane, player);
             } else {
-                monster.getGraphics().getSprite().setImage(Main.TRANSPARENT_IMAGE);
-                monster.getGraphics().setCurrentReel(
-                        new SingularImageSheet(Main.TRANSPARENT_IMAGE).getInitialReel());
-                room.getCollideables().remove(monster);
-                room.getHealthbars().remove(monster.getHPBar());
-                room.getMonsters().remove(monster);
-                monster.getHPBar().expire();
+                LinkedList<GameObject> rewards = monster.die();
                 pane.getChildren().remove(monster);
-
+                player.setMoveability(false);
+                openInventory(rewards);
                 i--;
             }
         }
@@ -262,7 +261,55 @@ public class GameStage extends Stage {
             ae -> moveMonsters()));
         timeline.play();
     }
-
+    private void openInventory(LinkedList<GameObject> items){
+        Bounds bound = pane.getLayoutBounds();
+        Rectangle rewardRec = new Rectangle();
+        Button close = new Button("X");
+        close.setAlignment(Pos.TOP_RIGHT);
+        close.setOnAction(event->{
+            pane.getChildren().remove(inv);
+            pane.getChildren().remove(rewardRec);
+            player.setMoveability(true);
+        });
+        GridPane inventory = new GridPane();
+        inventory.setHgap(15);
+        inventory.setVgap(20);
+        inventory.getRowConstraints().add(new RowConstraints(5));
+        inventory.getRowConstraints().add(new RowConstraints(5));
+        inventory.getRowConstraints().add(new RowConstraints(5));
+        inventory.getRowConstraints().add(new RowConstraints(5));
+        inventory.getStylesheets().add("inventoryStyleSheet.css");
+        inventory.add(close, 5, 0);
+        int row = 1;
+        int col = 0;
+        for( int i = 0; i < 15 ; i++){
+            if( col == 0 || col == 6){
+                //Text spaceHolder = new Text("      ");
+                //inventory.add(spaceHolder, col, row);
+            } else {
+                Button itembutton = new Button("a");
+                itembutton.getStylesheets().add("inventoryStyleSheet.css");
+                itembutton.getStyleClass().add("button");
+                inventory.add(itembutton, col, row);
+            }
+            if( col == 4){
+                row++;
+                col = 0;
+            } else{
+                col++;
+            }
+        }
+        rewardRec.setOpacity(0.8);
+        rewardRec.setHeight(bound.getHeight() / 2);
+        rewardRec.setWidth(bound.getWidth() / 2);
+        rewardRec.setX(bound.getWidth() / 2 - bound.getWidth() / 4);
+        rewardRec.setY(bound.getHeight() / 2 - bound.getHeight() / 4);
+        inv.getChildren().addAll(inventory, rewardRec);
+        inv.setLayoutX(bound.getWidth() / 2 - bound.getWidth() / 4);
+        inv.setLayoutY(bound.getHeight() / 2 - bound.getHeight() / 4);
+        pane.getChildren().add(rewardRec);
+        pane.getChildren().add(inv);
+    }
     private void teleportPlayerToEnteredRoom() {
         if (room != null && map != null && !GameMap.enterRoom().equals(room)) {
             prevRoom = room;
@@ -383,31 +430,39 @@ public class GameStage extends Stage {
     private EventHandler<KeyEvent> keyPressed = new EventHandler<KeyEvent>() {
         @Override
         public void handle(KeyEvent event) {
-            if (event.getCode() == KeyCode.A) {
+            if (event.getCode() == KeyCode.A && player.getMoveability()) {
                 playerIsMovingLeft = true;
                 player.getGraphics().setCurrentReel(
                         player.getSpriteSheet().getWalkSheet().getLeftImage());
             }
-            if (event.getCode() == KeyCode.D) {
+            if (event.getCode() == KeyCode.D && player.getMoveability()) {
                 playerIsMovingRight = true;
                 player.getGraphics().setCurrentReel(
                         player.getSpriteSheet().getWalkSheet().getRightImage());
             }
-            if (event.getCode() == KeyCode.W) {
+            if (event.getCode() == KeyCode.W && player.getMoveability()) {
                 playerIsMovingUp = true;
                 player.getGraphics().setCurrentReel(
                         player.getSpriteSheet().getWalkSheet().getUpImage());
             }
-            if (event.getCode() == KeyCode.S) {
+            if (event.getCode() == KeyCode.S && player.getMoveability()) {
                 playerIsMovingDown = true;
                 player.getGraphics().setCurrentReel(
                         player.getSpriteSheet().getWalkSheet().getDownImage());
             }
-            if (event.getCode() == KeyCode.ENTER) {
+            if (event.getCode() == KeyCode.ENTER && player.getMoveability()) {
                 player.launchProjectile(room, pane, camera, room.getMonsters());
+            }
+            if (event.getCode() == KeyCode.E && player.getMoveability() && room.getNpc() != null) {
+                player.setMoveability(false);
+                enterStore();
             }
         }
     };
+    private void enterStore(){
+        NPC npc = room.getNpc();
+
+    }
     /**
      * Derived from https://stackoverflow.com/questions/39007382/moving-two-rectangles-with-keyboard-in-javafx
      * Register key release to stop moving player in direction specified
@@ -416,6 +471,9 @@ public class GameStage extends Stage {
     private EventHandler<KeyEvent> keyReleased = new EventHandler<KeyEvent>() {
         @Override
         public void handle(KeyEvent event) {
+            if (event.getCode() == KeyCode.E) {
+                player.setMoveability(true);
+            }
             if (event.getCode() == KeyCode.A) {
                 playerIsMovingLeft = false;
                 player.setDirection(new Vector2D(-1, 0));

@@ -123,13 +123,6 @@ public class Main extends Application {
             new Image(Main.class.
                     getResource("../gameobjects/graphics/sprites/transparent.png").
                     toExternalForm());
-    public static final Image NPC_big =
-            new Image(Main.class.
-                    getResource("../gameobjects/graphics/sprites/NPCBig.png").
-                    toExternalForm());
-    public static final ImageSheet NPC_small =
-            new SingularImageSheet(
-                    getImageFrom("../gameobjects/graphics/sprites/NPCPixil.png"));
     private static final DirectionalImageSheet getDirectionalImageSheet(
             String directionImageBase, int numDirectionFrames) {
         // Find <direction> tag in direction gameobjects.graphics.sprites base address

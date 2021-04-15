@@ -9,3 +9,9 @@
     -fx-pref-width: 40px;
     -fx-pref-height: 80px;
 }
+.item_button {
+    -fx-pref-width: 40px;
+    -fx-pref-height: 80px;
+    -fx-background-color: green;
+    -fx-background-radius: 10;
+}

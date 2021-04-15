@@ -183,11 +183,11 @@ public class ConfigurationScreen {
 
         ProjectileLauncher weapon;
         if (numWeapon == 1) {
-            weapon = new ProjectileLauncherA(p);
+            weapon = ProjectileLauncherA.getInstance(p);
         } else if (numWeapon == 2) {
-            weapon = new ProjectileLauncherB(p);
+            weapon = ProjectileLauncherB.getInstance(p);
         } else {
-            weapon = new ProjectileLauncherC(p);
+            weapon = ProjectileLauncherC.getInstance(p);
         }
         System.out.println(weapon.getDescription());
         p.obtainNewWeapon(weapon);

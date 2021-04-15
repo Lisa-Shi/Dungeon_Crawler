@@ -87,7 +87,7 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
                                  Camera camera, LinkedList<Monster> monsters) {
 
         if (weaponList.size() < 0 || weaponList.get(holdingWeapon) == null) {
-            ProjectileLauncher weapon = new ProjectileLauncherA(this);
+            ProjectileLauncher weapon = ProjectileLauncherA.getInstance(this);
             weaponList.add(weapon);
             holdingWeapon = weaponList.size() - 1;
         }

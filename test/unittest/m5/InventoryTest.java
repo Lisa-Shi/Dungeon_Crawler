@@ -2,10 +2,6 @@ package unittest.m5;
 
 import gamemap.Room;
 import gameobjects.Player;
-import gameobjects.ProjectileLauncher.*;
-import gameobjects.physics.Vector2D;
-import gameobjects.physics.collisions.Physical;
-import gameobjects.potions.AttackPotion;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import main.GameStage;
@@ -28,8 +24,7 @@ public class InventoryTest extends ApplicationTest {
         stage.start(new Stage());
     }
     @Test
-    public void consumePotionTest(){
-
+    public void consumePotionTest() {
         press(KeyCode.Q).release(KeyCode.Q);
         player.setHealth(player.getMaxHealth() - 10);
         int oldAmount = player.getHealth();

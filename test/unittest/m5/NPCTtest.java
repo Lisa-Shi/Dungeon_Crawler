@@ -28,13 +28,14 @@ public class NPCTtest extends ApplicationTest {
         stage.start(new Stage());
     }
     @Test
-    public void buyFromNPC(){
+    public void buyFromNPC() {
         int oldAmount = player.getInventory().get(new AttackPotion());
-        player.getPhysics().setPosition(((Physical)r.getOpenables().get(0)).getPhysics().getPosition().subtract(new Vector2D(64, 0)));
+        player.getPhysics().setPosition(((Physical) r.getOpenables().get(0)).getPhysics()
+                .getPosition().subtract(new Vector2D(64, 0)));
         press(KeyCode.D).release(KeyCode.D);
         press(KeyCode.E).release(KeyCode.E);
         release(KeyCode.D);
         clickOn("#AttackPotion");
-        assertTrue(oldAmount+1 == player.getInventory().get(new AttackPotion()));
+        assertTrue(oldAmount + 1 == player.getInventory().get(new AttackPotion()));
     }
 }

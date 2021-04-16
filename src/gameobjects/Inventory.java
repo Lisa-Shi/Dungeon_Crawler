@@ -125,7 +125,7 @@ public class Inventory {
                     if (itembutton.getPotion() != null) {
                         Potion consumable = itembutton.getPotion();
                         from.buttonAction(player, consumable);
-                        if (! (from instanceof NPC)) {
+                        if (!(from instanceof NPC)) {
                             if (items.containsKey(consumable) && items.get(consumable) > 0) {
                                 itembutton.setText("        " + items.get(consumable));
                             } else {

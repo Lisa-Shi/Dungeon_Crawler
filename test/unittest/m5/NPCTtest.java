@@ -15,7 +15,7 @@ import org.testfx.framework.junit.ApplicationTest;
 
 import static org.junit.Assert.*;
 
-public class InventoryTest extends ApplicationTest {
+public class NPCTtest extends ApplicationTest {
     private GameStage stage;
     private Player player;
     private Room r;
@@ -28,12 +28,13 @@ public class InventoryTest extends ApplicationTest {
         stage.start(new Stage());
     }
     @Test
-    public void consumePotionTest(){
-
-        press(KeyCode.Q).release(KeyCode.Q);
-        player.setHealth(player.getMaxHealth()-10);
-        int oldAmount = player.getHealth();
-        clickOn("#HealthPotion");
-        assertTrue(oldAmount != player.getHealth());
+    public void buyFromNPC(){
+        int oldAmount = player.getInventory().get(new AttackPotion());
+        player.getPhysics().setPosition(((Physical)r.getOpenables().get(0)).getPhysics().getPosition().subtract(new Vector2D(64, 0)));
+        press(KeyCode.D).release(KeyCode.D);
+        press(KeyCode.E).release(KeyCode.E);
+        release(KeyCode.D);
+        clickOn("#AttackPotion");
+        assertTrue(oldAmount+1 == player.getInventory().get(new AttackPotion()));
     }
 }

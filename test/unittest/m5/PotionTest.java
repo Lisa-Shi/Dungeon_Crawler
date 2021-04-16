@@ -21,6 +21,10 @@ public class PotionTest extends ApplicationTest {
         game.start(stage);
     }
 
+    /**
+     * Tests the health potion by reducing the players health and then allowing him to take the potion. If the player's
+     * health increases by 25, the test passes.
+     */
     @Test
     public void testHealthPotion() {
         clickOn("Start Game");
@@ -37,6 +41,10 @@ public class PotionTest extends ApplicationTest {
         assertEquals(75, player.getHealth());
     }
 
+    /**
+     * Tests the attack potion by checking the damage that the currently equipped weapon would do, and then giving the
+     * player the potion. If the weapon does double damage after using the potion, the test passes.
+     */
     @Test
     public void testAttackPotion() {
         clickOn("Start Game");

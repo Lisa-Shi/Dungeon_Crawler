@@ -28,15 +28,15 @@ public class PotionTest extends ApplicationTest {
     @Test
     public void testHealthPotion() {
         player.setHealth(50);
-        player.consumePotion();
+        //player.consumePotion();
         assertEquals(75, player.getHealth());
     }
 
     @Test
     public void testAttackPotion() {
-        Weapon weapon = player.getWeaponList().get(player.getHoldingWeapon());
+        ProjectileLauncher weapon = player.getHoldingWeapon();
         int originalDamage = weapon.getDamage();
-        player.consumePotion();
+        //player.consumePotion();
         assertEquals(originalDamage * 2, weapon.getDamage());
     }
 }

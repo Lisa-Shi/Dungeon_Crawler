@@ -404,7 +404,7 @@ public class GameStage extends Stage {
                 Vector2D center = player.getPhysics().getPosition().add(
                         player.getDirection().multiply(Main.TILE_HEIGHT));
                 Openable openable = room.findOpenable(center);
-                if( openable != null){
+                if (openable != null){
                     player.setMoveability(false);
                     openable.open(player, pane);
                 }

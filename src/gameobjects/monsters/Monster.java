@@ -2,7 +2,6 @@
  *
          */
 package gameobjects.monsters;
-import gameobjects.Chest;
 import gameobjects.Damageable;
 import gameobjects.GameObject;
 import gameobjects.HPBar;

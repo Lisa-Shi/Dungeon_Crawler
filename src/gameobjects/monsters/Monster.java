@@ -2,6 +2,7 @@
  *
          */
 package gameobjects.monsters;
+import gameobjects.Chest;
 import gameobjects.Damageable;
 import gameobjects.GameObject;
 import gameobjects.HPBar;
@@ -70,6 +71,10 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
         carryReward = new TreeMap<>();
     }
 
+    public Map<Potion, Integer> getCarryReward() {
+        return carryReward;
+    }
+
     /**
      * attack player
      * @param room the room which the monster locats
@@ -134,6 +139,7 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
         getGraphics().getSprite().setImage(Main.TRANSPARENT_IMAGE);
         getGraphics().setCurrentReel(
                 new SingularImageSheet(Main.TRANSPARENT_IMAGE).getInitialReel());
+        collisionBox.setSolid(false);
         getHPBar().expire();
         room.getCollideables().remove(this);
         room.getHealthbars().remove(getHPBar());

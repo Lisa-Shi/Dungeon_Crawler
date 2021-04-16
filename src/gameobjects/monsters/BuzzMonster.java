@@ -5,6 +5,7 @@ package gameobjects.monsters;
 
 import gameobjects.Damageable;
 import gameobjects.physics.Vector2D;
+import gameobjects.potions.HealthPotion;
 import javafx.scene.layout.Pane;
 import main.Main;
 import gamemap.Room;
@@ -12,6 +13,7 @@ import gamemap.Room;
 public class BuzzMonster extends Monster {
     public BuzzMonster(Room room, double initialX, double initialY) {
         super(room, 100, 100, 10, initialX, initialY, Main.BUZZ_STANDING_SHEET);
+        this.getCarryReward().put(new HealthPotion(), 5);
     }
 
     @Override

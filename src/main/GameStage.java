@@ -2,13 +2,10 @@ package main;
 
 import gamemap.GameMap;
 import gamemap.Room;
-import gameobjects.Inventory;
-import gameobjects.Openable;
+import gameobjects.*;
 import gameobjects.physics.Vector2D;
 import gameobjects.physics.collisions.RectangleWireframe;
 import gameobjects.tiles.ExitTile;
-import gameobjects.GameObject;
-import gameobjects.Player;
 import gameobjects.graphics.functionality.ImageReel;
 import gameobjects.graphics.functionality.SingularImageSheet;
 import javafx.animation.AnimationTimer;
@@ -250,10 +247,7 @@ public class GameStage extends Stage {
                 monster.update(camera);
                 monster.attack(room, pane, player);
             } else {
-                //Inventory inv = Inventory.getInstance(monster, pane, player);
-                //inv.show();
-                //pane.getChildren().remove(monster);
-                //player.setMoveability(false);
+                player.getItem(monster.die());
                 i--;
             }
         }

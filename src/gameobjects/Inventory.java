@@ -89,12 +89,10 @@ public class Inventory {
                     Potion potion = entry.getKey();
                     itembutton = new ItemButton(potion);
                     if(from instanceof NPC){
-
                         itembutton.setText("      $"+((NPC)from).getPrice(potion)+"");
                     } else {
                         itembutton.setText("        " + entry.getValue() + "");
                     }
-
                     itembutton.getStyleClass().add(potion.getName());
                 } else{
                     itembutton = new ItemButton(null);

@@ -166,7 +166,9 @@ public class Room implements Physical {
                 }
                 add(exit);
             }
-            add(new NPC(this, 1,3));
+            if( Math.random() > 0.8 || roomId == 0) {
+                add(new NPC(this, 1, 3));
+            }
         }
     }
     /**
@@ -185,10 +187,6 @@ public class Room implements Physical {
         for (Monster monster: monsters) {
             monster.addHPBar(this, pane);
         }
-    }
-    public NPC getNpc() {
-        return null;
-        //return npc;
     }
     private void addFloorTiles() {
         for (int r = 0; r < width; r++) {

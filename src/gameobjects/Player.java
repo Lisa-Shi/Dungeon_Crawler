@@ -91,6 +91,15 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
             inventory.put(potion, 1);
         }
     }
+    public void getItem(Map<Potion, Integer> list){
+        for( Map.Entry<Potion, Integer> entry : list.entrySet()) {
+            if (inventory.containsKey(entry.getKey())) {
+                inventory.put(entry.getKey(), inventory.get(entry.getKey()) + entry.getValue());
+            } else {
+                inventory.put(entry.getKey(), entry.getValue());
+            }
+        }
+    }
     @Override
     public void open(Player player, Pane pane) {
         Inventory inventory = Inventory.getInstance(player, pane, player);

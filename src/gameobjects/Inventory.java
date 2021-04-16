@@ -96,6 +96,7 @@ public class Inventory {
                     }
                     itembutton.setText(text);
                     itembutton.getStyleClass().add(potion.getName());
+                    itembutton.setId(entry.getKey().getName());
                 } else{
                     itembutton = new ItemButton(null);
                     itembutton.getStyleClass().add("Transparent");

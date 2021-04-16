@@ -185,6 +185,10 @@ public class Room implements Physical {
         }
     }
 
+    public LinkedList<Openable> getOpenables() {
+        return openables;
+    }
+
     /**
      * Places the sprites that will be manipulated into the inputted pane
      * for the first time (do not call more than once if pane, etc. is not

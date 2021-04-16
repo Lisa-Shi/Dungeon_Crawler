@@ -1,4 +1,4 @@
-/*package unittest.m5;
+package unittest.m5;
 
 import gamemap.Room;
 import gameobjects.Player;
@@ -40,4 +40,3 @@ public class PotionTest extends ApplicationTest {
         assertEquals(originalDamage * 2, weapon.getDamage());
     }
 }
-*/

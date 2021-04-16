@@ -2,6 +2,9 @@ package unittest.m5;
 
 import gamemap.Room;
 import gameobjects.Player;
+import gameobjects.potions.AttackPotion;
+import gameobjects.potions.HealthPotion;
+import gameobjects.potions.Potion;
 import javafx.stage.Stage;
 import main.GameStage;
 import main.Main;
@@ -27,16 +30,18 @@ public class PotionTest extends ApplicationTest {
 
     @Test
     public void testHealthPotion() {
+        HealthPotion hp = new HealthPotion();
         player.setHealth(50);
-        player.consumePotion();
+        hp.consume(player);
         assertEquals(75, player.getHealth());
     }
 
     @Test
     public void testAttackPotion() {
+        AttackPotion ap = new AttackPotion();
         Weapon weapon = player.getWeaponList().get(player.getHoldingWeapon());
         int originalDamage = weapon.getDamage();
-        player.consumePotion();
+        ap.consume(player);
         assertEquals(originalDamage * 2, weapon.getDamage());
     }
 }

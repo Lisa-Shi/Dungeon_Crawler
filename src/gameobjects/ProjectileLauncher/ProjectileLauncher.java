@@ -1,6 +1,5 @@
 package gameobjects.ProjectileLauncher;
 
-import com.sun.java.swing.plaf.windows.WindowsDesktopPaneUI;
 import gamemap.Room;
 import gameobjects.Player;
 import gameobjects.graphics.functionality.ImageSheet;

@@ -69,7 +69,7 @@ public class Main extends Application {
 
     public static final int PLAYER_STARTING_HEALTH = 100;
 
-    public static final int DEFAULT_COLLISION_PRECISION = 8;
+    public static final int DEFAULT_COLLISION_PRECISION = 20;
 
     public static final PolygonWireframe TILE_WIREFRAME =
             new RectangleWireframe(Main.PLAYER_WIDTH, Main.PLAYER_HEIGHT);

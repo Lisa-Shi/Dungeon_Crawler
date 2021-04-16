@@ -130,7 +130,11 @@ public class DynamicCollisionBox extends CollisionBox {
                 boundaries.clear();
             }
 
-            if (backtrackVel.getX() == 0 && backtrackVel.getY() == 0) {
+            if (backtrackVel.len() < 0.001D) {
+                break;
+            }
+
+            if (backtracks >= 100) {
                 break;
             }
         } while (hasCollidedWithSolid);

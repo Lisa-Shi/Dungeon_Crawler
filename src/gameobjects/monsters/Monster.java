@@ -100,7 +100,7 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
     }
 
     /**
-     * the monster positiona and hp bar position are updated here
+     * the monster position and hp bar position are updated here
      * @param camera camera that focuses on object
      */
     @Override
@@ -149,7 +149,7 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
         Vector2D playerLoc =
                 damageable.getPhysics().getPosition().multiply(1.0 / Main.TILE_HEIGHT);
         Vector2D monsterLoc = getPhysics().getPosition().multiply(1.0 / Main.TILE_HEIGHT);
-        if (playerLoc.distanceSquared(monsterLoc) <= 5) {
+        if (playerLoc.distanceSquared(monsterLoc) <= 0) {
             facing = "";
             return true;
         }

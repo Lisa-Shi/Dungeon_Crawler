@@ -2,10 +2,8 @@ package gameobjects.ProjectileLauncher;
 
 import gamemap.Room;
 import gameobjects.Player;
-import gameobjects.graphics.functionality.ImageSheet;
 import gameobjects.graphics.functionality.SingularImageSheet;
 import javafx.scene.layout.Pane;
-import main.Main;
 import gameobjects.physics.Camera;
 
 public abstract class ProjectileLauncher {
@@ -26,37 +24,19 @@ public abstract class ProjectileLauncher {
      * @param player shooting bullet (shooter)
      * @param range determines number of bounces and travel time
      * @param damage inflicted on monster
-     * @param img of bullet
+     * @param image of bullet
      * @param name of weapon
      */
-    public ProjectileLauncher(Player player, int range, int damage, SingularImageSheet image, String name) {
+    public ProjectileLauncher(Player player, int range, int damage,
+                              SingularImageSheet image, String name) {
         this.player = player;
         this.range = range;
         this.damage = damage;
         this.name = name;
         this.image = image;
         this.price = (range % 3 + 1) * (damage % 3 + 1) * 5;
-        //look(img);
-        //LauncherInventory.getInstance().add(this);
     }
 
-    /**
-     * Changes the image sheet
-     *
-     * @param img file name, ex: bullet.png
-     */
-    public void look(String img) {
-//        if (img == null) {
-//            bulletImg = defaultImg;
-//            return;
-//        }
-        //Image = new Image(Main.class.getResource(name).toExternalForm());
-//        bulletImg = new SingularImageSheet(
-//                Main.getImageFrom("../gameobjects/graphics/sprites/bulletImg/" + img));
-//        if (defaultImg == null) {
-//            defaultImg = bulletImg;
-//        }
-    }
 
     public void shoot(Room room, Pane pane, Camera camera) {
         Projectile bullet = new Projectile(player, room, pane, range, damage, image);
@@ -65,7 +45,7 @@ public abstract class ProjectileLauncher {
         bullet.launch();
         bullet.update(camera);
     }
-    public void setDamage(int input){
+    public void setDamage(int input) {
         this.damage = input;
     }
     public int getDamage() {
@@ -85,12 +65,12 @@ public abstract class ProjectileLauncher {
     }
 
     @Override
-    public boolean equals (Object o) {
+    public boolean equals(Object o) {
         if (o instanceof ProjectileLauncher && o.getClass().equals(this.getClass())) {
             ProjectileLauncher other = (ProjectileLauncher) o;
 
-            boolean isEqual = name.equals(other.getName()) &&
-                    damage == other.getDamage() && range == other.getRange();
+            boolean isEqual = name.equals(other.getName())
+                    && damage == other.getDamage() && range == other.getRange();
             return isEqual;
         }
         return false;

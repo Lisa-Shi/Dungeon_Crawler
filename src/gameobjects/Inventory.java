@@ -22,18 +22,19 @@ public class Inventory {
     private Map<Potion, Integer> items;
     private static Inventory unique;
     private Openable from;
-    public static synchronized Inventory getInstance(Openable from, Pane pane, Player player){
+    public static synchronized Inventory getInstance(Openable from,
+                                                     Pane pane, Player player) {
         unique = new Inventory(from, pane, player);
         return unique;
     }
-    private Inventory(Openable from, Pane pane, Player player){
+    private Inventory(Openable from, Pane pane, Player player) {
         this.from = from;
         this.items = from.getInventory();
         this.pane = pane;
         this.player = player;
         setUpUI();
     }
-    private void setUpUI(){
+    private void setUpUI() {
         Bounds bound = pane.getLayoutBounds();
         inv = new StackPane();
         inv.setPrefSize(250, 240);
@@ -47,16 +48,16 @@ public class Inventory {
         inv.setLayoutY(bound.getHeight() / 2 - bound.getHeight() / 4);
 
     }
-    private Button setupClose(){
+    private Button setupClose() {
         Button close = new Button("X");
         close.getStyleClass().add("button");
         close.setPrefSize(50, 45);
-        close.setOnAction(event->{
+        close.setOnAction(event -> {
             close();
         });
         return close;
     }
-    private GridPane setupGrid(){
+    private GridPane setupGrid() {
         GridPane inventory = new GridPane();
         inventory.setHgap(5);
         inventory.setVgap(5);
@@ -71,18 +72,19 @@ public class Inventory {
         return inventory;
     }
 
-    private void addItems(GridPane inventory){
+    private void addItems(GridPane inventory) {
         int row = 2;
         int col = 0;
         Iterator<Map.Entry<Potion, Integer>> iterator = null;
         if (items != null) {
             iterator = items.entrySet().iterator();
         }
-        ListIterator<ProjectileLauncher> launcherInventoryIterator = LauncherInventory.getInstance().listIterator();
+        ListIterator<ProjectileLauncher> launcherInventoryIterator =
+                LauncherInventory.getInstance().listIterator();
         System.out.println(LauncherInventory.getInstance());
         ListIterator<ProjectileLauncher> launcherIterator = player.getWeaponList().listIterator();
 
-        for (int i = 0; i < 18 ; i++) {
+        for (int i = 0; i < 18; i++) {
             Map.Entry<Potion, Integer> entry;
             if (col == 0 || col == 5) {
                 Text spaceHolder = new Text("      ");
@@ -90,25 +92,25 @@ public class Inventory {
             } else {
                 System.out.println(from.getClass());
                 ItemButton itembutton;
-                if (iterator != null && iterator.hasNext()){
+                if (iterator != null && iterator.hasNext()) {
                     //adding the potions to inventory
                     String text;
                     entry = iterator.next();
                     Potion potion = entry.getKey();
                     itembutton = new ItemButton(potion);
                     if (from instanceof NPC) {
-                        text = "      $"+((NPC)from).getPrice(potion);
+                        text = "      $" + ((NPC) from).getPrice(potion);
                     } else {
                         text = "        " + entry.getValue();
                     }
                     itembutton.setText(text);
                     itembutton.getStyleClass().add(potion.getName());
                     itembutton.setId(entry.getKey().getName());
-                } else if(from instanceof Player && launcherIterator.hasNext()) {
+                } else if (from instanceof Player && launcherIterator.hasNext()) {
                     //adding the player's launchers to the inventory
                     ProjectileLauncher launcher = launcherIterator.next();
                     itembutton = loadLauncher(launcher);
-                } else if(from instanceof LauncherChest && launcherInventoryIterator.hasNext()) {
+                } else if (from instanceof LauncherChest && launcherInventoryIterator.hasNext()) {
                     //adding the available launchers to the chest inventory
                     ProjectileLauncher launcher = launcherInventoryIterator.next();
                     itembutton = loadLauncher(launcher);
@@ -124,9 +126,10 @@ public class Inventory {
                         Potion consumable = itembutton.getPotion();
                         //not the best way to do it but good enough for meeting deadline
 
+                        int money = player.getMoney();
                         if (from instanceof NPC) {
-                            if(player.getMoney() >= ((NPC)from).getPrice(consumable)){
-                                player.setMoney(player.getMoney()-((NPC)from).getPrice(consumable));
+                            if (money >= ((NPC) from).getPrice(consumable)) {
+                                player.setMoney(money - ((NPC) from).getPrice(consumable));
                                 player.getItem(consumable);
                                 loseItem(consumable);
                             }
@@ -134,12 +137,12 @@ public class Inventory {
                             if (from instanceof Player) {
                                 consumable.consume(player);
                                 loseItem(consumable);
-                            } else if (from instanceof PotionChest){
+                            } else if (from instanceof PotionChest) {
                                 player.getItem(consumable);
                                 loseItem(consumable);
                             }
                             if (items.containsKey(consumable) && items.get(consumable) > 0) {
-                                itembutton.setText("        "+items.get(consumable));
+                                itembutton.setText("        " + items.get(consumable));
                             } else {
                                 itembutton.getStyleClass().add("Transparent");
                                 itembutton.setPotion(null);
@@ -150,7 +153,8 @@ public class Inventory {
                         ProjectileLauncher launcher = itembutton.getLauncher();
                         if (from instanceof Player) {
                             player.equipWeapon(launcher);
-                        } else if (from instanceof LauncherChest && launcher.getPrice() <= player.getMoney()) {
+                        } else if (from instanceof LauncherChest
+                                && launcher.getPrice() <= player.getMoney()) {
                             player.setMoney(player.getMoney() - launcher.getPrice());
                             player.obtainNewWeapon(launcher);
                             itembutton.getStyleClass().add("Transparent");
@@ -161,7 +165,7 @@ public class Inventory {
                 });
                 inventory.add(itembutton, col, row);
             }
-            if (col == 5){
+            if (col == 5) {
                 row++;
                 col = 0;
             } else {
@@ -171,7 +175,7 @@ public class Inventory {
         for (int i = 0; i < 6; i++) {
             inventory.add(new Text("      "), i, row);
         }
-        for (int i = 0; i< 6; i++) {
+        for (int i = 0; i < 6; i++) {
             inventory.add(new Text("      "), i, 0);
         }
     }
@@ -194,8 +198,8 @@ public class Inventory {
         from.loseItem(potion);
     }
     public void updateItem(Map<Potion, Integer> updataItems) {
-        for (Potion potion: updataItems.keySet()){
-            if (items.containsKey(potion)){
+        for (Potion potion: updataItems.keySet()) {
+            if (items.containsKey(potion)) {
                 items.put(potion, items.get(potion) + updataItems.get(potion));
             } else {
                 items.put(potion, updataItems.get(potion));
@@ -204,8 +208,8 @@ public class Inventory {
     }
 
     private class ItemButton extends Button {
-        public Potion potion;
-        public ProjectileLauncher launcher;
+        private Potion potion;
+        private ProjectileLauncher launcher;
 
         public ItemButton(Potion potion) {
             super();

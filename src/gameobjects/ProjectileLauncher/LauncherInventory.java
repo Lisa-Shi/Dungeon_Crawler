@@ -1,7 +1,5 @@
 package gameobjects.ProjectileLauncher;
 
-import gameobjects.Player;
-
 import java.util.LinkedList;
 
 public class LauncherInventory {

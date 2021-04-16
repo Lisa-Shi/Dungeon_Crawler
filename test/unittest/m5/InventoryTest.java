@@ -29,9 +29,10 @@ public class InventoryTest extends ApplicationTest {
     }
 
     @Test
-    public void buyFromNPC(){
+    public void buyFromNPC() {
         int oldAmount = player.getInventory().get(new AttackPotion());
-        player.getPhysics().setPosition(((Physical)r.getOpenables().get(0)).getPhysics().getPosition().subtract(new Vector2D(64, 0)));
+        player.getPhysics().setPosition(((Physical) r.getOpenables().get(0))
+                .getPhysics().getPosition().subtract(new Vector2D(64, 0)));
         press(KeyCode.D);
         try {
             Thread.sleep(500);
@@ -47,11 +48,11 @@ public class InventoryTest extends ApplicationTest {
         }
         release(KeyCode.D);
         clickOn("#AttackPotion");
-        assertTrue(oldAmount+1 == player.getInventory().get(new AttackPotion()));
+        assertTrue(oldAmount + 1 == player.getInventory().get(new AttackPotion()));
     }
     @Test
-    public void consumePotionTest(){
-        player.setHealth(player.getMaxHealth()-10);
+    public void consumePotionTest() {
+        player.setHealth(player.getMaxHealth() - 10);
         int oldAmount = player.getHealth();
         press(KeyCode.Q);
         try {

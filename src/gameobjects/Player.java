@@ -70,9 +70,11 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
         inventory.put(new AttackPotion(), 5);
         inventory.put(new HealthPotion(), 10);
     }
-    public int getMaxHealth(){
+
+    public int getMaxHealth() {
         return maxHealth;
     }
+
     private void giveMoney(int difficulty) {
         if (difficulty == 1) {
             money = 100;
@@ -82,18 +84,21 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
             money = 20;
         }
     }
+
     public Map<Potion, Integer> getInventory() {
         return inventory;
     }
-    public void getItem(Potion potion){
-        if( inventory.containsKey(potion)){
-            inventory.put(potion, inventory.get(potion)+1);
-        }else{
+
+    public void getItem(Potion potion) {
+        if (inventory.containsKey(potion)) {
+            inventory.put(potion, inventory.get(potion) + 1);
+        } else {
             inventory.put(potion, 1);
         }
     }
-    public void getItem(Map<Potion, Integer> list){
-        for( Map.Entry<Potion, Integer> entry : list.entrySet()) {
+
+    public void getItem(Map<Potion, Integer> list) {
+        for (Map.Entry<Potion, Integer> entry : list.entrySet()) {
             if (inventory.containsKey(entry.getKey())) {
                 inventory.put(entry.getKey(), inventory.get(entry.getKey()) + entry.getValue());
             } else {
@@ -109,10 +114,10 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
 
     //@Override
     public void loseItem(Potion potion) {
-        if( inventory.containsKey(potion)){
-            if(inventory.get(potion)-1 != 0) {
+        if (inventory.containsKey(potion)) {
+            if (inventory.get(potion) - 1 != 0) {
                 inventory.put(potion, inventory.get(potion) - 1);
-            }else{
+            } else {
                 inventory.remove(potion);
             }
         }
@@ -154,7 +159,7 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
             getPhysics().setVelocity(relenVel);
         }
     }
-    public void setMoveability(boolean input){
+    public void setMoveability(boolean input) {
         moveability = input;
     }
 

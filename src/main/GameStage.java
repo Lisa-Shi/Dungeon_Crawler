@@ -4,17 +4,13 @@ import gamemap.GameMap;
 import gamemap.Room;
 import gameobjects.*;
 import gameobjects.physics.Vector2D;
-import gameobjects.physics.collisions.RectangleWireframe;
 import gameobjects.tiles.ExitTile;
 import gameobjects.graphics.functionality.ImageReel;
-import gameobjects.graphics.functionality.SingularImageSheet;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
-import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -32,7 +28,6 @@ import javafx.scene.control.*;
 import javafx.util.Duration;
 import gameobjects.monsters.Monster;
 import gameobjects.physics.Camera;
-import org.assertj.core.internal.bytebuddy.agent.builder.AgentBuilder;
 import screens.LoseScreen;
 
 import java.util.ArrayList;
@@ -255,7 +250,11 @@ public class GameStage extends Stage {
             ae -> moveMonsters()));
         timeline.play();
     }
-    public void enterStore(){}
+
+    public void enterStore() {
+
+    }
+
     private void teleportPlayerToEnteredRoom() {
         if (room != null && map != null && !GameMap.enterRoom().equals(room)) {
             prevRoom = room;
@@ -404,12 +403,12 @@ public class GameStage extends Stage {
                 Vector2D center = player.getPhysics().getPosition().add(
                         player.getDirection().multiply(Main.TILE_HEIGHT));
                 Openable openable = room.findOpenable(center);
-                if (openable != null){
+                if (openable != null) {
                     player.setMoveability(false);
                     openable.open(player, pane);
                 }
             }
-            if (event.getCode() == KeyCode.Q && player.isMoveable()){
+            if (event.getCode() == KeyCode.Q && player.isMoveable()) {
 
                 player.setMoveability(false);
                 Inventory inventory = Inventory.getInstance(player, pane, player);

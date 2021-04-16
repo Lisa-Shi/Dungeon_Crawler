@@ -107,24 +107,24 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
     public void update(Camera camera) {
         if (hpBar != null) {
             switch (facing) {
-                case "A":
-                    hpBar.getPhysics().pushLeft(Main.ENEMY_CONTROL_FORCE);
-                    getPhysics().pushLeft(Main.ENEMY_CONTROL_FORCE);
-                    break;
-                case "D":
-                    hpBar.getPhysics().pushRight(Main.ENEMY_CONTROL_FORCE);
-                    getPhysics().pushRight(Main.ENEMY_CONTROL_FORCE);
-                    break;
-                case "W":
-                    hpBar.getPhysics().pushUp(Main.ENEMY_CONTROL_FORCE);
-                    getPhysics().pushUp(Main.ENEMY_CONTROL_FORCE);
-                    break;
-                case "S":
-                    hpBar.getPhysics().pushDown(Main.ENEMY_CONTROL_FORCE);
-                    getPhysics().pushDown(Main.ENEMY_CONTROL_FORCE);
-                    break;
-                default:
-                    break;
+            case "A":
+                hpBar.getPhysics().pushLeft(Main.ENEMY_CONTROL_FORCE);
+                getPhysics().pushLeft(Main.ENEMY_CONTROL_FORCE);
+                break;
+            case "D":
+                hpBar.getPhysics().pushRight(Main.ENEMY_CONTROL_FORCE);
+                getPhysics().pushRight(Main.ENEMY_CONTROL_FORCE);
+                break;
+            case "W":
+                hpBar.getPhysics().pushUp(Main.ENEMY_CONTROL_FORCE);
+                getPhysics().pushUp(Main.ENEMY_CONTROL_FORCE);
+                break;
+            case "S":
+                hpBar.getPhysics().pushDown(Main.ENEMY_CONTROL_FORCE);
+                getPhysics().pushDown(Main.ENEMY_CONTROL_FORCE);
+                break;
+            default:
+                break;
             }
         }
         collisionBox.raytraceCollision(getPhysics(), room.getCollideables());
@@ -134,7 +134,7 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
      * return the items that the monster is carrying
      * @return list of items
      */
-    public Map<Potion, Integer> die(){
+    public Map<Potion, Integer> die() {
         getGraphics().getSprite().setImage(Main.TRANSPARENT_IMAGE);
         getGraphics().setCurrentReel(
                 new SingularImageSheet(Main.TRANSPARENT_IMAGE).getInitialReel());
@@ -145,7 +145,7 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
         room.getMonsters().remove(this);
         return carryReward;
     }
-    private boolean checkDistance(Damageable damageable){
+    private boolean checkDistance(Damageable damageable) {
         Vector2D playerLoc =
                 damageable.getPhysics().getPosition().multiply(1.0 / Main.TILE_HEIGHT);
         Vector2D monsterLoc = getPhysics().getPosition().multiply(1.0 / Main.TILE_HEIGHT);
@@ -225,7 +225,7 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
         Vector2D playerLoc =
                 damageable.getPhysics().getPosition().multiply(1.0 / Main.TILE_HEIGHT);
         Vector2D monsterLoc = getPhysics().getPosition().multiply(1.0 / Main.TILE_HEIGHT);
-        if (checkDistance(damageable)){
+        if (checkDistance(damageable)) {
             return;
         }
         PriorityQueue<State> thePQ = new PriorityQueue<>(1, new Comparator<State>() {
@@ -312,7 +312,7 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
         public Vector2D getState() {
             return state;
         }
-        public ArrayList<Vector2D> getPossibleAction(){
+        public ArrayList<Vector2D> getPossibleAction() {
             ArrayList<Vector2D> successors = new ArrayList() {
                 {
                     add(new Vector2D(1, 0));
@@ -330,7 +330,7 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
                         new RectangleWireframe(10, 10));
                 dcb.generate();
                 for (Collideable collideable: room.getCollideables()) {
-                    if(dcb.collidedWith(collideable.getCollisionBox())){
+                    if (dcb.collidedWith(collideable.getCollisionBox())) {
                         removeList.add(successor);
                     }
                 }

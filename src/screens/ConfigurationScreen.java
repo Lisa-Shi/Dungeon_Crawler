@@ -1,10 +1,7 @@
 package screens;
 
 import gameobjects.*;
-import gameobjects.ProjectileLauncher.ProjectileLauncher;
-import gameobjects.ProjectileLauncher.ProjectileLauncherA;
-import gameobjects.ProjectileLauncher.ProjectileLauncherB;
-import gameobjects.ProjectileLauncher.ProjectileLauncherC;
+import gameobjects.ProjectileLauncher.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -13,6 +10,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import gamemap.Room;
+
+import java.util.List;
 
 /**
  * set up for the configuration screen.
@@ -181,6 +180,11 @@ public class ConfigurationScreen {
         ToggleButton selectW = (ToggleButton) weaponToggles.getSelectedToggle();
         int numWeapon = selectW == null ? -1 : Integer.parseInt(selectW.getText().charAt(0) + "");
 
+        List<ProjectileLauncher> projectileLauncherList = LauncherInventory.getInstance();
+        projectileLauncherList.add(ProjectileLauncherA.getInstance(p));
+        projectileLauncherList.add(ProjectileLauncherB.getInstance(p));
+        projectileLauncherList.add(ProjectileLauncherC.getInstance(p));
+
         ProjectileLauncher weapon;
         if (numWeapon == 1) {
             weapon = ProjectileLauncherA.getInstance(p);
@@ -191,6 +195,9 @@ public class ConfigurationScreen {
         }
         System.out.println(weapon.getDescription());
         p.obtainNewWeapon(weapon);
+        projectileLauncherList.remove(weapon);
+
+        System.out.println("INVENTORY SIZE" + projectileLauncherList.size());
 
         return p;
     }

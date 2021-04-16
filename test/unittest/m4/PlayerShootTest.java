@@ -2,7 +2,7 @@ package unittest.m4;
 
 import gamemap.Room;
 import gameobjects.Player;
-import gameobjects.Projectile;
+import gameobjects.ProjectileLauncher.Projectile;
 import gameobjects.monsters.Monster;
 import gameobjects.physics.collisions.Collideable;
 import gameobjects.tiles.ExitTile;
@@ -10,7 +10,6 @@ import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import main.GameStage;
 import main.Main;
-import main.Weapon;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 
@@ -27,7 +26,8 @@ public class PlayerShootTest extends ApplicationTest {
     public void start(Stage primaryStage) throws Exception {
         Room r = new Room(20, 20);
         this.room = r;
-        player1 = new Player("unittest", new Weapon("unittest", "unittest", 1, 5), r, 0, 0, 0);
+        player1 = new Player("unittest", r, 0, 0, 0);
+        //player1 = new Player("unittest", new Weapon("unittest", "unittest", 1, 5), r, 0, 0, 0);
         game = new GameStage(player1, r);
         this.stage = new Stage();
         game.start(stage);

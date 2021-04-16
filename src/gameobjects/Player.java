@@ -3,37 +3,41 @@
  */
 package gameobjects;
 
+import gameobjects.ProjectileLauncher.LauncherInventory;
+import gameobjects.ProjectileLauncher.ProjectileLauncher;
+import gameobjects.ProjectileLauncher.ProjectileLauncherA;
 import gameobjects.monsters.Monster;
 import gameobjects.physics.collisions.Collideable;
 import gameobjects.physics.collisions.DynamicCollisionBox;
 import gameobjects.physics.collisions.Passable;
 import gameobjects.physics.collisions.RectangleWireframe;
 import gameobjects.graphics.functionality.CharacterImageSheet;
+import gameobjects.potions.AttackPotion;
+import gameobjects.potions.HealthPotion;
+import gameobjects.potions.Potion;
 import javafx.scene.layout.Pane;
 import gameobjects.physics.Camera;
 import gameobjects.graphics.functionality.Drawable;
 import main.Main;
 import gamemap.Room;
 import gameobjects.physics.Vector2D;
-import main.Weapon;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
-public class Player extends GameObject implements Damageable, Collideable, Drawable {
+public class Player extends GameObject implements Damageable, Collideable, Drawable, Openable {
 
     // Variables
     private String name;
-    private List<Weapon> weaponList;
+    private List<ProjectileLauncher> weaponList;
+    private Map<Potion, Integer> inventory = new TreeMap<>();
     private int difficulty;
     private int holdingWeapon; // index of weapon in the weapon list
     private int health;
+    private int maxHealth;
     private int damageAmt = 1;
     private Vector2D direction;
-
+    private boolean moveability = true;
     private DynamicCollisionBox collisionBox;
-
     private int money;
 
     /**
@@ -41,30 +45,34 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
      * to explore and escape the dungeon
      *
      * @param name Player name
-     * @param initialWeapon Weapon player starts game with
      * @param room the room player locates
      * @param initialX x-location player starts at
      * @param initialY y-location player starts at
      * @param difficulty difficulty for the game
      */
-    public Player(String name, Weapon initialWeapon, Room room,
+    public Player(String name, Room room,
                   double initialX, double initialY,  int difficulty) {
         super(room, initialX, initialY, Main.PLAYER_WIDTH / 2,
                 Main.PLAYER_HEIGHT / 2, Main.PLAYER_IMAGE_SHEET);
         this.name = name;
         weaponList = new ArrayList<>();
-        weaponList.add(initialWeapon);
+        holdingWeapon = 0;
+
         direction = new Vector2D(0, -1);
         this.health = Main.PLAYER_STARTING_HEALTH;
-
+        this.maxHealth = Main.PLAYER_STARTING_HEALTH;
         this.difficulty = difficulty;
         giveMoney(difficulty);
 
         this.collisionBox = new DynamicCollisionBox(getPhysics(),
                 new RectangleWireframe(Main.PLAYER_WIDTH, Main.PLAYER_HEIGHT));
         this.collisionBox.generate();
+        inventory.put(new AttackPotion(), 5);
+        inventory.put(new HealthPotion(), 10);
     }
-
+    public int getMaxHealth(){
+        return maxHealth;
+    }
     private void giveMoney(int difficulty) {
         if (difficulty == 1) {
             money = 100;
@@ -72,6 +80,41 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
             money = 60;
         } else {
             money = 20;
+        }
+    }
+    public Map<Potion, Integer> getInventory() {
+        return inventory;
+    }
+    public void getItem(Potion potion){
+        if( inventory.containsKey(potion)){
+            inventory.put(potion, inventory.get(potion)+1);
+        }else{
+            inventory.put(potion, 1);
+        }
+    }
+    public void getItem(Map<Potion, Integer> list){
+        for( Map.Entry<Potion, Integer> entry : list.entrySet()) {
+            if (inventory.containsKey(entry.getKey())) {
+                inventory.put(entry.getKey(), inventory.get(entry.getKey()) + entry.getValue());
+            } else {
+                inventory.put(entry.getKey(), entry.getValue());
+            }
+        }
+    }
+    @Override
+    public void open(Player player, Pane pane) {
+        Inventory inventory = Inventory.getInstance(player, pane, player);
+        inventory.show();
+    }
+
+    //@Override
+    public void loseItem(Potion potion) {
+        if( inventory.containsKey(potion)){
+            if(inventory.get(potion)-1 != 0) {
+                inventory.put(potion, inventory.get(potion) - 1);
+            }else{
+                inventory.remove(potion);
+            }
         }
     }
 
@@ -84,19 +127,14 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
      */
     public void launchProjectile(Room room, Pane pane,
                                  Camera camera, LinkedList<Monster> monsters) {
-        Projectile bullet = new Projectile(this, room, pane);
-        room.add(bullet);
-        pane.getChildren().add(bullet.getGraphics().getSprite());
-        //
-        //        double range = Main.TILE_WIDTH * 10;
-        //        Vector2D position = this.getPhysics().getPosition();
-        //        Vector2D displacement = direction.multiply(range);
-        //        System.out.println("Dis x:" + displacement.getX() +
-        //        "   Aim y:" + displacement.getY());
-        //        Vector2D aim = position.add(displacement);
-        //        System.out.println("Aim x:" + aim.getX() + "   Aim y:" + aim.getY());
-        bullet.launch();
-        bullet.update(camera);
+
+        if (weaponList.size() < 0 || weaponList.get(holdingWeapon) == null) {
+            ProjectileLauncher weapon = ProjectileLauncherA.getInstance(this);
+            weaponList.add(weapon);
+            holdingWeapon = weaponList.size() - 1;
+        }
+        ProjectileLauncher weapon = weaponList.get(holdingWeapon);
+        weapon.shoot(room, pane, camera);
     }
 
     /**
@@ -115,6 +153,13 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
             Vector2D relenVel = getPhysics().getVelocity().relen(Main.MAX_PLAYER_SPEED);
             getPhysics().setVelocity(relenVel);
         }
+    }
+    public void setMoveability(boolean input){
+        moveability = input;
+    }
+
+    public boolean isMoveable() {
+        return moveability;
     }
 
     public void update(Camera camera, LinkedList<Collideable> collideables) {
@@ -166,29 +211,37 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
     /**
      * @param newWeapon Weapon to add to player's collection
      */
-    public void obtainNewWeapon(Weapon newWeapon) {
+    public void obtainNewWeapon(ProjectileLauncher newWeapon) {
+        LauncherInventory.getInstance().remove(newWeapon);
         weaponList.add(newWeapon);
     }
 
     /**
      * @param target Weapon player will now hold
      */
-    public void equipWeapon(Weapon target) {
+    public void equipWeapon(ProjectileLauncher target) {
         holdingWeapon = weaponList.indexOf(target);
     }
 
     /**
      * @return Player's collection of weapons
      */
-    public List<Weapon> getWeaponList() {
+    public List<ProjectileLauncher> getWeaponList() {
         return weaponList;
     }
 
     /**
      * @return Index of the weapon the player is holding
      */
-    public int getHoldingWeapon() {
+    public int getHoldingWeaponIndex() {
         return holdingWeapon;
+    }
+
+    /**
+     * @return Index of the weapon the player is holding
+     */
+    public ProjectileLauncher getHoldingWeapon() {
+        return weaponList.get(holdingWeapon);
     }
 
     /**

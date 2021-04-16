@@ -1,0 +1,65 @@
+.inventory {
+    -fx-background-size: 1000 1000;
+    -fx-background-color: rgba(51, 51, 51, 0.9);
+    -fx-background-radius: 10;
+}
+.button{
+    -fx-background-color: brown;
+    -fx-background-radius: 2;
+}
+.AttackPotion {
+    -fx-background-image: url("../../../src/gameobjects/graphics/sprites/potionA.png");
+    -fx-background-size: 30px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 20%;
+    -fx-content-display: top;
+    -fx-text-alignment: right;
+    -fx-font-size: 10;
+    -fx-wrap-text: true;
+}
+.HealthPotion {
+    -fx-background-image: url("../../../src/gameobjects/graphics/sprites/potionB.png");
+    -fx-background-size: 30px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 20%;
+    -fx-content-display: top;
+    -fx-text-alignment: right;
+    -fx-font-size: 10;
+    -fx-wrap-text: true;
+}
+.fireball {
+    -fx-background-image: url("../../../src/gameobjects/graphics/sprites/bulletImg/fire.png");
+    -fx-background-size: 40px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 20%;
+    -fx-content-display: top;
+    -fx-text-alignment: right;
+    -fx-font-size: 10;
+    -fx-wrap-text: true;
+}
+.donut {
+    -fx-background-image: url("../../../src/gameobjects/graphics/sprites/bulletImg/donutBox.png");
+    -fx-background-size: 40px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 20%;
+    -fx-content-display: top;
+    -fx-text-alignment: right;
+    -fx-font-size: 10;
+    -fx-wrap-text: true;
+}
+.water {
+    -fx-background-image: url("../../../src/gameobjects/graphics/sprites/bulletImg/waterBox1.png");
+    -fx-background-size: 40px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 20%;
+    -fx-content-display: top;
+    -fx-text-alignment: right;
+    -fx-font-size: 10;
+    -fx-wrap-text: true;
+}
+.Transparent {
+    -fx-background-image: url("../../../src/gameobjects/graphics/sprites/transparent.png");
+    -fx-background-size: 30px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 50%;
+}

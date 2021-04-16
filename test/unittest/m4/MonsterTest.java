@@ -8,7 +8,6 @@ import gameobjects.physics.Vector2D;
 import gameobjects.tiles.ExitTile;
 import javafx.stage.Stage;
 import main.GameStage;
-import main.Weapon;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 
@@ -22,7 +21,8 @@ public class MonsterTest  extends ApplicationTest {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Room r = new Room(20, 20);
-        player = new Player("unittest", new Weapon("unittest", "unittest", 1, 5), r, 0, 0, 0);
+        //player = new Player("unittest", new Weapon("unittest", "unittest", 1, 5), r, 0, 0, 0);
+        player = new Player("unittest", r, 0, 0, 0);
         player.setHealth(1000000);
         game = new GameStage(player, r);
         map = game.getMap();

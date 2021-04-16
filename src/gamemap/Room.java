@@ -1,8 +1,10 @@
 package gamemap;
-
+import gameobjects.*;
+import gameobjects.potions.AttackPotion;
+import gameobjects.potions.HealthPotion;
+import gameobjects.potions.Potion;
 import gameobjects.tiles.ExitTile;
 import gameobjects.tiles.FloorTile;
-import gameobjects.GameObject;
 import gameobjects.tiles.Tile;
 import gameobjects.tiles.WallTile;
 import gameobjects.physics.Camera;
@@ -16,8 +18,8 @@ import gameobjects.monsters.SlimeMonster;
 import gameobjects.physics.collisions.Physical;
 import gameobjects.physics.PhysicsController;
 import gameobjects.graphics.functionality.Drawable;
-import gameobjects.HPBar;
 import gameobjects.physics.Vector2D;
+import main.Main;
 
 import java.util.LinkedList;
 import java.util.*;
@@ -33,8 +35,11 @@ public class Room implements Physical {
     private LinkedList<Collideable> collideables = new LinkedList<>();
     private LinkedList<Drawable> drawables = new LinkedList<>();
     private LinkedList<ExitTile> exits = new LinkedList<>();
+    private LinkedList<Openable> openables = new LinkedList<>();
+    private boolean generatedMonster = false;
+
     /**
-     *gameobjects.monsters is empty when all gameobjects.monsters in this room die
+     * gameobjects.monsters is empty when all gameobjects.monsters in this room die
      */
     private LinkedList<Monster> monsters = new LinkedList<>();
     private LinkedList<GameObject> toRemove = new LinkedList<>();
@@ -79,7 +84,7 @@ public class Room implements Physical {
      * this method will not check if there is already monster in the room
      */
     public void generateMonsters() {
-        if (monsters.isEmpty()) {
+        if (!generatedMonster) {
             Monster monster = null;
             if (roomId == 999) {
                 // Boss monster
@@ -106,7 +111,9 @@ public class Room implements Physical {
                     add(monster);
                 }
             }
+            generatedMonster = true;
         }
+
     }
 
     /**
@@ -162,6 +169,32 @@ public class Room implements Physical {
             }
         }
     }
+    public void addNPC(){
+        if(!generatedMonster) {
+            if (Math.random() > 0.8 || roomId == 0) {
+                add(new NPC(this, 1, 3));
+            }
+        }
+    }
+    public void addChest(){
+        if (openables.isEmpty() && (Math.random() > 0.8 || roomId == 0)) {
+            Map<Potion, Integer> items = new TreeMap<>();
+            items.put(new AttackPotion(), 1);
+            items.put(new HealthPotion(), 1);
+            add(new PotionChest(10, items, this, 2, 1));
+        }
+
+        if (roomId == 0) {
+            add(new LauncherChest(10, this, 4, 5));
+        }
+
+
+    }
+
+    public LinkedList<Openable> getOpenables() {
+        return openables;
+    }
+
     /**
      * Places the sprites that will be manipulated into the inputted pane
      * for the first time (do not call more than once if pane, etc. is not
@@ -171,6 +204,8 @@ public class Room implements Physical {
      */
     public void finalize(Pane pane) {
         addRoomLayout();
+        addChest();
+        addNPC();
         generateMonsters();
         addFloorTiles();
         addSurroundingWalls();
@@ -179,7 +214,6 @@ public class Room implements Physical {
             monster.addHPBar(this, pane);
         }
     }
-
     private void addFloorTiles() {
         for (int r = 0; r < width; r++) {
             for (int c = 0; c < height; c++) {
@@ -295,8 +329,24 @@ public class Room implements Physical {
         if (obj instanceof Monster) {
             monsters.add(0, (Monster) obj);
         }
+        if (obj instanceof Openable) {
+            openables.add(0, (Openable) obj);
+        }
     }
+    public Openable findOpenable(Vector2D center){
+        double upper = center.getY() - (Main.TILE_HEIGHT * 0.5);
+        double lower = center.getY() + (Main.TILE_HEIGHT * 0.5);
+        double left = center.getX() - (Main.TILE_HEIGHT * 0.5);
+        double right = center.getX() + (Main.TILE_HEIGHT * 0.5);
+        for( Openable openable: openables){
+            Vector2D position = ((Physical)openable).getPhysics().getPosition();
 
+            if (position.getX() >= left && position.getX() <= right && position.getY() >= upper && position.getY() <= lower){
+                return openable;
+            }
+        }
+        return null;
+    }
     public void remove(GameObject obj) {
         toRemove.add(obj);
     }

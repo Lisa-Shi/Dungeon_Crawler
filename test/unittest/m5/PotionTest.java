@@ -42,6 +42,46 @@ public class PotionTest extends ApplicationTest {
     }
 
     /**
+     * Tests the health potion by allowing him to take the potion at full health. If the player's health does not
+     * change, the test passes.
+     */
+    @Test
+    public void testHealthPotion2() {
+        clickOn("Start Game");
+        clickOn("#nameInput").write("name");
+        clickOn("1: easy");
+        clickOn("1: weapon");
+        clickOn("Go to room");
+
+        Player player = game.getPlayer();
+
+        HealthPotion hp = new HealthPotion();
+        hp.consume(player);
+        assertEquals(100, player.getHealth());
+    }
+
+
+    /**
+     * Tests the health potion by allowing him to take the potion at full health. If the player's health does not
+     * change, the test passes.
+     */
+    @Test
+    public void testHealthPotion3() {
+        clickOn("Start Game");
+        clickOn("#nameInput").write("name");
+        clickOn("1: easy");
+        clickOn("1: weapon");
+        clickOn("Go to room");
+
+        Player player = game.getPlayer();
+
+        player.setHealth(90);
+        HealthPotion hp = new HealthPotion();
+        hp.consume(player);
+        assertEquals(100, player.getHealth());
+    }
+
+    /**
      * Tests the attack potion by checking the damage that the currently equipped weapon would do, and then giving the
      * player the potion. If the weapon does double damage after using the potion, the test passes.
      */

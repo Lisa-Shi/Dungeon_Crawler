@@ -55,8 +55,8 @@ public class Main extends Application {
     public static final int PLAYER_BULLET_DAMAGE = 5;
 
     public static final int HEALTH_POTION_HEAL = 25;
-    public static final double ATTACK_POTION_AMP = 2.0;
-    public static final double ATTACK_POTION_DURATION = 15;
+    public static final int ATTACK_POTION_AMP = 2;
+    public static final int ATTACK_POTION_DURATION = 15;
 
 
     //public static final int BULLET_TIME_UNTIL_EXPIRATION = 1000;
@@ -127,6 +127,28 @@ public class Main extends Application {
             new Image(Main.class.
                     getResource("../gameobjects/graphics/sprites/transparent.png").
                     toExternalForm());
+    public static final Image NPC_big =
+            new Image(Main.class.
+                    getResource("../gameobjects/graphics/sprites/NPCBig.png").
+                    toExternalForm());
+    public static final ImageSheet NPC_small =
+            new SingularImageSheet(
+                    getImageFrom("../gameobjects/graphics/sprites/NPCPixil.png"));
+    public static final ImageSheet ATTACK_POTION =
+            new SingularImageSheet(
+                    getImageFrom("../gameobjects/graphics/sprites/potionA.png"));
+    public static final ImageSheet HEALTH_POTION =
+            new SingularImageSheet(
+                    getImageFrom("../gameobjects/graphics/sprites/potionB.png"));
+    public static final ImageSheet CHEST_CLOSE =
+            new SingularImageSheet(
+                    getImageFrom("../gameobjects/graphics/sprites/closedChest.png"));
+    public static final ImageSheet CHEST_OPEN =
+            new SingularImageSheet(
+                    getImageFrom("../gameobjects/graphics/sprites/openChest.png"));
+    public static final ImageSheet CHEST_EMPTY =
+            new SingularImageSheet(
+                    getImageFrom("../gameobjects/graphics/sprites/emptyChest.png"));
     private static final DirectionalImageSheet getDirectionalImageSheet(
             String directionImageBase, int numDirectionFrames) {
         // Find <direction> tag in direction gameobjects.graphics.sprites base address

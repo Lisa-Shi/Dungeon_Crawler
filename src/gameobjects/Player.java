@@ -11,6 +11,9 @@ import gameobjects.physics.collisions.DynamicCollisionBox;
 import gameobjects.physics.collisions.Passable;
 import gameobjects.physics.collisions.RectangleWireframe;
 import gameobjects.graphics.functionality.CharacterImageSheet;
+import gameobjects.potions.AttackPotion;
+import gameobjects.potions.HealthPotion;
+import gameobjects.potions.Potion;
 import javafx.scene.layout.Pane;
 import gameobjects.physics.Camera;
 import gameobjects.graphics.functionality.Drawable;
@@ -18,23 +21,22 @@ import main.Main;
 import gamemap.Room;
 import gameobjects.physics.Vector2D;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
-public class Player extends GameObject implements Damageable, Collideable, Drawable {
+public class Player extends GameObject implements Damageable, Collideable, Drawable, Openable {
 
     // Variables
     private String name;
     private List<ProjectileLauncher> weaponList;
+    private Map<Potion, Integer> inventory = new TreeMap<>();
     private int difficulty;
     private int holdingWeapon; // index of weapon in the weapon list
     private int health;
+    private int maxHealth;
     private int damageAmt = 1;
     private Vector2D direction;
-
+    private boolean moveability = true;
     private DynamicCollisionBox collisionBox;
-
     private int money;
 
     /**
@@ -57,15 +59,19 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
 
         direction = new Vector2D(0, -1);
         this.health = Main.PLAYER_STARTING_HEALTH;
-
+        this.maxHealth = Main.PLAYER_STARTING_HEALTH;
         this.difficulty = difficulty;
         giveMoney(difficulty);
 
         this.collisionBox = new DynamicCollisionBox(getPhysics(),
                 new RectangleWireframe(Main.PLAYER_WIDTH, Main.PLAYER_HEIGHT));
         this.collisionBox.generate();
+        inventory.put(new AttackPotion(), 5);
+        inventory.put(new HealthPotion(), 10);
     }
-
+    public int getMaxHealth(){
+        return maxHealth;
+    }
     private void giveMoney(int difficulty) {
         if (difficulty == 1) {
             money = 100;
@@ -73,6 +79,41 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
             money = 60;
         } else {
             money = 20;
+        }
+    }
+    public Map<Potion, Integer> getInventory() {
+        return inventory;
+    }
+    public void getItem(Potion potion){
+        if( inventory.containsKey(potion)){
+            inventory.put(potion, inventory.get(potion)+1);
+        }else{
+            inventory.put(potion, 1);
+        }
+    }
+    public void getItem(Map<Potion, Integer> list){
+        for( Map.Entry<Potion, Integer> entry : list.entrySet()) {
+            if (inventory.containsKey(entry.getKey())) {
+                inventory.put(entry.getKey(), inventory.get(entry.getKey()) + entry.getValue());
+            } else {
+                inventory.put(entry.getKey(), entry.getValue());
+            }
+        }
+    }
+    @Override
+    public void open(Player player, Pane pane) {
+        Inventory inventory = Inventory.getInstance(player, pane, player);
+        inventory.show();
+    }
+
+    @Override
+    public void loseItem(Potion potion) {
+        if( inventory.containsKey(potion)){
+            if(inventory.get(potion)-1 != 0) {
+                inventory.put(potion, inventory.get(potion) - 1);
+            }else{
+                inventory.remove(potion);
+            }
         }
     }
 
@@ -111,6 +152,13 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
             Vector2D relenVel = getPhysics().getVelocity().relen(Main.MAX_PLAYER_SPEED);
             getPhysics().setVelocity(relenVel);
         }
+    }
+    public void setMoveability(boolean input){
+        moveability = input;
+    }
+
+    public boolean isMoveable() {
+        return moveability;
     }
 
     public void update(Camera camera, LinkedList<Collideable> collideables) {

@@ -8,6 +8,7 @@ import gameobjects.graphics.functionality.CharacterImageSheet;
 import gameobjects.graphics.functionality.DirectionalImageSheet;
 import gameobjects.graphics.functionality.SpriteController;
 import gameobjects.physics.Vector2D;
+import gameobjects.potions.HealthPotion;
 import javafx.scene.layout.Pane;
 import main.Main;
 import gamemap.Room;
@@ -15,6 +16,7 @@ import gamemap.Room;
 public class SlimeMonster extends Monster {
     public SlimeMonster(Room room, double initialX, double initialY) {
         super(room, 50, 50, 10, initialX, initialY, Main.SLIME_IMAGE_SHEET);
+        this.getCarryReward().put(new HealthPotion(), 1);
     }
     public boolean inRange(Damageable other) {
         Vector2D otherPos = other.getPhysics().getPosition();

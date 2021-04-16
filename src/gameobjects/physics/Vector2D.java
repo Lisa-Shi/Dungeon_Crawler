@@ -74,6 +74,10 @@ public class Vector2D {
     public Vector2D round() {
         return new Vector2D(Math.round(x), Math.round(y));
     }
+    public Vector2D roundDown() { return new Vector2D(Math.floor(x), Math.floor(y)); }
+    public Vector2D roundUp() { return new Vector2D(Math.ceil(x), Math.ceil(y)); }
+
+
     /**
      * Normalizes a vector (finds its unit vector)
      *

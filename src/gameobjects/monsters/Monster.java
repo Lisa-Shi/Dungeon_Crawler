@@ -12,6 +12,7 @@ import gameobjects.physics.collisions.Collideable;
 import gameobjects.physics.collisions.CollisionBox;
 import gameobjects.physics.collisions.DynamicCollisionBox;
 import gameobjects.physics.collisions.RectangleWireframe;
+import gameobjects.potions.Potion;
 import javafx.geometry.Bounds;
 import javafx.scene.layout.Pane;
 import gameobjects.physics.Camera;
@@ -35,7 +36,7 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
     private ImageSheet sheet;
     private HPBar hpBar;
     private PropertyChangeSupport support;
-    private Map<GameObject, Integer> carryReward;
+    private Map<Potion, Integer> carryReward;
     /**
      * constructor
      * @param room the room which the monster locates
@@ -129,7 +130,7 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
      * return the items that the monster is carrying
      * @return list of items
      */
-    public Map<GameObject, Integer> die(){
+    public Map<Potion, Integer> die(){
         getGraphics().getSprite().setImage(Main.TRANSPARENT_IMAGE);
         getGraphics().setCurrentReel(
                 new SingularImageSheet(Main.TRANSPARENT_IMAGE).getInitialReel());

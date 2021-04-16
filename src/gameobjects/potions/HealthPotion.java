@@ -1,6 +1,8 @@
 package gameobjects.potions;
 
 import gameobjects.Player;
+import gameobjects.graphics.functionality.ImageSheet;
+import gameobjects.graphics.functionality.SpriteController;
 import javafx.scene.image.Image;
 import main.Main;
 
@@ -9,52 +11,21 @@ import main.Main;
  */
 public class HealthPotion extends Potion {
 
-    private String name;
-    private Image image;
-    private int healthGained;
 
     /**
      * Constructor for the Health Potion.
      */
     public HealthPotion() {
-        name = "Health Potion";
-        healthGained = Main.HEALTH_POTION_HEAL;
+        super("HealthPotion", Main.HEALTH_POTION_HEAL, Main.HEALTH_POTION);
     }
 
     @Override
     public void consume(Player player) {
-        player.setHealth(player.getHealth() + healthGained);
+        if( player.getHealth() + this.getValue() > player.getMaxHealth()){
+            player.setHealth(player.getMaxHealth());
+        }else {
+            player.setHealth(player.getHealth() + this.getValue());
+        }
     }
 
-    /**
-     * Getter method for image variable.
-     * @return image of the potion
-     */
-    public Image getImage() {
-        return image;
-    }
-
-    /**
-     * Getter method for the healthGained variable.
-     * @return the health that the player will gain
-     */
-    public int getHealthGained() {
-        return healthGained;
-    }
-
-    /**
-     * Setter for healthGained variable.
-     * @param health health that the player will gain
-     */
-    public void setHealthGained(int health) {
-        healthGained = health;
-    }
-
-    /**
-     * Getter method the name variable.
-     * @return name of the potion
-     */
-    public String getName() {
-        return name;
-    }
 }

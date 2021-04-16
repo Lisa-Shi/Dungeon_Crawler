@@ -1,9 +1,8 @@
 package gameobjects.potions;
 
 import gameobjects.Player;
-import javafx.scene.image.Image;
+import gameobjects.ProjectileLauncher.ProjectileLauncher;
 import main.Main;
-import main.Weapon;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -12,41 +11,26 @@ import java.util.TimerTask;
  * the player is wielding.
  */
 public class AttackPotion extends Potion {
-
-    private String name;
-    private Image image;
     private double duration;
-    private double damageAmp;
 
     /**
      * Constructor for Attack Potion.
      */
     public AttackPotion() {
-//        image =;
-        name = "Attack Potion";
-        duration = Main.ATTACK_POTION_DURATION;
-        damageAmp = Main.ATTACK_POTION_AMP;
+        super("AttackPotion",Main.ATTACK_POTION_AMP, Main.ATTACK_POTION);
     }
 
     @Override
     public void consume(Player player) {
-        Weapon playerWeapon = player.getWeaponList().get(player.getHoldingWeapon());
-        playerWeapon.setDamage(playerWeapon.getDamage() * 2);
+        ProjectileLauncher playerWeapon = player.getHoldingWeapon();
+        playerWeapon.setDamage(playerWeapon.getDamage() * getValue());
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                playerWeapon.setDamage(playerWeapon.getDamage() / 2);
+                playerWeapon.setDamage(playerWeapon.getDamage() / getValue());
             }
         }, (long) (duration * 10000));
-    }
-
-    /**
-     * Getter method for image variable.
-     * @return image of the potion
-     */
-    public Image getImage() {
-        return image;
     }
 
     /**
@@ -65,27 +49,4 @@ public class AttackPotion extends Potion {
         duration = time;
     }
 
-    /**
-     * Getter method for the damageAmp variable.
-     * @return the damage amplifier of the potion
-     */
-    public double getDamageAmp() {
-        return damageAmp;
-    }
-
-    /**
-     * Setter for damageAmp variable.
-     * @param damage damage that the potion will increase
-     */
-    public void setDamageAmp(double damage) {
-        this.damageAmp = damage;
-    }
-
-    /**
-     * Getter method the name variable.
-     * @return name of the potion
-     */
-    public String getName() {
-        return name;
-    }
 }

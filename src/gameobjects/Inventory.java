@@ -1,5 +1,6 @@
 package gameobjects;
 
+import gameobjects.potions.Potion;
 import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -21,60 +22,94 @@ public class Inventory {
     private StackPane inv;
     private Pane pane;
     private Player player;
-    private Map<GameObject, Integer> items;
-    public Inventory(Map<GameObject, Integer> items, Pane pane, Player player){
+    private Map<Potion, Integer> items;
+    private static Inventory unique;
+    public static synchronized Inventory getInstance(Map<Potion, Integer> items, Pane pane, Player player){
+        if(unique == null){
+            unique = new Inventory(items, pane, player);
+        }
+        return unique;
+    }
+    private Inventory(Map<Potion, Integer> items, Pane pane, Player player){
         this.items = items;
         this.pane = pane;
         this.player = player;
-        inv = new StackPane();
+        setUpUI();
+    }
+    private void setUpUI(){
         Bounds bound = pane.getLayoutBounds();
-        Rectangle rewardRec = new Rectangle();
+        inv = new StackPane();
+        inv.setPrefSize(250, 240);
+        inv.setLayoutX(bound.getWidth() / 2 - bound.getWidth() / 4);
+        inv.setLayoutY(bound.getHeight() / 2 - bound.getHeight() / 4);
+        Button close = setupClose();
+        GridPane inventory = setupGrid();
+        inventory.add(close, 4, 1);
+        inv.getChildren().addAll(inventory);
+        inv.setLayoutX(bound.getWidth() / 2 - bound.getWidth() / 4);
+        inv.setLayoutY(bound.getHeight() / 2 - bound.getHeight() / 4);
+
+    }
+    private Button setupClose(){
         Button close = new Button("X");
         close.getStyleClass().add("button");
+        close.setPrefSize(50, 45);
         close.setOnAction(event->{
             close();
         });
-        inv.setPrefSize(200, 200);
-        inv.setLayoutX(bound.getWidth() / 2 - bound.getWidth() / 4);
-        inv.setLayoutY(bound.getHeight() / 2 - bound.getHeight() / 4);
+        return close;
+    }
+    private GridPane setupGrid(){
         GridPane inventory = new GridPane();
-        inventory.setAlignment(Pos.CENTER);
-        inventory.setHgap(15);
-        inventory.setVgap(20);
-        inventory.getRowConstraints().add(new RowConstraints(5));
-        inventory.getRowConstraints().add(new RowConstraints(5));
-        inventory.getRowConstraints().add(new RowConstraints(5));
-        inventory.getRowConstraints().add(new RowConstraints(5));
+        inventory.setHgap(5);
+        inventory.setVgap(5);
+        inventory.getRowConstraints().add(new RowConstraints(10));
+        inventory.getRowConstraints().add(new RowConstraints(50));
+        inventory.getRowConstraints().add(new RowConstraints(50));
+        inventory.getRowConstraints().add(new RowConstraints(50));
+        inventory.getRowConstraints().add(new RowConstraints(50));
         inventory.getStylesheets().add("inventoryStyleSheet.css");
         inventory.getStyleClass().add("inventory");
-        inventory.add(close, 5, 0);
-        int row = 1;
+        addItems(inventory);
+        return inventory;
+    }
+    private void addItems(GridPane inventory){
+        int row = 2;
         int col = 0;
-        Iterator<Map.Entry<GameObject, Integer>> iterator = items.entrySet().iterator();
+        Iterator<Map.Entry<Potion, Integer>> iterator = items.entrySet().iterator();
         for( int i = 0; i < 18 ; i++){
-            Map.Entry<GameObject, Integer> entry;
-            if( iterator.hasNext()){
-                entry = iterator.next();
-            } else{
-                entry = null;
-            }
+            Map.Entry<Potion, Integer> entry;
             if( col == 0 || col == 5){
                 Text spaceHolder = new Text("      ");
                 inventory.add(spaceHolder, col, row);
             } else {
-                //ItemButton itembutton = new ItemButton(entry.getKey());
-                ItemButton itembutton = new ItemButton();
-                if( entry != null) {
-                    //itembutton.setGraphic(entry.getKey().getGraphic());
+                ItemButton itembutton;
+                if( iterator.hasNext()){
+                    entry = iterator.next();
+                    Potion potion = entry.getKey();
+                    itembutton = new ItemButton(potion);
+                    itembutton.setText("        "+entry.getValue()+"");
+
+                    itembutton.getStyleClass().add(potion.getName());
                 } else{
-                    //itembutton.setGraphic(new ImageView(Main.TRANSPARENT_IMAGE));
+                    itembutton = new ItemButton(null);
+                    itembutton.getStyleClass().add("Transparent");
                 }
-                itembutton.getStylesheets().add("inventoryStyleSheet.css");
-                itembutton.getStyleClass().add("item_button");
+                itembutton.setPrefSize(50, 45);
                 itembutton.setOnAction(event -> {
-                    //Potion consumable = itembutton.getPotion();
-                    //consumable.consume(player);
-                    //loseItem(potion);
+                    if(itembutton.getPotion() != null) {
+                        Potion consumable = itembutton.getPotion();
+                        consumable.consume(player);
+                        loseItem(consumable);
+                        if(items.get(consumable) > 0) {
+                            itembutton.setText("        "+items.get(consumable));
+                        } else{
+                            itembutton.getStyleClass().add("Transparent");
+                            itembutton.setPotion(null);
+                            itembutton.setText("");
+                        }
+
+                    }
                 });
                 inventory.add(itembutton, col, row);
             }
@@ -88,24 +123,19 @@ public class Inventory {
         for( int i = 0 ; i< 6; i++){
             inventory.add(new Text("      "), i, row);
         }
-        /*rewardRec.setOpacity(0.8);
-        rewardRec.setHeight(bound.getHeight() / 2);
-        rewardRec.setWidth(bound.getWidth() / 2);
-        rewardRec.setX(bound.getWidth() / 2 - bound.getWidth() / 4);
-        rewardRec.setY(bound.getHeight() / 2 - bound.getHeight() / 4);*/
-        inv.getChildren().addAll(inventory);
-        inv.setLayoutX(bound.getWidth() / 2 - bound.getWidth() / 4);
-        inv.setLayoutY(bound.getHeight() / 2 - bound.getHeight() / 4);
+        for( int i = 0 ; i< 6; i++){
+            inventory.add(new Text("      "), i, 0);
+        }
     }
     public void show(){
-        pane.getChildren().add(inv);
+        if(!pane.getChildren().contains(inv)) {
+            pane.getChildren().add(inv);
+        }
     }
     public void close(){
         pane.getChildren().remove(inv);
-        //pane.getChildren().remove(rewardRec);
         player.setMoveability(true);
     }
-    /**
     public void loseItem(Potion potion){
         if(items.containsKey(potion)){
             items.put(potion, items.get(potion) - 1);
@@ -120,9 +150,8 @@ public class Inventory {
             }
         }
     }
-     */
+
     private class ItemButton extends Button{
-     /**
         public Potion potion;
 
         public ItemButton(Potion potion){
@@ -136,7 +165,7 @@ public class Inventory {
         public void setPotion(Potion potion) {
             this.potion = potion;
         }
-     */
+
     }
 
 }

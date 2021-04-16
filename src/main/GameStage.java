@@ -248,10 +248,10 @@ public class GameStage extends Stage {
                 monster.update(camera);
                 monster.attack(room, pane, player);
             } else {
-                Inventory inv = new Inventory(monster.die(), this.pane, this.player);
+                Inventory inv = Inventory.getInstance(monster.die(), pane, player);
+                inv.show();
                 pane.getChildren().remove(monster);
                 player.setMoveability(false);
-                inv.show();
                 i--;
             }
         }
@@ -406,6 +406,11 @@ public class GameStage extends Stage {
             if (event.getCode() == KeyCode.E && player.isMoveable() && room.getNpc() != null) {
                 player.setMoveability(false);
                 enterStore();
+            }
+            if (event.getCode() == KeyCode.Q){
+                player.setMoveability(false);
+                Inventory inventory = Inventory.getInstance(player.getInventory(), pane, player);
+                inventory.show();
             }
         }
     };

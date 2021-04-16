@@ -11,6 +11,9 @@ import gameobjects.physics.collisions.DynamicCollisionBox;
 import gameobjects.physics.collisions.Passable;
 import gameobjects.physics.collisions.RectangleWireframe;
 import gameobjects.graphics.functionality.CharacterImageSheet;
+import gameobjects.potions.AttackPotion;
+import gameobjects.potions.HealthPotion;
+import gameobjects.potions.Potion;
 import javafx.scene.layout.Pane;
 import gameobjects.physics.Camera;
 import gameobjects.graphics.functionality.Drawable;
@@ -18,18 +21,18 @@ import main.Main;
 import gamemap.Room;
 import gameobjects.physics.Vector2D;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class Player extends GameObject implements Damageable, Collideable, Drawable {
 
     // Variables
     private String name;
     private List<ProjectileLauncher> weaponList;
+    private Map<Potion, Integer> inventory;
     private int difficulty;
     private int holdingWeapon; // index of weapon in the weapon list
     private int health;
+    private int maxHealth;
     private int damageAmt = 1;
     private Vector2D direction;
     private boolean moveability = true;
@@ -57,15 +60,20 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
 
         direction = new Vector2D(0, -1);
         this.health = Main.PLAYER_STARTING_HEALTH;
-
+        this.maxHealth = Main.PLAYER_STARTING_HEALTH;
         this.difficulty = difficulty;
         giveMoney(difficulty);
 
         this.collisionBox = new DynamicCollisionBox(getPhysics(),
                 new RectangleWireframe(Main.PLAYER_WIDTH, Main.PLAYER_HEIGHT));
         this.collisionBox.generate();
+        inventory = new TreeMap<>();
+        inventory.put(new AttackPotion(), 5);
+        inventory.put(new HealthPotion(), 99);
     }
-
+    public int getMaxHealth(){
+        return maxHealth;
+    }
     private void giveMoney(int difficulty) {
         if (difficulty == 1) {
             money = 100;
@@ -74,6 +82,10 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
         } else {
             money = 20;
         }
+    }
+
+    public Map<Potion, Integer> getInventory() {
+        return inventory;
     }
 
     /**

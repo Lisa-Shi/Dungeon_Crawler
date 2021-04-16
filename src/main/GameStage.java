@@ -2,25 +2,26 @@ package main;
 
 import gamemap.GameMap;
 import gamemap.Room;
+import gameobjects.*;
 import gameobjects.physics.Vector2D;
+import gameobjects.physics.collisions.RectangleWireframe;
 import gameobjects.tiles.ExitTile;
-import gameobjects.GameObject;
-import gameobjects.Player;
 import gameobjects.graphics.functionality.ImageReel;
 import gameobjects.graphics.functionality.SingularImageSheet;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -31,6 +32,7 @@ import javafx.scene.control.*;
 import javafx.util.Duration;
 import gameobjects.monsters.Monster;
 import gameobjects.physics.Camera;
+import org.assertj.core.internal.bytebuddy.agent.builder.AgentBuilder;
 import screens.LoseScreen;
 
 import java.util.ArrayList;
@@ -63,7 +65,7 @@ public class GameStage extends Stage {
     private Text healthText = new Text();
     private Text testingPurpose = new Text();
     private static Room prevRoom;
-
+    private StackPane inv;
     private ProgressBar pbar = new ProgressBar(0);
     private LinkedList<ProgressBar> monsterHP = new LinkedList<>();
     public GameMap getMap() {
@@ -88,7 +90,8 @@ public class GameStage extends Stage {
         exitButton = new Button("exit");
 
         Timeline timeline = new Timeline(new KeyFrame(
-                Duration.millis(Main.MONSTER_ATTACK_TIME), ae -> moveMonsters()));
+            Duration.millis(Main.MONSTER_ATTACK_TIME),
+            ae -> moveMonsters()));
         timeline.play();
     }
 
@@ -244,15 +247,7 @@ public class GameStage extends Stage {
                 monster.update(camera);
                 monster.attack(room, pane, player);
             } else {
-                monster.getGraphics().getSprite().setImage(Main.TRANSPARENT_IMAGE);
-                monster.getGraphics().setCurrentReel(
-                        new SingularImageSheet(Main.TRANSPARENT_IMAGE).getInitialReel());
-                room.getCollideables().remove(monster);
-                room.getHealthbars().remove(monster.getHPBar());
-                room.getMonsters().remove(monster);
-                monster.getHPBar().expire();
-                pane.getChildren().remove(monster);
-
+                player.getItem(monster.die());
                 i--;
             }
         }
@@ -260,7 +255,7 @@ public class GameStage extends Stage {
             ae -> moveMonsters()));
         timeline.play();
     }
-
+    public void enterStore(){}
     private void teleportPlayerToEnteredRoom() {
         if (room != null && map != null && !GameMap.enterRoom().equals(room)) {
             prevRoom = room;
@@ -381,28 +376,44 @@ public class GameStage extends Stage {
     private EventHandler<KeyEvent> keyPressed = new EventHandler<KeyEvent>() {
         @Override
         public void handle(KeyEvent event) {
-            if (event.getCode() == KeyCode.A) {
+            if (event.getCode() == KeyCode.A && player.isMoveable()) {
                 playerIsMovingLeft = true;
                 player.getGraphics().setCurrentReel(
                         player.getSpriteSheet().getWalkSheet().getLeftImage());
             }
-            if (event.getCode() == KeyCode.D) {
+            if (event.getCode() == KeyCode.D && player.isMoveable()) {
                 playerIsMovingRight = true;
                 player.getGraphics().setCurrentReel(
                         player.getSpriteSheet().getWalkSheet().getRightImage());
             }
-            if (event.getCode() == KeyCode.W) {
+            if (event.getCode() == KeyCode.W && player.isMoveable()) {
                 playerIsMovingUp = true;
                 player.getGraphics().setCurrentReel(
                         player.getSpriteSheet().getWalkSheet().getUpImage());
             }
-            if (event.getCode() == KeyCode.S) {
+            if (event.getCode() == KeyCode.S && player.isMoveable()) {
                 playerIsMovingDown = true;
                 player.getGraphics().setCurrentReel(
                         player.getSpriteSheet().getWalkSheet().getDownImage());
             }
-            if (event.getCode() == KeyCode.ENTER) {
+            if (event.getCode() == KeyCode.ENTER && player.isMoveable()) {
                 player.launchProjectile(room, pane, camera, room.getMonsters());
+            }
+            if (event.getCode() == KeyCode.E && player.isMoveable()) {
+                //check if there is openable chest/npc in front of player;
+                Vector2D center = player.getPhysics().getPosition().add(
+                        player.getDirection().multiply(Main.TILE_HEIGHT));
+                Openable openable = room.findOpenable(center);
+                if( openable != null){
+                    player.setMoveability(false);
+                    openable.open(player, pane);
+                }
+            }
+            if (event.getCode() == KeyCode.Q && player.isMoveable()){
+
+                player.setMoveability(false);
+                Inventory inventory = Inventory.getInstance(player, pane, player);
+                inventory.show();
             }
         }
     };

@@ -1,13 +1,14 @@
 package gameobjects.potions;
 
 import gameobjects.Player;
-import gameobjects.graphics.functionality.ImageSheet;
-import gameobjects.graphics.functionality.SpriteController;
-import javafx.scene.image.Image;
 import main.Main;
 
 /**
- * Health potion for Dungeon Crawler. Can be held in inventory and when used, increases the health of the player.
+ * Health potion for Dungeon Crawler.
+ *
+ * Can be held in inventory and when used
+ *
+ * Increases the health of the player.
  */
 public class HealthPotion extends Potion {
 
@@ -21,9 +22,9 @@ public class HealthPotion extends Potion {
 
     @Override
     public void consume(Player player) {
-        if( player.getHealth() + this.getValue() > player.getMaxHealth()){
+        if (player.getHealth() + this.getValue() > player.getMaxHealth()) {
             player.setHealth(player.getMaxHealth());
-        }else {
+        } else {
             player.setHealth(player.getHealth() + this.getValue());
         }
     }

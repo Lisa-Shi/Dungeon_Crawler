@@ -3,7 +3,6 @@ package gameobjects.monsters;
 import gameobjects.Damageable;
 import gameobjects.ProjectileLauncher.Projectile;
 import gameobjects.potions.AttackPotion;
-import gameobjects.potions.HealthPotion;
 import javafx.scene.layout.Pane;
 import main.Main;
 import gamemap.Room;

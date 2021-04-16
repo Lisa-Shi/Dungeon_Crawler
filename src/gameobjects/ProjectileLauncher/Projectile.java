@@ -46,7 +46,6 @@ public class Projectile extends GameObject implements Collideable {
                 player.getPhysics().getPosition().getY(),
                 (damage % 3 + 1) * 0.5, damage, img);
         sprite = player;
-        //this.bouncesLeft = p.getWeaponList()[p.getHoldingWeapon()].getPower();
         range = range % 3;
         this.bouncesLeft = range + 1;
         this.timeRange = range * 5000;
@@ -64,7 +63,6 @@ public class Projectile extends GameObject implements Collideable {
                 monster.getPhysics().getPosition().getY(), 0.5,
                 Main.PLAYER_BULLET_DAMAGE, Main.MONSTER_BULLET_SHEET);
         sprite = monster;
-        //this.bouncesLeft = p.getWeaponList()[p.getHoldingWeapon()].getPower();
         this.bouncesLeft = 2;
         this.timeRange = 10000;
     }
@@ -73,18 +71,17 @@ public class Projectile extends GameObject implements Collideable {
                        double initialY, double scale, int damage, ImageSheet img) {
         super(room, initialX, initialY,
                 Main.BULLET_WIDTH * scale, Main.BULLET_HEIGHT * scale, img);
+
         this.room = room;
-        this.collisionBox =
-                new DynamicCollisionBox(getPhysics(),
-                        new RectangleWireframe(Main.BULLET_WIDTH, Main.BULLET_HEIGHT), false);
+        this.collisionBox = new DynamicCollisionBox(getPhysics(),
+               new RectangleWireframe(Main.BULLET_WIDTH, Main.BULLET_HEIGHT), false);
         this.collisionBox.generate();
         this.damage = damage;
         this.pane = pane;
 
         new Timeline(new KeyFrame(
                 Duration.millis(timeRange),
-                ae -> expire()))
-                .play();
+            ae -> expire())).play();
     }
 
     /**

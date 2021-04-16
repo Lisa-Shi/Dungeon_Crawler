@@ -39,7 +39,7 @@ public class Room implements Physical {
     private boolean generatedMonster = false;
 
     /**
-     *gameobjects.monsters is empty when all gameobjects.monsters in this room die
+     * gameobjects.monsters is empty when all gameobjects.monsters in this room die
      */
     private LinkedList<Monster> monsters = new LinkedList<>();
     private LinkedList<GameObject> toRemove = new LinkedList<>();
@@ -181,8 +181,14 @@ public class Room implements Physical {
             Map<Potion, Integer> items = new TreeMap<>();
             items.put(new AttackPotion(), 1);
             items.put(new HealthPotion(), 1);
-            add(new Chest(10, items, this, 2, 1));
+            add(new PotionChest(10, items, this, 2, 1));
         }
+
+        if (roomId == 0) {
+            add(new LauncherChest(10, this, 4, 5));
+        }
+
+
     }
 
     public LinkedList<Openable> getOpenables() {
@@ -335,7 +341,7 @@ public class Room implements Physical {
         for( Openable openable: openables){
             Vector2D position = ((Physical)openable).getPhysics().getPosition();
 
-            if(position.getX() >= left && position.getX() <= right && position.getY() >= upper && position.getY() <= lower){
+            if (position.getX() >= left && position.getX() <= right && position.getY() >= upper && position.getY() <= lower){
                 return openable;
             }
         }

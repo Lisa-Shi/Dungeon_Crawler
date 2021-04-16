@@ -3,6 +3,7 @@
  */
 package gameobjects;
 
+import gameobjects.ProjectileLauncher.LauncherInventory;
 import gameobjects.ProjectileLauncher.ProjectileLauncher;
 import gameobjects.ProjectileLauncher.ProjectileLauncherA;
 import gameobjects.monsters.Monster;
@@ -106,7 +107,7 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
         inventory.show();
     }
 
-    @Override
+    //@Override
     public void loseItem(Potion potion) {
         if( inventory.containsKey(potion)){
             if(inventory.get(potion)-1 != 0) {
@@ -211,6 +212,7 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
      * @param newWeapon Weapon to add to player's collection
      */
     public void obtainNewWeapon(ProjectileLauncher newWeapon) {
+        LauncherInventory.getInstance().remove(newWeapon);
         weaponList.add(newWeapon);
     }
 

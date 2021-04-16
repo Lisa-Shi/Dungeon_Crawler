@@ -8,5 +8,5 @@ import java.util.Map;
 public interface Openable {
     void open(Player player, Pane pane);
     Map<Potion, Integer> getInventory();
-    void loseItem(Potion potion);
+    void loseItem(Potion item);
 }

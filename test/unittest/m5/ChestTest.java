@@ -1,7 +1,7 @@
 package unittest.m5;
 
 import gamemap.Room;
-import gameobjects.Chest;
+import gameobjects.PotionChest;
 import gameobjects.Player;
 import gameobjects.potions.AttackPotion;
 import gameobjects.potions.Potion;
@@ -22,7 +22,7 @@ public class ChestTest extends ApplicationTest {
 
     private GameStage game;
     private Player player;
-    private Chest chest;
+    private PotionChest chest;
     private Potion potion;
 
     @Override
@@ -39,7 +39,7 @@ public class ChestTest extends ApplicationTest {
         HashMap<Potion, Integer> inv = new HashMap<>();
         inv.put(potion, 2);
 
-        chest = new Chest(100, inv, r, 0, 0);
+        chest = new PotionChest(100, inv, r, 0, 0);
     }
 
     @Test

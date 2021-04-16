@@ -48,6 +48,10 @@ public class LauncherChest extends GameObject implements Collideable, Drawable, 
 
     @Override
     public void loseItem(Potion potion) {
+    }
+    
+    @Override
+    public void buttonAction(Player player, Potion potion) {
 
     }
 

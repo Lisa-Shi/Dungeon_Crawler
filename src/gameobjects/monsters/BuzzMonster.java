@@ -16,14 +16,16 @@ public class BuzzMonster extends Monster {
         this.getCarryReward().put(new HealthPotion(), 5);
     }
 
+    public boolean inRange(Damageable other) {
+        Vector2D otherPos = other.getPhysics().getPosition();
+        Vector2D thisPos = getPhysics().getPosition();
+        double radius = Math.sqrt(otherPos.distanceSquared(thisPos));
+        return (radius < Main.BUZZ_ATTACK_RADIUS);
+    }
+
     @Override
     public void attack(Room room, Pane pane, Damageable other) {
-        Vector2D playerPos = other.getPhysics().getPosition();
-        Vector2D monsterPos = this.getPhysics().getPosition();
-        double squareDisplace = playerPos.distanceSquared(monsterPos);
-        double tileDistanceSquared = Main.TILE_HEIGHT * Main.TILE_WIDTH;
-
-        if (squareDisplace <= tileDistanceSquared) {
+        if (inRange(other)) {
             other.hurt(1);
         }
 

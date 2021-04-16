@@ -169,14 +169,14 @@ public class Room implements Physical {
             }
         }
     }
-    public void addNPC(){
-        if(!generatedMonster) {
+    public void addNPC() {
+        if (!generatedMonster) {
             if (Math.random() > 0.8 || roomId == 0) {
                 add(new NPC(this, 1, 3));
             }
         }
     }
-    public void addChest(){
+    public void addChest() {
         if (openables.isEmpty() && (Math.random() > 0.8 || roomId == 0)) {
             Map<Potion, Integer> items = new TreeMap<>();
             items.put(new AttackPotion(), 1);
@@ -333,15 +333,16 @@ public class Room implements Physical {
             openables.add(0, (Openable) obj);
         }
     }
-    public Openable findOpenable(Vector2D center){
+    public Openable findOpenable(Vector2D center) {
         double upper = center.getY() - (Main.TILE_HEIGHT * 0.5);
         double lower = center.getY() + (Main.TILE_HEIGHT * 0.5);
         double left = center.getX() - (Main.TILE_HEIGHT * 0.5);
         double right = center.getX() + (Main.TILE_HEIGHT * 0.5);
-        for( Openable openable: openables){
-            Vector2D position = ((Physical)openable).getPhysics().getPosition();
+        for (Openable openable: openables) {
+            Vector2D position = ((Physical) openable).getPhysics().getPosition();
 
-            if (position.getX() >= left && position.getX() <= right && position.getY() >= upper && position.getY() <= lower){
+            if (position.getX() >= left && position.getX() <= right && position.getY() >= upper
+                    && position.getY() <= lower) {
                 return openable;
             }
         }

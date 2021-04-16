@@ -31,7 +31,7 @@ public class InventoryTest extends ApplicationTest {
     public void consumePotionTest(){
 
         press(KeyCode.Q).release(KeyCode.Q);
-        player.setHealth(player.getMaxHealth()-10);
+        player.setHealth(player.getMaxHealth() - 10);
         int oldAmount = player.getHealth();
         clickOn("#HealthPotion");
         assertTrue(oldAmount != player.getHealth());

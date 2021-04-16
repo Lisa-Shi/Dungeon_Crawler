@@ -64,6 +64,7 @@ public class Main extends Application {
 
     public static final int MONSTER_ATTACK_TIME = 1000;
     public static final int SLIME_ATTACK_RADIUS = 100;
+    public static final int BUZZ_ATTACK_RADIUS = 200;
 
     public static final String REPLACE_DIRECTION_REGEX = "<direction>";
 
@@ -117,9 +118,7 @@ public class Main extends Application {
     public static final ImageSheet MONSTER_BULLET_SHEET =
             new SingularImageSheet(
                     getImageFrom("../gameobjects/graphics/sprites/bulletM.png"));
-//    public static final ImageSheet PLAYER_BULLET_SHEET =
-//            new SingularImageSheet(
-//                    getImageFrom("../gameobjects/graphics/sprites/bulletP.png"));
+
     public static final ImageSheet TRANSPARENT_SHEET =
             new SingularImageSheet(
                     getImageFrom("../gameobjects/graphics/sprites/transparent.png"));
@@ -127,11 +126,11 @@ public class Main extends Application {
             new Image(Main.class.
                     getResource("../gameobjects/graphics/sprites/transparent.png").
                     toExternalForm());
-    public static final Image NPC_big =
+    public static final Image NPC_BIG =
             new Image(Main.class.
                     getResource("../gameobjects/graphics/sprites/NPCBig.png").
                     toExternalForm());
-    public static final ImageSheet NPC_small =
+    public static final ImageSheet NPC_SMALL =
             new SingularImageSheet(
                     getImageFrom("../gameobjects/graphics/sprites/NPCPixil.png"));
     public static final ImageSheet ATTACK_POTION =

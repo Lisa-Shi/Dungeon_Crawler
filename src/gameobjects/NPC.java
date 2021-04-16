@@ -37,6 +37,15 @@ public class NPC extends GameObject implements Collideable, Drawable, Openable {
     }
 
     @Override
+    public void buttonAction(Player player, Potion potion) {
+        if(player.getMoney() >= getPrice(potion)){
+            player.setMoney(player.getMoney()-getPrice(potion));
+            player.getItem(potion);
+            loseItem(potion);
+        }
+    }
+
+    @Override
     public void update(Camera camera) {
         super.update(camera);
     }

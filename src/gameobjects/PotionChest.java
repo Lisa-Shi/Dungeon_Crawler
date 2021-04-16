@@ -40,6 +40,12 @@ public class PotionChest extends GameObject implements Collideable, Drawable, Op
     }
 
     @Override
+    public void buttonAction(Player player, Potion potion) {
+        player.getItem(potion);
+        loseItem(potion);
+    }
+
+    @Override
     public Map<Potion, Integer> getInventory() {
         return treasure;
     }
@@ -51,6 +57,10 @@ public class PotionChest extends GameObject implements Collideable, Drawable, Op
             } else {
                 treasure.remove(potion);
             }
+        }
+        if (treasure.keySet().isEmpty()) {
+            isEmpty = true;
+            this.getGraphics().setCurrentReel(Main.CHEST_EMPTY.getInitialReel());
         }
     }
     // Misc.

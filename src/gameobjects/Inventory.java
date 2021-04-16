@@ -124,23 +124,8 @@ public class Inventory {
                 itembutton.setOnAction(event -> {
                     if (itembutton.getPotion() != null) {
                         Potion consumable = itembutton.getPotion();
-                        //not the best way to do it but good enough for meeting deadline
-
-                        int money = player.getMoney();
-                        if (from instanceof NPC) {
-                            if (money >= ((NPC) from).getPrice(consumable)) {
-                                player.setMoney(money - ((NPC) from).getPrice(consumable));
-                                player.getItem(consumable);
-                                loseItem(consumable);
-                            }
-                        } else {
-                            if (from instanceof Player) {
-                                consumable.consume(player);
-                                loseItem(consumable);
-                            } else if (from instanceof PotionChest) {
-                                player.getItem(consumable);
-                                loseItem(consumable);
-                            }
+                        from.buttonAction(player, consumable);
+                        if (! (from instanceof NPC)) {
                             if (items.containsKey(consumable) && items.get(consumable) > 0) {
                                 itembutton.setText("        " + items.get(consumable));
                             } else {

@@ -85,6 +85,12 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
         }
     }
 
+    @Override
+    public void buttonAction(Player player, Potion potion) {
+        potion.consume(player);
+        loseItem(potion);
+    }
+
     public Map<Potion, Integer> getInventory() {
         return inventory;
     }

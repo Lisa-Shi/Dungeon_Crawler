@@ -4,7 +4,6 @@ import gamemap.Room;
 import gameobjects.Player;
 import gameobjects.potions.AttackPotion;
 import gameobjects.potions.HealthPotion;
-import gameobjects.potions.Potion;
 import javafx.stage.Stage;
 import main.GameStage;
 import main.Main;

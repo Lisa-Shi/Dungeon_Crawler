@@ -109,7 +109,11 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
     @Override
     public void loseItem(Potion potion) {
         if( inventory.containsKey(potion)){
-            inventory.put(potion, inventory.get(potion)-1);
+            if(inventory.get(potion)-1 != 0) {
+                inventory.put(potion, inventory.get(potion) - 1);
+            }else{
+                inventory.remove(potion);
+            }
         }
     }
 

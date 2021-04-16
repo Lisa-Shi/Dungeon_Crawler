@@ -42,7 +42,11 @@ public class Chest extends GameObject implements Collideable, Drawable, Openable
     }
     public void loseItem(Potion potion){
         if(treasure.containsKey(potion)){
-            treasure.put(potion, treasure.get(potion)-1);
+            if(treasure.get(potion)-1 != 0) {
+                treasure.put(potion, treasure.get(potion) - 1);
+            }else{
+                treasure.remove(potion);
+            }
         }
     }
     // Misc.

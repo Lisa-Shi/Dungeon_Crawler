@@ -85,14 +85,16 @@ public class Inventory {
             } else {
                 ItemButton itembutton;
                 if( iterator.hasNext()){
+                    String text;
                     entry = iterator.next();
                     Potion potion = entry.getKey();
                     itembutton = new ItemButton(potion);
                     if(from instanceof NPC){
-                        itembutton.setText("      $"+((NPC)from).getPrice(potion)+"");
+                        text = "      $"+((NPC)from).getPrice(potion);
                     } else {
-                        itembutton.setText("        " + entry.getValue() + "");
+                        text = "        " + entry.getValue();
                     }
+                    itembutton.setText(text);
                     itembutton.getStyleClass().add(potion.getName());
                 } else{
                     itembutton = new ItemButton(null);
@@ -103,27 +105,29 @@ public class Inventory {
                     if(itembutton.getPotion() != null) {
                         Potion consumable = itembutton.getPotion();
                         //not the best way to do it but good enough for meeting deadline
-                        if(from instanceof Player) {
-                            consumable.consume(player);
-                            loseItem(consumable);
-                        }else if(from instanceof Chest){
-                            player.getItem(consumable);
-                            loseItem(consumable);
-                        } else{
+
+                        if( from instanceof NPC){
                             if(player.getMoney() >= ((NPC)from).getPrice(consumable)){
                                 player.setMoney(player.getMoney()-((NPC)from).getPrice(consumable));
                                 player.getItem(consumable);
                                 loseItem(consumable);
                             }
-                        }
-                        if(items.get(consumable) > 0) {
-                            itembutton.setText("        "+items.get(consumable));
                         } else{
-                            itembutton.getStyleClass().add("Transparent");
-                            itembutton.setPotion(null);
-                            itembutton.setText("");
+                            if(from instanceof Player) {
+                            consumable.consume(player);
+                            loseItem(consumable);
+                            }else if(from instanceof Chest){
+                            player.getItem(consumable);
+                            loseItem(consumable);
+                            }
+                            if(items.containsKey(consumable) && items.get(consumable) > 0) {
+                                itembutton.setText("        "+items.get(consumable));
+                            } else{
+                                itembutton.getStyleClass().add("Transparent");
+                                itembutton.setPotion(null);
+                                itembutton.setText("");
+                            }
                         }
-
                     }
                 });
                 inventory.add(itembutton, col, row);

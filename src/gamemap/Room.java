@@ -1,6 +1,7 @@
 package gamemap;
 import gameobjects.*;
 import gameobjects.potions.AttackPotion;
+import gameobjects.potions.HealthPotion;
 import gameobjects.potions.Potion;
 import gameobjects.tiles.ExitTile;
 import gameobjects.tiles.FloorTile;
@@ -36,7 +37,7 @@ public class Room implements Physical {
     private LinkedList<ExitTile> exits = new LinkedList<>();
     private LinkedList<Openable> openables = new LinkedList<>();
     private boolean generatedMonster = false;
-    //private NPC npc = new NPC(this, 1,3);
+
     /**
      *gameobjects.monsters is empty when all gameobjects.monsters in this room die
      */
@@ -166,11 +167,24 @@ public class Room implements Physical {
                 }
                 add(exit);
             }
-            if( Math.random() > 0.8 || roomId == 0) {
+        }
+    }
+    public void addNPC(){
+        if(!generatedMonster) {
+            if (Math.random() > 0.8 || roomId == 0) {
                 add(new NPC(this, 1, 3));
             }
         }
     }
+    public void addChest(){
+        if (openables.isEmpty() && (Math.random() > 0.8 || roomId == 0)) {
+            Map<Potion, Integer> items = new TreeMap<>();
+            items.put(new AttackPotion(), 1);
+            items.put(new HealthPotion(), 1);
+            add(new Chest(10, items, this, 2, 1));
+        }
+    }
+
     /**
      * Places the sprites that will be manipulated into the inputted pane
      * for the first time (do not call more than once if pane, etc. is not
@@ -180,6 +194,8 @@ public class Room implements Physical {
      */
     public void finalize(Pane pane) {
         addRoomLayout();
+        addChest();
+        addNPC();
         generateMonsters();
         addFloorTiles();
         addSurroundingWalls();

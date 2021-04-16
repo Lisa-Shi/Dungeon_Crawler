@@ -1,8 +1,9 @@
 package gamemap;
-import gameobjects.NPC;
+import gameobjects.*;
+import gameobjects.potions.AttackPotion;
+import gameobjects.potions.Potion;
 import gameobjects.tiles.ExitTile;
 import gameobjects.tiles.FloorTile;
-import gameobjects.GameObject;
 import gameobjects.tiles.Tile;
 import gameobjects.tiles.WallTile;
 import gameobjects.physics.Camera;
@@ -16,8 +17,8 @@ import gameobjects.monsters.SlimeMonster;
 import gameobjects.physics.collisions.Physical;
 import gameobjects.physics.PhysicsController;
 import gameobjects.graphics.functionality.Drawable;
-import gameobjects.HPBar;
 import gameobjects.physics.Vector2D;
+import main.Main;
 
 import java.util.LinkedList;
 import java.util.*;
@@ -33,8 +34,9 @@ public class Room implements Physical {
     private LinkedList<Collideable> collideables = new LinkedList<>();
     private LinkedList<Drawable> drawables = new LinkedList<>();
     private LinkedList<ExitTile> exits = new LinkedList<>();
+    private LinkedList<Openable> openables = new LinkedList<>();
     private boolean generatedMonster = false;
-    private NPC npc;
+    //private NPC npc = new NPC(this, 1,3);
     /**
      *gameobjects.monsters is empty when all gameobjects.monsters in this room die
      */
@@ -54,9 +56,6 @@ public class Room implements Physical {
      */
     public Room(int width, int height) {
         roomId = id++;
-        if(roomId == 0){
-            npc = new NPC(this, width/2.0, height/2.0);
-        }
         this.width = width;
         this.height = height;
         // Physics so the camera works properly
@@ -113,6 +112,7 @@ public class Room implements Physical {
             }
             generatedMonster = true;
         }
+
     }
 
     /**
@@ -166,6 +166,7 @@ public class Room implements Physical {
                 }
                 add(exit);
             }
+            add(new NPC(this, 1,3));
         }
     }
     /**
@@ -184,12 +185,10 @@ public class Room implements Physical {
         for (Monster monster: monsters) {
             monster.addHPBar(this, pane);
         }
-        if(roomId == 0) {
-            //add(npc);
-        }
     }
     public NPC getNpc() {
-        return npc;
+        return null;
+        //return npc;
     }
     private void addFloorTiles() {
         for (int r = 0; r < width; r++) {
@@ -306,8 +305,24 @@ public class Room implements Physical {
         if (obj instanceof Monster) {
             monsters.add(0, (Monster) obj);
         }
+        if (obj instanceof Openable) {
+            openables.add(0, (Openable) obj);
+        }
     }
+    public Openable findOpenable(Vector2D center){
+        double upper = center.getY() - (Main.TILE_HEIGHT * 0.5);
+        double lower = center.getY() + (Main.TILE_HEIGHT * 0.5);
+        double left = center.getX() - (Main.TILE_HEIGHT * 0.5);
+        double right = center.getX() + (Main.TILE_HEIGHT * 0.5);
+        for( Openable openable: openables){
+            Vector2D position = ((Physical)openable).getPhysics().getPosition();
 
+            if(position.getX() >= left && position.getX() <= right && position.getY() >= upper && position.getY() <= lower){
+                return openable;
+            }
+        }
+        return null;
+    }
     public void remove(GameObject obj) {
         toRemove.add(obj);
     }

@@ -3,7 +3,9 @@ package main;
 import gamemap.GameMap;
 import gamemap.Room;
 import gameobjects.Inventory;
+import gameobjects.Openable;
 import gameobjects.physics.Vector2D;
+import gameobjects.physics.collisions.RectangleWireframe;
 import gameobjects.tiles.ExitTile;
 import gameobjects.GameObject;
 import gameobjects.Player;
@@ -248,10 +250,10 @@ public class GameStage extends Stage {
                 monster.update(camera);
                 monster.attack(room, pane, player);
             } else {
-                Inventory inv = Inventory.getInstance(monster.die(), pane, player);
-                inv.show();
-                pane.getChildren().remove(monster);
-                player.setMoveability(false);
+                //Inventory inv = Inventory.getInstance(monster, pane, player);
+                //inv.show();
+                //pane.getChildren().remove(monster);
+                //player.setMoveability(false);
                 i--;
             }
         }
@@ -403,13 +405,20 @@ public class GameStage extends Stage {
             if (event.getCode() == KeyCode.ENTER && player.isMoveable()) {
                 player.launchProjectile(room, pane, camera, room.getMonsters());
             }
-            if (event.getCode() == KeyCode.E && player.isMoveable() && room.getNpc() != null) {
-                player.setMoveability(false);
-                enterStore();
+            if (event.getCode() == KeyCode.E && player.isMoveable()) {
+                //check if there is openable chest/npc in front of player;
+                Vector2D center = player.getPhysics().getPosition().add(
+                        player.getDirection().multiply(Main.TILE_HEIGHT));
+                Openable openable = room.findOpenable(center);
+                if( openable != null){
+                    player.setMoveability(false);
+                    openable.open(player, pane);
+                }
             }
-            if (event.getCode() == KeyCode.Q){
+            if (event.getCode() == KeyCode.Q && player.isMoveable()){
+
                 player.setMoveability(false);
-                Inventory inventory = Inventory.getInstance(player.getInventory(), pane, player);
+                Inventory inventory = Inventory.getInstance(player, pane, player);
                 inventory.show();
             }
         }

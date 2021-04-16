@@ -140,6 +140,15 @@ public class Main extends Application {
     public static final ImageSheet HEALTH_POTION =
             new SingularImageSheet(
                     getImageFrom("../gameobjects/graphics/sprites/potionB.png"));
+    public static final ImageSheet CHEST_CLOSE =
+            new SingularImageSheet(
+                    getImageFrom("../gameobjects/graphics/sprites/closedChest.png"));
+    public static final ImageSheet CHEST_OPEN =
+            new SingularImageSheet(
+                    getImageFrom("../gameobjects/graphics/sprites/openChest.png"));
+    public static final ImageSheet CHEST_EMPTY =
+            new SingularImageSheet(
+                    getImageFrom("../gameobjects/graphics/sprites/emptyChest.png"));
     private static final DirectionalImageSheet getDirectionalImageSheet(
             String directionImageBase, int numDirectionFrames) {
         // Find <direction> tag in direction gameobjects.graphics.sprites base address

@@ -24,14 +24,14 @@ public class Inventory {
     private Player player;
     private Map<Potion, Integer> items;
     private static Inventory unique;
-    public static synchronized Inventory getInstance(Map<Potion, Integer> items, Pane pane, Player player){
-        if(unique == null){
-            unique = new Inventory(items, pane, player);
-        }
+    private Openable from;
+    public static synchronized Inventory getInstance(Openable from, Pane pane, Player player){
+        unique = new Inventory(from, pane, player);
         return unique;
     }
-    private Inventory(Map<Potion, Integer> items, Pane pane, Player player){
-        this.items = items;
+    private Inventory(Openable from, Pane pane, Player player){
+        this.from = from;
+        this.items = from.getInventory();
         this.pane = pane;
         this.player = player;
         setUpUI();
@@ -88,7 +88,12 @@ public class Inventory {
                     entry = iterator.next();
                     Potion potion = entry.getKey();
                     itembutton = new ItemButton(potion);
-                    itembutton.setText("        "+entry.getValue()+"");
+                    if(from instanceof NPC){
+
+                        itembutton.setText("      $"+((NPC)from).getPrice(potion)+"");
+                    } else {
+                        itembutton.setText("        " + entry.getValue() + "");
+                    }
 
                     itembutton.getStyleClass().add(potion.getName());
                 } else{
@@ -99,8 +104,20 @@ public class Inventory {
                 itembutton.setOnAction(event -> {
                     if(itembutton.getPotion() != null) {
                         Potion consumable = itembutton.getPotion();
-                        consumable.consume(player);
-                        loseItem(consumable);
+                        //not the best way to do it but good enough for meeting deadline
+                        if(from instanceof Player) {
+                            consumable.consume(player);
+                            loseItem(consumable);
+                        }else if(from instanceof Chest){
+                            player.getItem(consumable);
+                            loseItem(consumable);
+                        } else{
+                            if(player.getMoney() >= ((NPC)from).getPrice(consumable)){
+                                player.setMoney(player.getMoney()-((NPC)from).getPrice(consumable));
+                                player.getItem(consumable);
+                                loseItem(consumable);
+                            }
+                        }
                         if(items.get(consumable) > 0) {
                             itembutton.setText("        "+items.get(consumable));
                         } else{
@@ -137,9 +154,7 @@ public class Inventory {
         player.setMoveability(true);
     }
     public void loseItem(Potion potion){
-        if(items.containsKey(potion)){
-            items.put(potion, items.get(potion) - 1);
-        }
+        from.loseItem(potion);
     }
     public void updateItem(Map<Potion, Integer> updataItems){
         for( Potion potion: updataItems.keySet()){

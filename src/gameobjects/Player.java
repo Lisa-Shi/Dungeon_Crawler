@@ -23,12 +23,12 @@ import gameobjects.physics.Vector2D;
 
 import java.util.*;
 
-public class Player extends GameObject implements Damageable, Collideable, Drawable {
+public class Player extends GameObject implements Damageable, Collideable, Drawable, Openable {
 
     // Variables
     private String name;
     private List<ProjectileLauncher> weaponList;
-    private Map<Potion, Integer> inventory;
+    private Map<Potion, Integer> inventory = new TreeMap<>();
     private int difficulty;
     private int holdingWeapon; // index of weapon in the weapon list
     private int health;
@@ -37,7 +37,6 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
     private Vector2D direction;
     private boolean moveability = true;
     private DynamicCollisionBox collisionBox;
-
     private int money;
 
     /**
@@ -67,9 +66,8 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
         this.collisionBox = new DynamicCollisionBox(getPhysics(),
                 new RectangleWireframe(Main.PLAYER_WIDTH, Main.PLAYER_HEIGHT));
         this.collisionBox.generate();
-        inventory = new TreeMap<>();
         inventory.put(new AttackPotion(), 5);
-        inventory.put(new HealthPotion(), 99);
+        inventory.put(new HealthPotion(), 10);
     }
     public int getMaxHealth(){
         return maxHealth;
@@ -83,9 +81,27 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
             money = 20;
         }
     }
-
     public Map<Potion, Integer> getInventory() {
         return inventory;
+    }
+    public void getItem(Potion potion){
+        if( inventory.containsKey(potion)){
+            inventory.put(potion, inventory.get(potion)+1);
+        }else{
+            inventory.put(potion, 1);
+        }
+    }
+    @Override
+    public void open(Player player, Pane pane) {
+        Inventory inventory = Inventory.getInstance(player, pane, player);
+        inventory.show();
+    }
+
+    @Override
+    public void loseItem(Potion potion) {
+        if( inventory.containsKey(potion)){
+            inventory.put(potion, inventory.get(potion)-1);
+        }
     }
 
     /**

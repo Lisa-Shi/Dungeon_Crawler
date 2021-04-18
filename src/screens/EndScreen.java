@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import main.Main;
 
@@ -15,23 +16,22 @@ import main.Main;
  * Creates the scene that appears when the player is defeated.
  */
 
-public class LoseScreen {
+public class EndScreen {
     private Button restart;
     private Button exit;
     private BorderPane pane;
     private Scene scene;
+    private boolean isWinner;
 
     /**
      * Sets up the initial title of the pane.
      *
      * Sets the scene to be the pane.
+     * @param isWinner true if player won, false if player lost
      */
-    public LoseScreen() {
+    public EndScreen(boolean isWinner) {
         this.pane = new BorderPane();
-        Label title = new Label("The monsters won this time...");
-        title.setId("title");
-        pane.setTop(title);
-
+        this.isWinner = isWinner;
         this.scene = new Scene(pane, Main.GAME_WIDTH, Main.GAME_HEIGHT);
     }
 
@@ -45,6 +45,24 @@ public class LoseScreen {
         stage.show();
     }
 
+    public ImageView createImg(String file) {
+        try {
+            //Image image = new Image(Main.class.getResource(
+            //        "../image/Monster/monstersAll.png").toExternalForm());
+            Image image = new Image(Main.class.
+                    getResource("../screens/" + file).
+                    toExternalForm());
+            ImageView imageView = new ImageView(image);
+            imageView.setFitHeight(Main.GAME_HEIGHT  / 1.5);
+            imageView.setFitWidth(Main.GAME_WIDTH  / 1.5);
+            imageView.setPreserveRatio(true);
+
+            return imageView;
+        } catch (Exception e) {
+            System.out.println("Restart Image failed to print");
+            return null;
+        }
+    }
     /**
      * Adds the buttons to the scene
      * @param exit button from game stage
@@ -56,21 +74,24 @@ public class LoseScreen {
         this.restart = restart;
         restart.setId("restart");
         HBox buttonBox = LRNavigate.buildBox(restart, exit);
-        try {
-            //Image image = new Image(Main.class.getResource(
-            //        "../image/Monster/monstersAll.png").toExternalForm());
-            Image image = new Image(Main.class.
-                    getResource("../gameobjects/graphics/sprites/monster/monstersAll.png").
-                            toExternalForm());
-            ImageView imageView = new ImageView(image);
-            imageView.setFitHeight(Main.GAME_HEIGHT  / 1.5);
-            imageView.setFitWidth(Main.GAME_WIDTH  / 1.5);
-            imageView.setPreserveRatio(true);
 
-            pane.setCenter(imageView);
-        } catch (Exception e) {
-            System.out.println("Restart Image failed to print");
+        Label title;
+        if (isWinner) {
+            title = new Label("Victory");
+            //allows for more images to be stacked on, idk rn the naked baby scares me
+            StackPane stack = new StackPane();
+            ImageView img = createImg("stars.png");
+            stack.getChildren().addAll(img);
+            pane.setCenter(stack);
+            pane.setTop(title);
+        } else {
+            title = new Label("The monsters won this time...");
+            pane.setTop(title);
+            ImageView img = createImg("monstersAll.png");
+            pane.setCenter(img);
         }
+
+        pane.getStylesheets().add("stylesheet.css");
 
         pane.setBottom(buttonBox);
 

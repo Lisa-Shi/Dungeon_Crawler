@@ -111,10 +111,6 @@ public class Main extends Application {
                             + Main.REPLACE_DIRECTION_REGEX + ".png", 5
             );
 
-    public static final ImageSheet ALL_MONSTER_SHEET =
-            new SingularImageSheet(
-                    getImageFrom("../gameobjects/graphics/sprites/monster/monstersAll.png"));
-
     public static final ImageSheet MONSTER_BULLET_SHEET =
             new SingularImageSheet(
                     getImageFrom("../gameobjects/graphics/sprites/bulletM.png"));

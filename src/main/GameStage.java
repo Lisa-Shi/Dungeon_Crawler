@@ -28,7 +28,7 @@ import javafx.scene.control.*;
 import javafx.util.Duration;
 import gameobjects.monsters.Monster;
 import gameobjects.physics.Camera;
-import screens.LoseScreen;
+import screens.EndScreen;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -158,9 +158,19 @@ public class GameStage extends Stage {
      * etc.
      */
     private final List<Image> direction = new ArrayList<>();
+
+    /**
+     * If player health is 0, then lose.
+     *
+     * If end room, and final boss defeated, then win.
+     *
+     * else update
+     */
     public void update() {
         if (player.getHealth() <= 0) {
-            stop();
+            stop(false);
+        } else if (room.getMonsters().size() == 0 && room.getRoomId() == 999) {
+            stop(true);
         } else {
             player.update(camera, room.getCollideables());
 
@@ -183,12 +193,14 @@ public class GameStage extends Stage {
      * Clears the room so that all sprites will stop.
      * Restarts the map so that game restarts in room 0.
      * Creates the losing screen.
+     *
+     * @param isWinner true if player won; false if player lost
      */
-    private void stop() {
+    private void stop(boolean isWinner) {
         timer.stop();
         room.restart();
         map.restartMap();
-        LoseScreen screen = new LoseScreen();
+        EndScreen screen = new EndScreen(isWinner);
         screen.createButton(exitButton, restartButton);
         screen.setStage(stage);
     }
@@ -340,11 +352,7 @@ public class GameStage extends Stage {
             pane.getChildren().add(monsterHP);
         }*/
         Scene scene = new Scene(pane);
-        if (room.getRoomId() == 999) {
-            infoBar.getChildren().add(winButton);
-        } else {
-            infoBar.getChildren().remove(winButton);
-        }
+
         text.setText("$" + player.getMoney());
         testingPurpose.setText("now in room " + room.getRoomId() + " \n");
         pane.getChildren().add(player.getGraphics().getSprite());

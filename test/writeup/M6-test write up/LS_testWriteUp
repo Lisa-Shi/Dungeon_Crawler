@@ -1,0 +1,8 @@
+Class: EndScreenTest.java
+@Lisa
+
+Test: finishGameTest
+    Verifies that a victory screen will appear, once game is defeated.
+
+    The test does so by starting up the game, then moving the player to the last room.
+    Afterwards the room's monster's are cleared, and the victory screen buttons of "restart" and "exit" are checked.

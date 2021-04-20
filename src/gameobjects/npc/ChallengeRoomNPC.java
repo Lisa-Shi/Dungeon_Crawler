@@ -12,9 +12,9 @@ import javafx.scene.text.Text;
 
 
 public class ChallengeRoomNPC extends NPC {
-
     private StackPane stackPane;
     private ChallengeRoom room;
+    private boolean challenged = false;
     public ChallengeRoomNPC(Room room, double initialX, double initialY){
         super(room, initialX, initialY);
         if( !(room instanceof ChallengeRoom)){
@@ -25,8 +25,10 @@ public class ChallengeRoomNPC extends NPC {
 
     @Override
     public void open(Player player, Pane pane) {
-        setUpUI(player, pane);
-        pane.getChildren().add(stackPane);
+        if(!challenged) {
+            setUpUI(player, pane);
+            pane.getChildren().add(stackPane);
+        }
     }
     private void setUpUI(Player player, Pane pane) {
         Bounds bound = pane.getLayoutBounds();
@@ -66,8 +68,9 @@ public class ChallengeRoomNPC extends NPC {
         Button button = new Button("Yes");
         button.setPrefSize(75, 45);
         button.setOnAction(e->{
-            room.setFinish(false);
+            challenged = true;
             room.drawMonster(pane);
+            room.setFinish(false);
             pane.getChildren().remove(stackPane);
             player.setMoveability(true);
         });

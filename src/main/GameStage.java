@@ -397,10 +397,18 @@ public class GameStage extends Stage {
                 }
             }
             if (event.getCode() == KeyCode.Q && player.isMoveable()) {
-
                 player.setMoveability(false);
                 Inventory inventory = Inventory.getInstance(player, pane, player);
                 inventory.show();
+            }
+            if (event.getCode() == KeyCode.TAB){
+                //for demo purpose
+                for( Monster monster: room.getMonsters()){
+                    monster.getHPBar().expire();
+                    pane.getChildren().remove(monster.getGraphics().getSprite());
+                }
+                room.getMonsters().clear();
+
             }
         }
     };

@@ -153,7 +153,7 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
         Vector2D playerLoc =
                 damageable.getPhysics().getPosition().multiply(1.0 / Main.TILE_HEIGHT);
         Vector2D monsterLoc = getPhysics().getPosition().multiply(1.0 / Main.TILE_HEIGHT);
-        if (playerLoc.distanceSquared(monsterLoc) <= 0) {
+        if (playerLoc.distanceSquared(monsterLoc) <= 10) {
             facing = "";
             return true;
         }
@@ -255,7 +255,7 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
             Vector2D current = popped.getState();
             LinkedList<String> currPath = popped.getPath();
             double cost = popped.getCost();
-            if (playerLoc.distanceSquared(current) <= 5) {
+            if (playerLoc.distanceSquared(current) <= 10) {
                 if (currPath.size() >= 1) {
                     String a = currPath.remove(0);
                     facing = a;

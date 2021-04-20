@@ -65,8 +65,8 @@ public class ExitTile extends Tile implements Passable {
 
     @Override
     public void collisionWithPlayerEvent(Player player) {
-        if ((this.linkedRoom.equals(GameStage.getPrevRoom()) && !(this.linkedRoom instanceof ChallengeRoom))
-                || ((this.inRoom instanceof ChallengeRoom) && ((ChallengeRoom)this.inRoom).isFinish())
+        if ((this.linkedRoom.equals(GameStage.getPrevRoom()) && !(this.inRoom instanceof ChallengeRoom))
+                || ((this.inRoom instanceof ChallengeRoom) && (((ChallengeRoom)this.inRoom).isFinish()))
                 || this.inRoom.getMonsters().size() == 0) {
             GameMap.enterRoom(getLinkedRoom());
         }

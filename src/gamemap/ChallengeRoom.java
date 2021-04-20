@@ -37,6 +37,9 @@ public class ChallengeRoom extends Room{
     }
     public void update(Camera camera){
         super.update(camera);
+        if( this.getMonsters().size() == 0){
+            this.finish = true;
+        }
     }
     public void addRoomLayout() {
         this.setLayout(RoomLayout.design(this, true));
@@ -56,15 +59,11 @@ public class ChallengeRoom extends Room{
         for (Monster monster : this.getMonsters()) {
             pane.getChildren().add(monster.getGraphics().getSprite());
         }
+        for (Monster monster: getMonsters()) {
+            monster.addHPBar(this, pane);
+        }
     }
     public boolean isFinish() {
         return finish;
     }
-    public void addAllSprites(Pane pane) {
-        for (Drawable drawable : this.getDrawables()) {
-            pane.getChildren().add(drawable.getGraphics().getSprite());
-        }
-    }
-
-
 }

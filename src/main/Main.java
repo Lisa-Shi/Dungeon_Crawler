@@ -57,6 +57,7 @@ public class Main extends Application {
     public static final int HEALTH_POTION_HEAL = 25;
     public static final int ATTACK_POTION_AMP = 2;
     public static final int ATTACK_POTION_DURATION = 15;
+    public static final int END_GAME_ATTACK_POTION_AMP = 3;
 
 
     //public static final int BULLET_TIME_UNTIL_EXPIRATION = 1000;
@@ -65,6 +66,7 @@ public class Main extends Application {
     public static final int MONSTER_ATTACK_TIME = 1000;
     public static final int SLIME_ATTACK_RADIUS = 100;
     public static final int BUZZ_ATTACK_RADIUS = 200;
+    public static final int BOSS_ATTACK_RADIUS = 300;
 
     public static final String REPLACE_DIRECTION_REGEX = "<direction>";
 
@@ -80,6 +82,14 @@ public class Main extends Application {
     }
 
 
+    public static final DirectionalImageSheet BOSS_STANDING_SHEET =
+            getDirectionalImageSheet(
+                    "../gameobjects/graphics/sprites/monster/Buzz"
+                            + Main.REPLACE_DIRECTION_REGEX + ".png", 2
+            );
+    public static final ImageSheet END_GAME_ATTACK_POTION =
+            new SingularImageSheet(
+                    getImageFrom("../gameobjects/graphics/sprites/potionC.png"));
     private static final DirectionalImageSheet PLAYER_STANDING_SHEET =
             getDirectionalImageSheet(
                     "../gameobjects/graphics/sprites/PlayerFace"

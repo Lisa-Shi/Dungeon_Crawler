@@ -1,6 +1,7 @@
 package gameobjects.tiles;
 
 
+import gamemap.ChallengeRoom;
 import gameobjects.Player;
 import gameobjects.physics.collisions.CollisionBox;
 import gameobjects.physics.collisions.Passable;
@@ -64,7 +65,8 @@ public class ExitTile extends Tile implements Passable {
 
     @Override
     public void collisionWithPlayerEvent(Player player) {
-        if (this.linkedRoom.equals(GameStage.getPrevRoom())
+        if ((this.linkedRoom.equals(GameStage.getPrevRoom()) && !(this.linkedRoom instanceof ChallengeRoom))
+                || ((this.inRoom instanceof ChallengeRoom) && ((ChallengeRoom)this.inRoom).isFinish())
                 || this.inRoom.getMonsters().size() == 0) {
             GameMap.enterRoom(getLinkedRoom());
         }

@@ -98,7 +98,11 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
     public String getFacing() {
         return facing;
     }
-
+    public void evolution(int amount){
+        maxHealth = maxHealth * amount;
+        this.health = this.health * amount;
+        this.damagePerHit = this.damagePerHit * amount;
+    }
     /**
      * the monster position and hp bar position are updated here
      * @param camera camera that focuses on object

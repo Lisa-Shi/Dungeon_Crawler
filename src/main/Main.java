@@ -81,12 +81,9 @@ public class Main extends Application {
         return new Image(Main.class.getResource(name).toExternalForm());
     }
 
-
-    public static final DirectionalImageSheet BOSS_STANDING_SHEET =
-            getDirectionalImageSheet(
-                    "../gameobjects/graphics/sprites/monster/Buzz"
-                            + Main.REPLACE_DIRECTION_REGEX + ".png", 2
-            );
+    public static final ImageSheet BOSS_STANDING_SHEET =
+            new SingularImageSheet(
+                    getImageFrom("../gameobjects/graphics/sprites/monster/BossMonster.png"));
     public static final ImageSheet END_GAME_ATTACK_POTION =
             new SingularImageSheet(
                     getImageFrom("../gameobjects/graphics/sprites/potionC.png"));

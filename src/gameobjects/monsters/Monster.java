@@ -153,7 +153,7 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
         Vector2D playerLoc =
                 damageable.getPhysics().getPosition().multiply(1.0 / Main.TILE_HEIGHT);
         Vector2D monsterLoc = getPhysics().getPosition().multiply(1.0 / Main.TILE_HEIGHT);
-        if (playerLoc.distanceSquared(monsterLoc) <= 10) {
+        if (playerLoc.distanceSquared(monsterLoc) <= 5) {
             facing = "";
             return true;
         }
@@ -222,10 +222,9 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
      * using manhattan distance as heuristic function. each path cost is one
      * @room room room that player and monster are in
      * @param damageable the target that monster moving toward
-     * @param room room that player and monster are in
      */
 
-    public void face(Damageable damageable, Room room) {
+    public void face(Damageable damageable) {
         Vector2D playerLoc =
                 damageable.getPhysics().getPosition().multiply(1.0 / Main.TILE_HEIGHT);
         Vector2D monsterLoc = getPhysics().getPosition().multiply(1.0 / Main.TILE_HEIGHT);
@@ -255,7 +254,7 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
             Vector2D current = popped.getState();
             LinkedList<String> currPath = popped.getPath();
             double cost = popped.getCost();
-            if (playerLoc.distanceSquared(current) <= 10) {
+            if (playerLoc.distanceSquared(current) <= 5) {
                 if (currPath.size() >= 1) {
                     String a = currPath.remove(0);
                     facing = a;

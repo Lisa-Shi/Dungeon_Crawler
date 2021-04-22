@@ -4,11 +4,16 @@ import gamemap.ChallengeRoom;
 import gamemap.Room;
 import gameobjects.Player;
 import javafx.geometry.Bounds;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import main.Main;
+
+import java.awt.*;
+import java.awt.event.MouseEvent;
 
 
 public class ChallengeRoomNPC extends NPC {
@@ -22,13 +27,46 @@ public class ChallengeRoomNPC extends NPC {
         }
         this.room = (ChallengeRoom)room;
     }
+    private String getString(String playerName){
+        return "Hi " + playerName + ",\n Welcome to the challenge room.\n In this room, \n"
+                + "you will have the chance to accept the challenge.\n In the challenge,"
+                + "the monsters that you will be \nfacing are a lot strongger than the"
+                + "regular monsters.\n Of course defecting the monsters will give you the\n"
+                + "items that you don't see outside the challenge room.\n Keep in mind"
+                + "that you cannot leave the room\n until all the monsters are defected"
+                + "\nif you take the challenge.\n\n\n\n\n";
 
+    }
     @Override
     public void open(Player player, Pane pane) {
         if(!challenged) {
+            setUpConversation(player, pane);
+        }
+    }
+    private void setUpConversation(Player player, Pane pane){
+        stackPane = new StackPane();
+        stackPane.setPrefSize(Main.GAME_WIDTH, Main.GAME_HEIGHT);
+        Button background = new Button();
+        background.setPrefSize(Main.GAME_WIDTH, Main.GAME_HEIGHT);
+        background.getStylesheets().add("inventoryStyleSheet.css");
+        background.getStyleClass().add("Transparent");
+        background.setOnAction(e-> {
+            pane.getChildren().remove(stackPane);
             setUpUI(player, pane);
             pane.getChildren().add(stackPane);
-        }
+        });
+        ImageView imageView = new ImageView(Main.NPC_BIG);
+        imageView.setFitWidth(250);
+        imageView.setFitHeight(300);
+        Text text = new Text(getString(player.getName()));
+        text.getStyleClass().add("font");
+        HBox hbox = new HBox(imageView, text);
+        hbox.getStylesheets().add("inventoryStyleSheet.css");
+        hbox.getStyleClass().add("conversation");
+        hbox.setAlignment(Pos.BOTTOM_CENTER);
+        stackPane.getChildren().add(hbox);
+        stackPane.getChildren().add(background);
+        pane.getChildren().add(stackPane);
     }
     private void setUpUI(Player player, Pane pane) {
         Bounds bound = pane.getLayoutBounds();

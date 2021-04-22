@@ -239,7 +239,7 @@ public class GameStage extends Stage {
             Monster monster = room.getMonsters().get(i);
 
             if (!monster.isDead()) {
-                monster.face(player, room);
+                monster.face(player);
                 monster.update(camera);
                 monster.attack(room, pane, player);
             } else {

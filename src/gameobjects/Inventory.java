@@ -2,6 +2,8 @@ package gameobjects;
 
 import gameobjects.ProjectileLauncher.LauncherInventory;
 import gameobjects.ProjectileLauncher.ProjectileLauncher;
+import gameobjects.npc.NPC;
+import gameobjects.npc.storeNPC;
 import gameobjects.potions.Potion;
 import javafx.geometry.Bounds;
 import javafx.scene.control.Button;
@@ -44,9 +46,6 @@ public class Inventory {
         GridPane inventory = setupGrid();
         inventory.add(close, 4, 1);
         inv.getChildren().addAll(inventory);
-        inv.setLayoutX(bound.getWidth() / 2 - bound.getWidth() / 4);
-        inv.setLayoutY(bound.getHeight() / 2 - bound.getHeight() / 4);
-
     }
     private Button setupClose() {
         Button close = new Button("X");
@@ -98,8 +97,8 @@ public class Inventory {
                     entry = iterator.next();
                     Potion potion = entry.getKey();
                     itembutton = new ItemButton(potion);
-                    if (from instanceof NPC) {
-                        text = "      $" + ((NPC) from).getPrice(potion);
+                    if (from instanceof storeNPC) {
+                        text = "      $" + ((storeNPC) from).getPrice(potion);
                     } else {
                         text = "        " + entry.getValue();
                     }

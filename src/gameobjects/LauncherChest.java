@@ -11,7 +11,7 @@ import javafx.scene.layout.Pane;
 import main.Main;
 import java.util.Map;
 
-public class LauncherChest extends GameObject implements Collideable, Drawable, Openable {
+public class LauncherChest extends GameObject implements Collideable, Drawable, Openable, Interactable {
     // Variables
     private int money;
     private boolean isOpen = false;

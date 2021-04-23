@@ -30,7 +30,13 @@ public class RoomLayout {
             return null;
         }
     }
-
+    public static String design(Room room, boolean isChallenge){
+        if(isChallenge){
+            design3(room);
+            return "design3";
+        }
+        return null;
+    }
     /**
      * Design 0 in the shape of an H.
      * design:

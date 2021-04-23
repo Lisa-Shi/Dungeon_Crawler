@@ -134,7 +134,8 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
         collisionBox.raytraceCollision(getPhysics(), room.getCollideables());
         super.update(camera);
     }
-    /**change graphic
+    /**
+     * change graphic
      * return the items that the monster is carrying
      * @return list of items
      */
@@ -169,6 +170,7 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
         support.firePropertyChange("health", (double) this.health / this.maxHealth,
                 (this.health - healthDamage) / (double) this.maxHealth);
         health -= healthDamage;
+
         if (health <= 0) {
             isDead = true;
             facing = "";

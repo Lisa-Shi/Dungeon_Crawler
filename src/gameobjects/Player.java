@@ -40,6 +40,11 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
     private DynamicCollisionBox collisionBox;
     private int money;
 
+    private int bulletShot = 0;
+    private int monsterKilled = 0;
+    private int challengeRooms = 0;
+    private int potionsConsumed = 0;
+
     /**
      * Constructs the Player object that the user will control
      * to explore and escape the dungeon
@@ -85,8 +90,11 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
         }
     }
 
+
+
     @Override
     public void buttonAction(Player player, Potion potion) {
+        potionsConsumed++;
         potion.consume(player);
         loseItem(potion);
     }
@@ -193,7 +201,19 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
                 + camera.getOffsetY() - Main.PLAYER_HEIGHT / 2);
     }
 
-    /**
+    public void addBullet() {
+        bulletShot++;
+    }
+
+    public void addMonsterKilled() {
+        monsterKilled++;
+    }
+
+    public int getMonsterKilled() {
+        return monsterKilled;
+    }
+
+     /**
      * deduct player health point
      * @param healthDamage amount of hp to deduct from player
      */
@@ -317,5 +337,21 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
 
     public void setDamageAmt(int damageAmt) {
         this.damageAmt = health;
+    }
+
+    public int getBulletShot() {
+        return bulletShot;
+    }
+
+    public int getChallengeRooms() {
+        return challengeRooms;
+    }
+
+    public void addChallenge() {
+        challengeRooms++;
+    }
+
+    public int getPotionsConsumed() {
+        return potionsConsumed;
     }
 }

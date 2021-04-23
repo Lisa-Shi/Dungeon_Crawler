@@ -106,6 +106,7 @@ public class ChallengeRoomNPC extends NPC {
         Button button = new Button("Yes");
         button.setPrefSize(75, 45);
         button.setOnAction(e->{
+            player.addChallenge();
             challenged = true;
             room.drawMonster(pane);
             room.setFinish(false);

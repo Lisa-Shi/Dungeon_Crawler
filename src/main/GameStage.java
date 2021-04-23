@@ -11,6 +11,7 @@ import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -19,7 +20,6 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -39,6 +39,10 @@ public class GameStage extends Stage {
     private Pane pane = new Pane();
 
     private double t = 0;
+
+    //game stats
+    private int maxRoom = 0;
+    private int challengeRoom = 0;
 
     private boolean playerIsMovingLeft;
     private boolean playerIsMovingRight;
@@ -201,9 +205,33 @@ public class GameStage extends Stage {
         timer.stop();
         room.restart();
         map.restartMap();
-        EndScreen screen = new EndScreen(isWinner);
-        screen.createButton(exitButton, restartButton);
-        screen.setStage(stage);
+        EndScreen.loadButton(restartButton, exitButton);
+        EndScreen.loadStats(isWinner, player.getMonsterKilled(), player.getChallengeRooms(),
+                maxRoom, player.getPotionsConsumed(), player.getBulletShot());
+
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("../screens/EndScene.fxml"));
+            stage.setScene(new Scene(root, Main.GAME_WIDTH, Main.GAME_HEIGHT));
+            stage.show();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println(e.getStackTrace());
+
+        }
+
+
+//        LoseScreen loseScreen = new LoseScreen(isWinner, maxRoom,
+//                player.getBulletShot(), player.getMonsterKilled());
+//        Scene scene = loseScreen.loadButton(restartButton, exitButton);
+//        stage.setScene(scene);
+//        stage.show();
+
+        //LoseScreen.start(stage);
+
+//        EndScreen screen = new EndScreen(isWinner, maxRoom,
+//                player.getBulletShot(), player.getMonsterKilled());
+//        screen.createButton(exitButton, restartButton);
+//        screen.setStage(stage);
     }
 
     private void updateText() {
@@ -211,6 +239,7 @@ public class GameStage extends Stage {
         healthText.setText("HP: " + player.getHealth());
         testingPurpose.setText("now in room " + room.getRoomId() + " \n");
     }
+
     private void switchPlayerGraphicsStateToStill() {
         double threshold = 0.1D;
         //if (Math.abs(player.getPhysics().getVelocity().getX())
@@ -256,6 +285,7 @@ public class GameStage extends Stage {
                 monster.attack(room, pane, player);
             } else {
                 player.getItem(monster.die());
+                player.addMonsterKilled();
                 i--;
             }
         }
@@ -264,7 +294,6 @@ public class GameStage extends Stage {
         timeline.play();
     }
 
-
     private void teleportPlayerToEnteredRoom() {
         if (room != null && map != null && !GameMap.enterRoom().equals(room)) {
             prevRoom = room;
@@ -272,6 +301,10 @@ public class GameStage extends Stage {
             enterRoom();
             player.update(camera, room.getCollideables());
             matchPlayerExit(prevRoom);
+
+            if (maxRoom < room.getRoomId() && !(room instanceof ChallengeRoom)) {
+                maxRoom++;
+            }
 
             if (!room.getCollideables().contains(player)) {
                 room.getCollideables().add(player);

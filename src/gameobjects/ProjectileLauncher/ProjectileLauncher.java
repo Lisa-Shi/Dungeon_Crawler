@@ -40,6 +40,7 @@ public abstract class ProjectileLauncher {
 
     public void shoot(Room room, Pane pane, Camera camera) {
         Projectile bullet = new Projectile(player, room, pane, range, damage, image);
+        player.addBullet();
         room.add(bullet);
         pane.getChildren().add(bullet.getGraphics().getSprite());
         bullet.launch();

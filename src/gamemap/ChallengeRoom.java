@@ -37,14 +37,14 @@ public class ChallengeRoom extends Room{
     }
     public void update(Camera camera){
         super.update(camera);
-        if( this.getMonsters().size() == 0){
+        if (this.getMonsters().size() == 0) {
             this.finish = true;
         }
     }
     public void addRoomLayout() {
         this.setLayout(RoomLayout.design(this, true));
     }
-    public void setFinish(Boolean finish){
+    public void setFinish(Boolean finish) {
         this.finish = finish;
     }
     public void finalize(Pane pane) {

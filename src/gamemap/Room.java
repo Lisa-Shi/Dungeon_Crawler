@@ -101,8 +101,8 @@ public class Room implements Physical {
                 add(monster);
             } else if (roomId != 0) {
                 Random ran = new Random();
-                int numOfMon = (ran.nextInt(roomId) + 1);
-                for (int i = 1; i <= numOfMon; i++) {
+                int numOfMon = (ran.nextInt(roomId) + 2);
+                for (int i = 0; i < numOfMon; i++) {
                     monster = getRandomMonster();
                     add(monster);
                 }

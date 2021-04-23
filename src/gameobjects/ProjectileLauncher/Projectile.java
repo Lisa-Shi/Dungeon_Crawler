@@ -101,7 +101,7 @@ public class Projectile extends GameObject implements Collideable {
         Player player = (Player) sprite;
         Vector2D direction = player.getDirection();
         PhysicsController physics = this.getPhysics();
-        physics.setVelocity(direction.multiply(damage));
+        physics.setVelocity(direction.multiply(damage * 2));
         physics.setPosition(
                 sprite.getPhysics().getPosition().add(direction.multiply(Main.TILE_WIDTH / 2)));
     }

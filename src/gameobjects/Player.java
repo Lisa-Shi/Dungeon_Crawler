@@ -24,7 +24,7 @@ import gameobjects.physics.Vector2D;
 
 import java.util.*;
 
-public class Player extends GameObject implements Damageable, Collideable, Drawable, Openable {
+public class Player extends GameObject implements Damageable, Collideable, Drawable, Openable, Interactable {
 
     // Variables
     private String name;

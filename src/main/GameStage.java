@@ -1,5 +1,6 @@
 package main;
 
+import gamemap.ChallengeRoom;
 import gamemap.GameMap;
 import gamemap.Room;
 import gameobjects.*;
@@ -250,7 +251,7 @@ public class GameStage extends Stage {
             Monster monster = room.getMonsters().get(i);
 
             if (!monster.isDead()) {
-                monster.face(player, room);
+                monster.face(player);
                 monster.update(camera);
                 monster.attack(room, pane, player);
             } else {
@@ -263,9 +264,6 @@ public class GameStage extends Stage {
         timeline.play();
     }
 
-    public void enterStore() {
-
-    }
 
     private void teleportPlayerToEnteredRoom() {
         if (room != null && map != null && !GameMap.enterRoom().equals(room)) {
@@ -344,13 +342,6 @@ public class GameStage extends Stage {
         room.finalize(pane);
         pbar.setProgress(room.getRoomId() / 9.0);
         monsterHP.clear();
-        Rectangle monsterHP = new Rectangle(10, 10, 100, 100);
-        /*for( Monster monster: room.getMonsters()){
-            Rectangle monsterHP = new Rectangle();
-            PropertyChangeListener listener = new monsterHPListener(monsterHP);
-            monster.addPropertyChangeListener(listener);
-            pane.getChildren().add(monsterHP);
-        }*/
         Scene scene = new Scene(pane);
 
         text.setText("$" + player.getMoney());
@@ -359,9 +350,6 @@ public class GameStage extends Stage {
         pane.getChildren().add(infoBar);
         scene.setOnKeyPressed(keyPressed);
         scene.setOnKeyReleased(keyReleased);
-
-
-
         stage.setScene(scene);
         stage.show();
     }
@@ -410,17 +398,25 @@ public class GameStage extends Stage {
                 //check if there is openable chest/npc in front of player;
                 Vector2D center = player.getPhysics().getPosition().add(
                         player.getDirection().multiply(Main.TILE_HEIGHT));
-                Openable openable = room.findOpenable(center);
-                if (openable != null) {
+                Interactable interactable = room.findInteractable(center);
+                if (interactable != null) {
                     player.setMoveability(false);
-                    openable.open(player, pane);
+                    interactable.open(player, pane);
                 }
             }
             if (event.getCode() == KeyCode.Q && player.isMoveable()) {
-
                 player.setMoveability(false);
                 Inventory inventory = Inventory.getInstance(player, pane, player);
                 inventory.show();
+            }
+            if (event.getCode() == KeyCode.TAB){
+                //for demo purpose
+                for( Monster monster: room.getMonsters()){
+                    monster.getHPBar().expire();
+                    pane.getChildren().remove(monster.getGraphics().getSprite());
+                }
+                room.getMonsters().clear();
+
             }
         }
     };

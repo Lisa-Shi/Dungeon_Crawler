@@ -81,7 +81,7 @@ public class GameMap {
         arr2.add(prev);
         adjList.put(end, arr2);
         for (int i = 0; i < 3; i++) {
-            Room newRoom = new Room(20, 20);
+            Room newRoom = new ChallengeRoom(20, 20);
             rooms.add(newRoom);
             edge.add(new Edge(newRoom, start));
             adjList.get(start).add(newRoom);

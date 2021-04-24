@@ -15,6 +15,7 @@ public class ProjectileLauncherD extends ProjectileLauncher {
     private int range;
     private int damage;
     private Player player;
+    private int bulletsLeft = 20;
 
 
 
@@ -62,18 +63,28 @@ public class ProjectileLauncherD extends ProjectileLauncher {
             increasePower();
         }
         for (Monster m : room.getMonsters()) {
-            Projectile bullet = new Projectile(player, room, pane, range * 2, damage * 2, BULLET_IMG);
-            player.addBullet();
-            room.add(bullet);
-            pane.getChildren().add(bullet.getGraphics().getSprite());
-            bullet.launchTowardsPoint(m.getPhysics().getPosition(), Main.ENEMY_BULLET_SPEED);
-            bullet.update(camera);
+            if (bulletsLeft > 0) {
+                System.out.println("shooting");
+                Projectile bullet = new Projectile(player, room, pane, range * 2, damage * 2, BULLET_IMG);
+                player.addBullet();
+                room.add(bullet);
+                pane.getChildren().add(bullet.getGraphics().getSprite());
+                bullet.launchTowardsPoint(m.getPhysics().getPosition(), Main.ENEMY_BULLET_SPEED);
+                bullet.update(camera);
+                bulletsLeft--;
+            } else {
+                player.equipWeapon(player.getWeaponList().get(0));
+            }
+
         }
         BULLET_IMG = defaultImg;
     }
 
     public boolean isRandomPowerUp() {
         return randomPowerUp;
+    }
+    public void addBullets() {
+        bulletsLeft += 10;
     }
 
     public void setRandomPowerUp(boolean b) {

@@ -33,6 +33,16 @@
     -fx-font-size: 10;
     -fx-wrap-text: true;
 }
+.BulletPotion {
+    -fx-background-image: url("../../../src/gameobjects/graphics/sprites/potionC.png");
+    -fx-background-size: 30px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 20%;
+    -fx-content-display: top;
+    -fx-text-alignment: right;
+    -fx-font-size: 10;
+    -fx-wrap-text: true;
+}
 .fireball {
     -fx-background-image: url("../../../src/gameobjects/graphics/sprites/bulletImg/fire.png");
     -fx-background-size: 40px;

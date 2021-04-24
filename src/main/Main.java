@@ -40,6 +40,7 @@ public class Main extends Application {
     public static final double DEFAULT_CAMERA_SLOWDOWN_FACTOR = 7; // similar to a frictional force
     public static final double DEFAULT_CONTROL_PLAYER_FORCE = 0.45D;
     public static final double MAX_PLAYER_SPEED = 13D;
+    public static double powerUpSpeed = 1;
 
     public static final double PLAYER_WIDTH = 40;
     public static final double PLAYER_HEIGHT = 40;

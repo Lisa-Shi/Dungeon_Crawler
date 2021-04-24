@@ -263,16 +263,17 @@ public class GameStage extends Stage {
         }
     }
     private void movePlayer() {
+        double force = Main.powerUpSpeed * Main.DEFAULT_CONTROL_PLAYER_FORCE;
         if (playerIsMovingLeft) {
-            player.getPhysics().pushLeft(Main.DEFAULT_CONTROL_PLAYER_FORCE);
+            player.getPhysics().pushLeft(force);
         } else if (playerIsMovingRight) {
-            player.getPhysics().pushRight(Main.DEFAULT_CONTROL_PLAYER_FORCE);
+            player.getPhysics().pushRight(force);
         }
 
         if (playerIsMovingUp) {
-            player.getPhysics().pushUp(Main.DEFAULT_CONTROL_PLAYER_FORCE);
+            player.getPhysics().pushUp(force);
         } else if (playerIsMovingDown) {
-            player.getPhysics().pushDown(Main.DEFAULT_CONTROL_PLAYER_FORCE);
+            player.getPhysics().pushDown(force);
         }
     }
     private void moveMonsters() {
@@ -426,6 +427,7 @@ public class GameStage extends Stage {
                         player.getSpriteSheet().getWalkSheet().getDownImage());
             }
             if (event.getCode() == KeyCode.ENTER && player.isMoveable()) {
+                Main.powerUpSpeed = 1;
                 player.launchProjectile(room, pane, camera, room.getMonsters());
             }
             if (event.getCode() == KeyCode.E && player.isMoveable()) {

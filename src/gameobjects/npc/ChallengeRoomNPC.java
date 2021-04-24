@@ -2,9 +2,11 @@ package gameobjects.npc;
 
 import gamemap.ChallengeRoom;
 import gamemap.Room;
+import gameobjects.Inventory;
 import gameobjects.Player;
 import gameobjects.ProjectileLauncher.Projectile;
 import gameobjects.ProjectileLauncher.ProjectileLauncherD;
+import gameobjects.potions.BulletPotion;
 import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -38,6 +40,8 @@ public class ChallengeRoomNPC extends NPC {
                     + "items that you don't see outside the challenge room.\n Keep in mind"
                     + "that you cannot leave the room\n until all the monsters are defected"
                     + "\nif you take the challenge.\n\n\n\n\n";
+        } else if (room.isPrizeCollected()) {
+            return "You have already completed this challenge.\n\n\n\n\n\n\n\n\n\n\n";
         } else {
             return "Congratulations " + playerName + ",\n You have succeeded.\n Here is your prize.\n\n\n\n\n";
         }
@@ -46,17 +50,19 @@ public class ChallengeRoomNPC extends NPC {
     }
     @Override
     public void open(Player player, Pane pane) {
-        boolean completeChallenge = false;
+        boolean completeChallenge = true;
         if (!challenged) {
+            completeChallenge = false;
             setUpConversation(player, pane, completeChallenge);
         } else if (room.isFinish() &&
                 room.isGeneratedMonster() &&
                 room.getMonsters().size() == 0 &&
                 !room.isPrizeCollected()) {
-            completeChallenge = true;
-            room.setPrizeCollected(true);
             setUpConversation(player, pane, completeChallenge);
             selectPrize(player);
+            room.setPrizeCollected(true);
+        } else if (room.isPrizeCollected()) {
+            setUpConversation(player, pane, completeChallenge);
         }
     }
 
@@ -66,6 +72,8 @@ public class ChallengeRoomNPC extends NPC {
             player.obtainNewWeapon(weapon);
         } else if (!weapon.isRandomPowerUp()) {
             weapon.setRandomPowerUp(true);
+        } else {
+            player.getInventory().put(new BulletPotion(), 5);
         }
         player.addChallenge();
 

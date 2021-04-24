@@ -29,6 +29,7 @@ public class ChallengeRoom extends Room{
         }
         setGeneratedMonster(true);
     }
+
     public void addNPC() {
         if (npc == null) {
             npc = new ChallengeRoomNPC(this, this.getWidth()/2 - 1, this.getHeight()/2);

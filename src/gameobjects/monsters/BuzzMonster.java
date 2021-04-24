@@ -4,6 +4,7 @@
 package gameobjects.monsters;
 
 import gameobjects.Damageable;
+import gameobjects.physics.Camera;
 import gameobjects.physics.Vector2D;
 import gameobjects.potions.HealthPotion;
 import javafx.scene.layout.Pane;
@@ -24,7 +25,7 @@ public class BuzzMonster extends Monster {
     }
 
     @Override
-    public void attack(Room room, Pane pane, Damageable other) {
+    public void attack(Room room, Pane pane, Damageable other, Camera camera) {
         if (inRange(other)) {
             other.hurt(1);
         }

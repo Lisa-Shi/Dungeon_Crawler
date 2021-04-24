@@ -80,7 +80,7 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
      * @param pane overall pane
      * @param other what to damage
      */
-    public abstract void attack(Room room, Pane pane, Damageable other);
+    public abstract void attack(Room room, Pane pane, Damageable other, Camera camera);
 
     /**
      * add the hp bar to the pane

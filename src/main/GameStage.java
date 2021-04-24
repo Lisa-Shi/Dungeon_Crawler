@@ -281,8 +281,9 @@ public class GameStage extends Stage {
 
             if (!monster.isDead()) {
                 monster.face(player);
+                monster.attack(room, pane, player, camera);
                 monster.update(camera);
-                monster.attack(room, pane, player);
+
             } else {
                 player.getItem(monster.die());
                 player.addMonsterKilled();
@@ -449,6 +450,7 @@ public class GameStage extends Stage {
                     pane.getChildren().remove(monster.getGraphics().getSprite());
                 }
                 room.getMonsters().clear();
+                player.setMoveability(true);
 
             }
         }

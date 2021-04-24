@@ -11,7 +11,7 @@ public class ProjectileLauncherB extends ProjectileLauncher {
             Main.getImageFrom("../gameobjects/graphics/sprites/bulletImg/" + "donut.png"));
 
     private ProjectileLauncherB(Player player) {
-        super(player, 3, 3, BULLET_IMG, "donut");
+        super(player, 3, 3, BULLET_IMG, "donut", false);
     }
 
     public static ProjectileLauncherB getInstance(Player player) {

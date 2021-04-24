@@ -7,6 +7,7 @@ import gameobjects.Damageable;
 import gameobjects.graphics.functionality.CharacterImageSheet;
 import gameobjects.graphics.functionality.DirectionalImageSheet;
 import gameobjects.graphics.functionality.SpriteController;
+import gameobjects.physics.Camera;
 import gameobjects.physics.Vector2D;
 import gameobjects.potions.HealthPotion;
 import javafx.scene.layout.Pane;
@@ -25,7 +26,7 @@ public class SlimeMonster extends Monster {
         return (radius < Main.SLIME_ATTACK_RADIUS);
     }
     @Override
-    public void attack(Room room, Pane pane, Damageable other) {
+    public void attack(Room room, Pane pane, Damageable other, Camera camera) {
         SpriteController graphics = getGraphics();
         CharacterImageSheet charImg = (CharacterImageSheet) getSpriteSheet();
         if (inRange(other)) {

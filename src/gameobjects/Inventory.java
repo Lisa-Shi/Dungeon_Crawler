@@ -2,6 +2,7 @@ package gameobjects;
 
 import gameobjects.ProjectileLauncher.LauncherInventory;
 import gameobjects.ProjectileLauncher.ProjectileLauncher;
+import gameobjects.ProjectileLauncher.ProjectileLauncherD;
 import gameobjects.npc.NPC;
 import gameobjects.npc.storeNPC;
 import gameobjects.potions.Potion;
@@ -89,7 +90,6 @@ public class Inventory {
                 Text spaceHolder = new Text("      ");
                 inventory.add(spaceHolder, col, row);
             } else {
-                System.out.println(from.getClass());
                 ItemButton itembutton;
                 if (iterator != null && iterator.hasNext()) {
                     //adding the potions to inventory

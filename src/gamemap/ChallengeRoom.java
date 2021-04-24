@@ -12,6 +12,16 @@ import java.util.Random;
 
 public class ChallengeRoom extends Room{
     private boolean finish = true;
+
+    public boolean isPrizeCollected() {
+        return prizeCollected;
+    }
+
+    public void setPrizeCollected(boolean prizeCollected) {
+        this.prizeCollected = prizeCollected;
+    }
+
+    private boolean prizeCollected = false;
     private NPC npc;
     public ChallengeRoom(int width, int height){
         super(width, height);
@@ -67,4 +77,5 @@ public class ChallengeRoom extends Room{
     public boolean isFinish() {
         return finish;
     }
+
 }

@@ -46,16 +46,29 @@ public class ChallengeRoomNPC extends NPC {
     }
     @Override
     public void open(Player player, Pane pane) {
-        boolean complete = false;
+        boolean completeChallenge = false;
         if (!challenged) {
-            setUpConversation(player, pane, complete);
-        } else if (room.isFinish() && room.isGeneratedMonster() && room.getMonsters().size() == 0) {
-            complete = true;
-            setUpConversation(player, pane, complete);
-            ProjectileLauncherD weapon = ProjectileLauncherD.getInstance(player);
-            player.obtainNewWeapon(weapon);
-            player.equipWeapon(weapon);
+            setUpConversation(player, pane, completeChallenge);
+        } else if (room.isFinish() &&
+                room.isGeneratedMonster() &&
+                room.getMonsters().size() == 0 &&
+                !room.isPrizeCollected()) {
+            completeChallenge = true;
+            room.setPrizeCollected(true);
+            setUpConversation(player, pane, completeChallenge);
+            selectPrize(player);
         }
+    }
+
+    private void selectPrize(Player player) {
+        ProjectileLauncherD weapon = ProjectileLauncherD.getInstance(player);
+        if (!player.getWeaponList().contains(weapon)) {
+            player.obtainNewWeapon(weapon);
+        } else if (!weapon.isRandomPowerUp()) {
+            weapon.setRandomPowerUp(true);
+        }
+        player.addChallenge();
+
     }
     private void setUpConversation(Player player, Pane pane, boolean complete){
         stackPane = new StackPane();
@@ -124,7 +137,6 @@ public class ChallengeRoomNPC extends NPC {
         Button button = new Button("Yes");
         button.setPrefSize(75, 45);
         button.setOnAction(e->{
-            player.addChallenge();
             challenged = true;
             room.drawMonster(pane);
             room.setFinish(false);

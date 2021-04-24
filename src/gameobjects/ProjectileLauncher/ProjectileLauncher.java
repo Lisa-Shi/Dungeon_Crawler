@@ -19,6 +19,15 @@ public abstract class ProjectileLauncher {
     private int range;
     private int price;
     private boolean isDropped;
+
+    public SingularImageSheet getImage() {
+        return image;
+    }
+
+    public void setImage(SingularImageSheet image) {
+        this.image = image;
+    }
+
     private SingularImageSheet image;
     private boolean tracking;
     /**
@@ -41,10 +50,11 @@ public abstract class ProjectileLauncher {
         this.tracking = tracking;
     }
 
+    public ProjectileLauncher(ProjectileLauncher pL) {
+    }
+
 
     public void shoot(Room room, Pane pane, Camera camera) {
-
-
         if (tracking) {
             for (Monster m : room.getMonsters()) {
                 Projectile bullet = new Projectile(player, room, pane, range, damage, image);
@@ -77,6 +87,10 @@ public abstract class ProjectileLauncher {
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {

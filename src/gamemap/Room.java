@@ -94,7 +94,6 @@ public class Room implements Physical {
             if (roomId == 999) {
                 // Boss monster
                 monster = new BossMonster(this, width / 2, height / 2);
-                monster = new BuzzMonster(this, width / 2, height / 2);
                 monster.evolution(7);
                 add(monster);
             } else if (roomId != 0) {

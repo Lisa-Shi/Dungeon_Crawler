@@ -13,7 +13,7 @@ import main.Main;
 import java.util.Map;
 import java.util.Set;
 
-public class PotionChest extends GameObject implements Collideable, Drawable, Openable {
+public class PotionChest extends GameObject implements Collideable, Drawable, Openable, Interactable {
     // Variables
     private int money;
     private Map<Potion, Integer> treasure;

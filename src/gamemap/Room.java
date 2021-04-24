@@ -1,6 +1,8 @@
 package gamemap;
 import gameobjects.*;
 import gameobjects.monsters.*;
+import gameobjects.npc.NPC;
+import gameobjects.npc.storeNPC;
 import gameobjects.potions.AttackPotion;
 import gameobjects.potions.HealthPotion;
 import gameobjects.potions.Potion;
@@ -32,9 +34,8 @@ public class Room implements Physical {
     private LinkedList<Collideable> collideables = new LinkedList<>();
     private LinkedList<Drawable> drawables = new LinkedList<>();
     private LinkedList<ExitTile> exits = new LinkedList<>();
-    private LinkedList<Openable> openables = new LinkedList<>();
+    private LinkedList<Interactable> interactables = new LinkedList<>();
     private boolean generatedMonster = false;
-
     /**
      * gameobjects.monsters is empty when all gameobjects.monsters in this room die
      */
@@ -58,7 +59,6 @@ public class Room implements Physical {
         this.height = height;
         // Physics so the camera works properly
         this.physics = new PhysicsController(0, 0);
-
         this.toRemove = new LinkedList<>();
     }
     public void restart() {
@@ -76,6 +76,14 @@ public class Room implements Physical {
         this.toRemove = new LinkedList<>();
     }
 
+    public boolean isGeneratedMonster() {
+        return generatedMonster;
+    }
+
+    public void setGeneratedMonster(boolean generatedMonster) {
+        this.generatedMonster = generatedMonster;
+    }
+
     /**
      * add random amount (from 1 to 5) of gameobjects.monsters to the room.
      * this method will not check if there is already monster in the room
@@ -86,25 +94,14 @@ public class Room implements Physical {
             if (roomId == 999) {
                 // Boss monster
                 monster = new BossMonster(this, width / 2, height / 2);
+                monster = new BuzzMonster(this, width / 2, height / 2);
+                monster.evolution(7);
                 add(monster);
             } else if (roomId != 0) {
                 Random ran = new Random();
                 int numOfMon = ran.nextInt(5) + 1;
                 for (int i = 1; i <= numOfMon; i++) {
-                    int monsterX;
-                    int monsterY;
-                    do {
-                        monsterX = ran.nextInt(width - 2) + 1;
-                        monsterY = ran.nextInt(height - 2) + 1;
-                        int monsterType = ran.nextInt(3);
-                        if (monsterType == 0) {
-                            monster = new SlimeMonster(this, monsterX, monsterY);
-                        } else if (monsterType == 1) {
-                            monster = new MagicianMonster(this, monsterX, monsterY);
-                        } else {
-                            monster = new BuzzMonster(this, monsterX, monsterY);
-                        }
-                    } while (findExistingCollideable(monster));
+                    monster = getRandomMonster();
                     add(monster);
                 }
             }
@@ -112,7 +109,25 @@ public class Room implements Physical {
         }
 
     }
-
+    public Monster getRandomMonster(){
+        Monster monster = null;
+        Random ran = new Random();
+        int monsterX;
+        int monsterY;
+        do {
+            monsterX = ran.nextInt(width - 2) + 1;
+            monsterY = ran.nextInt(height - 2) + 1;
+            int monsterType = ran.nextInt(3);
+            if (monsterType == 0) {
+                monster = new SlimeMonster(this, monsterX, monsterY);
+            } else if (monsterType == 1) {
+                monster = new MagicianMonster(this, monsterX, monsterY);
+            } else {
+                monster = new BuzzMonster(this, monsterX, monsterY);
+            }
+        } while (findExistingCollideable(monster));
+        return monster;
+    }
     /**
      * check if the passed monster collides with any collideable object in the room
      * @param monster target monster
@@ -169,12 +184,12 @@ public class Room implements Physical {
     public void addNPC() {
         if (!generatedMonster) {
             if (Math.random() > 0.8 || roomId == 0) {
-                add(new NPC(this, 1, 3));
+                add(new storeNPC(this, 1, 3));
             }
         }
     }
     public void addChest() {
-        if (openables.isEmpty() && (Math.random() > 0.8 || roomId == 0)) {
+        if (interactables.isEmpty() && (Math.random() > 0.8 || roomId == 0)) {
             Map<Potion, Integer> items = new TreeMap<>();
             items.put(new AttackPotion(), 1);
             items.put(new HealthPotion(), 1);
@@ -188,8 +203,8 @@ public class Room implements Physical {
 
     }
 
-    public LinkedList<Openable> getOpenables() {
-        return openables;
+    public LinkedList<Interactable> getOpenables() {
+        return interactables;
     }
 
     /**
@@ -211,7 +226,7 @@ public class Room implements Physical {
             monster.addHPBar(this, pane);
         }
     }
-    private void addFloorTiles() {
+    public void addFloorTiles() {
         for (int r = 0; r < width; r++) {
             for (int c = 0; c < height; c++) {
                 Tile tile = new FloorTile(this, r, c);
@@ -219,7 +234,7 @@ public class Room implements Physical {
             }
         }
     }
-    private void addSurroundingWalls() {
+    public void addSurroundingWalls() {
         // Add walls around the dungeon
         for (int r = 0; r < width; r++) {
             Tile topWall = new WallTile(this, r, -1);
@@ -237,7 +252,7 @@ public class Room implements Physical {
     public void addRoomLayout() {
         layout = RoomLayout.design(this);
     }
-    private void addAllSprites(Pane pane) {
+    public void addAllSprites(Pane pane) {
         for (Drawable drawable : drawables) {
             pane.getChildren().add(drawable.getGraphics().getSprite());
         }
@@ -259,7 +274,9 @@ public class Room implements Physical {
 
         flushToRemove();
     }
-
+    public void setLayout(String layout){
+        this.layout = layout;
+    }
     public void clear() {
         this.physicals = new LinkedList<>();
         this.collideables = new LinkedList<>();
@@ -326,21 +343,20 @@ public class Room implements Physical {
         if (obj instanceof Monster) {
             monsters.add(0, (Monster) obj);
         }
-        if (obj instanceof Openable) {
-            openables.add(0, (Openable) obj);
+        if (obj instanceof Interactable) {
+            interactables.add(0, (Interactable) obj);
         }
     }
-    public Openable findOpenable(Vector2D center) {
+    public Interactable findInteractable(Vector2D center) {
         double upper = center.getY() - (Main.TILE_HEIGHT * 0.5);
         double lower = center.getY() + (Main.TILE_HEIGHT * 0.5);
         double left = center.getX() - (Main.TILE_HEIGHT * 0.5);
         double right = center.getX() + (Main.TILE_HEIGHT * 0.5);
-        for (Openable openable: openables) {
-            Vector2D position = ((Physical) openable).getPhysics().getPosition();
-
+        for (Interactable interactable: interactables) {
+            Vector2D position = ((Physical) interactable).getPhysics().getPosition();
             if (position.getX() >= left && position.getX() <= right && position.getY() >= upper
                     && position.getY() <= lower) {
-                return openable;
+                return interactable;
             }
         }
         return null;

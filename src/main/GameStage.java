@@ -500,7 +500,7 @@ public class GameStage extends Stage {
     }
 
     public Button getExitButton() {
-        return winButton;
+        return exitButton;
     }
     public Camera getCamera() {
         return camera;

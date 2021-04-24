@@ -10,6 +10,7 @@ import gameobjects.graphics.functionality.ImageReel;
 import gameobjects.graphics.functionality.ImageSheet;
 import gameobjects.graphics.functionality.SingularImageSheet;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.control.Alert;
@@ -302,7 +303,8 @@ public class Main extends Application {
         }
         Button exit = r.getExitButton();
         exit.setOnAction(event -> {
-            goCongrat();
+            Platform.exit();
+            System.exit(0);
         });
 
         Button restart = r.getRestartButton();

@@ -32,7 +32,7 @@ public class BossMonster extends Monster {
     @Override
     public void attack(Room room, Pane pane, Damageable other) {
         if (inRange(other)) {
-            other.hurt(1);
+            other.hurt(5);
         }
     }
 

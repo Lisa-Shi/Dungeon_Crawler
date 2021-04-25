@@ -29,6 +29,5 @@ public class BuzzMonster extends Monster {
         if (inRange(other)) {
             other.hurt(1);
         }
-
     }
 }

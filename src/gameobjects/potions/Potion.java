@@ -14,6 +14,7 @@ public abstract class Potion implements Consumable, Comparable {
         this.name = name;
         this.value = value;
     }
+
     /**
      * Abstract implementation of consume from Consumable interface.
      * Will be overridden by each of the other potion classes.
@@ -27,7 +28,7 @@ public abstract class Potion implements Consumable, Comparable {
      */
     public String getName() {
         return name;
-    };
+    }
 
     public void setValue(int value) {
         this.value = value;
@@ -39,6 +40,7 @@ public abstract class Potion implements Consumable, Comparable {
     public ImageSheet getImage() {
         return this.spriteSheet;
     }
+
     /**
      * Overrides objects equals method for the potions.
      * @param obj the other potion objects
@@ -65,6 +67,11 @@ public abstract class Potion implements Consumable, Comparable {
         return hash;
     }
 
+    /**
+     * Overridden version of the compareTo method that returns the difference in potion hashCodes.
+     * @param o object passed in to be compared
+     * @return a number that represents the difference in the hashCodes between the two potions
+     */
     @Override
     public int compareTo(Object o) {
         if (o instanceof Potion) {

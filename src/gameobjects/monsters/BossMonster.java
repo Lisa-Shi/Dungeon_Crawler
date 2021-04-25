@@ -2,6 +2,7 @@ package gameobjects.monsters;
 
 import gamemap.Room;
 import gameobjects.Damageable;
+import gameobjects.physics.Camera;
 import gameobjects.physics.Vector2D;
 import gameobjects.potions.EndGameAttackPotion;
 import javafx.scene.layout.Pane;
@@ -30,7 +31,7 @@ public class BossMonster extends Monster {
      * @param other what to damage
      */
     @Override
-    public void attack(Room room, Pane pane, Damageable other) {
+    public void attack(Room room, Pane pane, Damageable other, Camera camera) {
         if (inRange(other)) {
             other.hurt(5);
         }

@@ -94,7 +94,7 @@ public class Projectile extends GameObject implements Collideable {
         Vector2D start = getPhysics().getPosition();
         Vector2D direction = start.subtract(launchTowards).relen(-vel);
         Vector2D directionNorm = direction.norm();
-        getPhysics().setVelocity(direction.multiply(damage));
+        getPhysics().setVelocity(direction.multiply(Main.ENEMY_BULLET_SPEED));
         getPhysics().setPosition(
                 sprite.getPhysics().getPosition().add(directionNorm.multiply(Main.TILE_WIDTH / 2)));
     }

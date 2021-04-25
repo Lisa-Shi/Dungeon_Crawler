@@ -2,7 +2,11 @@ package gameobjects.npc;
 
 import gamemap.ChallengeRoom;
 import gamemap.Room;
+import gameobjects.Inventory;
 import gameobjects.Player;
+import gameobjects.ProjectileLauncher.Projectile;
+import gameobjects.ProjectileLauncher.ProjectileLauncherD;
+import gameobjects.potions.BulletPotion;
 import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -22,28 +26,59 @@ public class ChallengeRoomNPC extends NPC {
     private boolean challenged = false;
     public ChallengeRoomNPC(Room room, double initialX, double initialY){
         super(room, initialX, initialY);
-        if( !(room instanceof ChallengeRoom)){
+        if (!(room instanceof ChallengeRoom)) {
             throw new IllegalArgumentException("Incorrect NPC in the room");
         }
         this.room = (ChallengeRoom)room;
     }
-    private String getString(String playerName){
-        return "Hi " + playerName + ",\n Welcome to the challenge room.\n In this room, \n"
-                + "you will have the chance to accept the challenge.\n In the challenge,"
-                + "the monsters that you will be \nfacing are a lot strongger than the"
-                + "regular monsters.\n Of course defecting the monsters will give you the\n"
-                + "items that you don't see outside the challenge room.\n Keep in mind"
-                + "that you cannot leave the room\n until all the monsters are defected"
-                + "\nif you take the challenge.\n\n\n\n\n";
+    private String getString(String playerName, boolean complete){
+        if (!complete) {
+            return "Hi " + playerName + ",\n Welcome to the challenge room.\n In this room, \n"
+                    + "you will have the chance to accept the challenge.\n In the challenge,"
+                    + "the monsters that you will be \nfacing are a lot strongger than the"
+                    + "regular monsters.\n Of course defecting the monsters will give you the\n"
+                    + "items that you don't see outside the challenge room.\n Keep in mind"
+                    + "that you cannot leave the room\n until all the monsters are defected"
+                    + "\nif you take the challenge.\n\n\n\n\n";
+        } else if (room.isPrizeCollected()) {
+            return "You have already completed this challenge.\n\n\n\n\n\n\n\n\n\n\n";
+        } else {
+            return "Congratulations " + playerName + ",\n You have succeeded.\n Here is your prize.\n\n\n\n\n";
+        }
+
 
     }
     @Override
     public void open(Player player, Pane pane) {
-        if(!challenged) {
-            setUpConversation(player, pane);
+        boolean completeChallenge = true;
+        if (!challenged) {
+            completeChallenge = false;
+            setUpConversation(player, pane, completeChallenge);
+        } else if (room.isFinish() &&
+                room.isGeneratedMonster() &&
+                room.getMonsters().size() == 0 &&
+                !room.isPrizeCollected()) {
+            setUpConversation(player, pane, completeChallenge);
+            selectPrize(player);
+            room.setPrizeCollected(true);
+        } else if (room.isPrizeCollected()) {
+            setUpConversation(player, pane, completeChallenge);
         }
     }
-    private void setUpConversation(Player player, Pane pane){
+
+    private void selectPrize(Player player) {
+        ProjectileLauncherD weapon = ProjectileLauncherD.getInstance(player);
+        if (!player.getWeaponList().contains(weapon)) {
+            player.obtainNewWeapon(weapon);
+        } else if (!weapon.isRandomPowerUp()) {
+            weapon.setRandomPowerUp(true);
+        } else {
+            player.getInventory().put(new BulletPotion(), 5);
+        }
+        player.addChallenge();
+
+    }
+    private void setUpConversation(Player player, Pane pane, boolean complete){
         stackPane = new StackPane();
         stackPane.setPrefSize(Main.GAME_WIDTH, Main.GAME_HEIGHT);
         Button background = new Button();
@@ -52,13 +87,14 @@ public class ChallengeRoomNPC extends NPC {
         background.getStyleClass().add("Transparent");
         background.setOnAction(e-> {
             pane.getChildren().remove(stackPane);
-            setUpUI(player, pane);
+            setUpUI(player, pane, complete);
+            player.setMoveability(true);
             pane.getChildren().add(stackPane);
         });
         ImageView imageView = new ImageView(Main.NPC_BIG);
         imageView.setFitWidth(250);
         imageView.setFitHeight(300);
-        Text text = new Text(getString(player.getName()));
+        Text text = new Text(getString(player.getName(), complete));
         text.getStyleClass().add("font");
         HBox hbox = new HBox(imageView, text);
         hbox.getStylesheets().add("inventoryStyleSheet.css");
@@ -68,13 +104,16 @@ public class ChallengeRoomNPC extends NPC {
         stackPane.getChildren().add(background);
         pane.getChildren().add(stackPane);
     }
-    private void setUpUI(Player player, Pane pane) {
+    private void setUpUI(Player player, Pane pane, boolean complete) {
         Bounds bound = pane.getLayoutBounds();
         stackPane = new StackPane();
         stackPane.setPrefSize(200, 50);
         stackPane.setLayoutX(bound.getWidth() / 3);
         stackPane.setLayoutY(bound.getHeight() / 3);
-        GridPane gridPane = setupGrid(player, pane);
+        GridPane gridPane = new GridPane();
+        if (!complete) {
+            gridPane = setupGrid(player, pane);
+        }
         stackPane.getChildren().addAll(gridPane);
     }
     private GridPane setupGrid(Player player, Pane pane){
@@ -114,6 +153,7 @@ public class ChallengeRoomNPC extends NPC {
         });
         return button;
     }
+
     private Button setUpDecline(Player player, Pane pane){
         Button button = new Button("No");
         button.setPrefSize(75, 45);

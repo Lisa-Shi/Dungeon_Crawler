@@ -101,8 +101,8 @@ public class Room implements Physical {
                 add(monster);
             } else if (roomId != 0) {
                 Random ran = new Random();
-                int numOfMon = ran.nextInt(5) + 1;
-                for (int i = 1; i <= numOfMon; i++) {
+                int numOfMon = (ran.nextInt(roomId) + 2);
+                for (int i = 0; i < numOfMon; i++) {
                     monster = getRandomMonster();
                     add(monster);
                 }
@@ -190,6 +190,7 @@ public class Room implements Physical {
             }
         }
     }
+
     public void addChest() {
         if (interactables.isEmpty() && (Math.random() > 0.8 || roomId == 0)) {
             Map<Potion, Integer> items = new TreeMap<>();
@@ -201,7 +202,6 @@ public class Room implements Physical {
         if (roomId == 0) {
             add(new LauncherChest(10, this, 4, 5));
         }
-
 
     }
 

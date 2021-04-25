@@ -11,7 +11,7 @@ public class ProjectileLauncherC extends ProjectileLauncher {
             Main.getImageFrom("../gameobjects/graphics/sprites/bulletImg/" + "bulletP.png"));
 
     public ProjectileLauncherC(Player player) {
-        super(player, 1, 5, BULLET_IMG, "water");
+        super(player, 1, 5, BULLET_IMG, "water", false);
     }
 
     public static ProjectileLauncherC getInstance(Player player) {

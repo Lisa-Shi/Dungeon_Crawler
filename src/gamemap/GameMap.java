@@ -11,6 +11,7 @@ public class GameMap {
     private static Room currentRoom;
     private Room start;
     private Room end;
+    private int totalRooms = 0;
     private Set<Edge> edge = new HashSet<>();
     private Set<Room> rooms;
     private Map<Room, List<Room>> adjList = new HashMap<>();
@@ -42,7 +43,7 @@ public class GameMap {
     }
 
     private void addRooms() {
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 7; i++) {
             rooms.add(new Room(20, 20));
         }
     }
@@ -90,6 +91,7 @@ public class GameMap {
             adjList.put(newRoom, r2);
         }
     }
+
 
     public Room getStart() {
         return start;

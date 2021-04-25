@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.Blend?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="650.0" maxWidth="650.0" minHeight="650.0" minWidth="650.0" prefHeight="650.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="screens.EndScreen">
+   <children>
+      <VBox alignment="CENTER" layoutX="83.0" layoutY="14.0" prefHeight="580.0" prefWidth="484.0" spacing="20.0">
+         <children>
+            <HBox depthTest="ENABLE" pickOnBounds="false" prefHeight="321.0" prefWidth="528.0" spacing="20.0">
+               <children>
+                  <VBox prefHeight="291.0" prefWidth="543.0" style="-fx-background-color: rgb(129, 178, 154);">
+                     <children>
+                        <Label fx:id="win" alignment="CENTER" contentDisplay="CENTER" prefHeight="57.0" prefWidth="541.0" style="&#10;" text="DEFEAT" textAlignment="CENTER" textFill="WHITE" wrapText="false">
+                           <font>
+                              <Font name="Avenir Heavy" size="50.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="winMessage" alignment="CENTER" contentDisplay="CENTER" prefHeight="23.0" prefWidth="528.0" style="&#10;" text="THE MONSTERS WON THIS TIME..." textAlignment="CENTER" textFill="WHITE" wrapText="false">
+                           <font>
+                              <Font name="Avenir Medium" size="15.0" />
+                           </font>
+                        </Label>
+                        <HBox alignment="CENTER" prefHeight="170.0" prefWidth="506.0">
+                           <children>
+                              <ImageView fx:id="imageDisplay" fitHeight="188.0" fitWidth="199.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@monstersAll.png" />
+                                 </image>
+                                 <effect>
+                                    <Blend />
+                                 </effect>
+                              </ImageView>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+               <opaqueInsets>
+                  <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+               </opaqueInsets>
+               <cursor>
+                  <Cursor fx:constant="SW_RESIZE" />
+               </cursor>
+            </HBox>
+            <HBox alignment="CENTER" fillHeight="false" prefHeight="213.0" prefWidth="484.0" spacing="10.0" style="-fx-background-color: rgb(61, 64, 91);">
+               <children>
+                  <VBox alignment="CENTER" prefHeight="299.0" prefWidth="301.0" style="-fx-background-color: rgb(61, 64, 91);">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="42.0" prefWidth="254.0">
+                           <children>
+                          <Label alignment="CENTER" style="&#10;" text="GAME SUMMARY" textAlignment="CENTER" textFill="WHITE">
+                            <font>
+                              <Font name="Avenir Heavy" size="21.0" />
+                            </font>
+                          </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="37.0" prefWidth="428.0">
+                           <children>
+                              <Label prefHeight="45.0" prefWidth="201.0" style="&#10;" text="MONSTERS KILLED" textFill="WHITE" wrapText="false">
+                                 <font>
+                                    <Font name="Avenir Medium" size="13.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="monster" alignment="CENTER_RIGHT" prefHeight="35.0" prefWidth="97.0" style="&#10;" text="0" textFill="WHITE" wrapText="false">
+                                 <font>
+                                    <Font name="Avenir Medium" size="13.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <VBox.margin>
+                              <Insets left="10.0" />
+                           </VBox.margin>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </HBox>
+                        <HBox prefHeight="40.0" prefWidth="195.0">
+                           <children>
+                              <Label prefHeight="45.0" prefWidth="201.0" style="&#10;" text="CHALLENGES COMPLETED" textFill="#fffdfd" wrapText="false">
+                                 <font>
+                                    <Font name="Avenir Medium" size="13.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="challenge" alignment="CENTER_RIGHT" prefHeight="38.0" prefWidth="91.0" style="&#10;" text="0" textFill="#fffefe" wrapText="false">
+                                 <font>
+                                    <Font name="Avenir Medium" size="13.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </HBox>
+                        <HBox prefHeight="40.0" prefWidth="195.0">
+                           <children>
+                              <Label prefHeight="45.0" prefWidth="201.0" style="&#10;" text="ROOMS ENTERED" textFill="#fffdfd" wrapText="false">
+                                 <font>
+                                    <Font name="Avenir Medium" size="13.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="rooms" alignment="CENTER_RIGHT" prefHeight="38.0" prefWidth="94.0" style="&#10;" text="0" textFill="WHITE" wrapText="false">
+                                 <font>
+                                    <Font name="Avenir Medium" size="13.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <VBox.margin>
+                              <Insets left="10.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <HBox prefHeight="40.0" prefWidth="195.0">
+                           <children>
+                              <Label prefHeight="45.0" prefWidth="201.0" style="&#10;" text="POTIONS CONSUMED" textFill="#fffefe" wrapText="false">
+                                 <font>
+                                    <Font name="Avenir Medium" size="13.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="potion" alignment="CENTER_RIGHT" prefHeight="38.0" prefWidth="101.0" style="&#10;" text="0" textFill="#fffdfd" wrapText="false">
+                                 <font>
+                                    <Font name="Avenir Medium" size="13.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <VBox.margin>
+                              <Insets left="10.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <HBox prefHeight="40.0" prefWidth="195.0">
+                           <children>
+                              <Label prefHeight="45.0" prefWidth="201.0" style="&#10;" text="BULLETS SHOT" textFill="#fffdfd" wrapText="false">
+                                 <font>
+                                    <Font name="Avenir Medium" size="13.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="bullets" alignment="CENTER_RIGHT" prefHeight="39.0" prefWidth="103.0" style="&#10;" text="0" textFill="WHITE" wrapText="false">
+                                 <font>
+                                    <Font name="Avenir Medium" size="13.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <VBox.margin>
+                              <Insets left="10.0" />
+                           </VBox.margin>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+               <opaqueInsets>
+                  <Insets left="10.0" right="10.0" />
+               </opaqueInsets>
+            </HBox>
+         </children>
+      </VBox>
+      <Button fx:id="replayButtonStyle" layoutX="14.0" layoutY="596.0" mnemonicParsing="false" onAction="#handleReplay" prefHeight="39.0" prefWidth="100.0" style="-fx-text-fill: white; -fx-background-color: rgb(61, 64, 91); -fx-font-size: 18;" text="REPLAY" />
+      <Button fx:id="exitButtonStyle" layoutX="576.0" layoutY="598.0" mnemonicParsing="false" onAction="#handleExit" style="-fx-text-fill: white; -fx-background-color: rgb(61, 64, 91); -fx-font-size: 18;" text="EXIT" />
+   </children>
+</AnchorPane>

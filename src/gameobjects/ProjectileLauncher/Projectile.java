@@ -91,7 +91,14 @@ public class Projectile extends GameObject implements Collideable {
      */
     // Misc.
     public void launchTowardsPoint(Vector2D launchTowards, int vel) {
-        getPhysics().setVelocity(getPhysics().getPosition().subtract(launchTowards).relen(-vel));
+        Vector2D start = getPhysics().getPosition();
+        Vector2D direction = start.subtract(launchTowards).relen(-vel);
+        Vector2D directionNorm = direction.norm();
+
+        getPhysics().setVelocity(direction);
+
+        getPhysics().setPosition(
+                sprite.getPhysics().getPosition().add(directionNorm.multiply(Main.TILE_WIDTH / 2)));
     }
 
     /**
@@ -101,7 +108,7 @@ public class Projectile extends GameObject implements Collideable {
         Player player = (Player) sprite;
         Vector2D direction = player.getDirection();
         PhysicsController physics = this.getPhysics();
-        physics.setVelocity(direction.multiply(damage));
+        physics.setVelocity(direction.multiply(damage * 2));
         physics.setPosition(
                 sprite.getPhysics().getPosition().add(direction.multiply(Main.TILE_WIDTH / 2)));
     }

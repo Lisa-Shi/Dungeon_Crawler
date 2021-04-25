@@ -70,6 +70,7 @@ public class ExitTile extends Tile implements Passable {
                 || this.inRoom.getMonsters().size() == 0) {
             GameMap.enterRoom(getLinkedRoom());
         }
+        
     }
 
     /**

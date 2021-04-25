@@ -16,7 +16,7 @@ public class ProjectileLauncherB extends ProjectileLauncher {
 
     public static ProjectileLauncherB getInstance(Player player) {
         if (weapon == null) {
-            synchronized (ProjectileLauncherA.class) {
+            synchronized (ProjectileLauncherB.class) {
                 if (weapon == null) {
                     weapon = new ProjectileLauncherB(player);
                 }

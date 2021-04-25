@@ -43,7 +43,7 @@ public class GameMap {
     }
 
     private void addRooms() {
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 7; i++) {
             rooms.add(new Room(20, 20));
         }
     }

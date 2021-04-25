@@ -12,7 +12,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="650.0" maxWidth="650.0" minHeight="650.0" minWidth="650.0" prefHeight="650.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="screens.EndScreen">
+<AnchorPane maxHeight="650.0" maxWidth="650.0" minHeight="650.0" minWidth="650.0" prefHeight="650.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="screens.EndSceneController">
    <children>
       <VBox alignment="CENTER" layoutX="83.0" layoutY="14.0" prefHeight="580.0" prefWidth="484.0" spacing="20.0">
          <children>

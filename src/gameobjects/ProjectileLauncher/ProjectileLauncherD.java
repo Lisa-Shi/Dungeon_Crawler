@@ -37,7 +37,7 @@ public class ProjectileLauncherD extends ProjectileLauncher {
 
     public static ProjectileLauncherD getInstance(Player player) {
         if (weapon == null) {
-            synchronized (ProjectileLauncherA.class) {
+            synchronized (ProjectileLauncherD.class) {
                 if (weapon == null) {
                     weapon = new ProjectileLauncherD(player);
                 }
@@ -47,7 +47,7 @@ public class ProjectileLauncherD extends ProjectileLauncher {
     }
 
     public void increasePower() {
-        int luck = 80;
+        int luck = 20;
         if (randomPowerUp) {
             int seed = 100;
             Random rand = new Random();

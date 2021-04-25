@@ -142,10 +142,8 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
      * @param room the room player is in
      * @param pane the overall pane
      * @param camera the camera
-     * @param monsters list of monster
      */
-    public void launchProjectile(Room room, Pane pane,
-                                 Camera camera, LinkedList<Monster> monsters) {
+    public void launchProjectile(Room room, Pane pane, Camera camera) {
 
         if (weaponList.size() < 0 || weaponList.get(holdingWeapon) == null) {
             ProjectileLauncher weapon = ProjectileLauncherA.getInstance(this);

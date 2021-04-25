@@ -46,7 +46,7 @@ public class Projectile extends GameObject implements Collideable {
                 player.getPhysics().getPosition().getY(),
                 (damage % 3 + 1) * 0.5, damage, img);
         sprite = player;
-        range = range % 3;
+        range = range % 3 + 1;
         this.bouncesLeft = range + 1;
         this.timeRange = range * 5000;
     }
@@ -63,8 +63,8 @@ public class Projectile extends GameObject implements Collideable {
                 monster.getPhysics().getPosition().getY(), 0.5,
                 Main.PLAYER_BULLET_DAMAGE, Main.MONSTER_BULLET_SHEET);
         sprite = monster;
-        this.bouncesLeft = 2;
-        this.timeRange = 10000;
+        this.bouncesLeft = Main.ENEMY_BULLET_BOUNCES_UNTIL_EXPIRATION;
+        this.timeRange = 5000;
     }
 
     private Projectile(Room room, Pane pane, double initialX,
@@ -94,9 +94,7 @@ public class Projectile extends GameObject implements Collideable {
         Vector2D start = getPhysics().getPosition();
         Vector2D direction = start.subtract(launchTowards).relen(-vel);
         Vector2D directionNorm = direction.norm();
-
-        getPhysics().setVelocity(direction);
-
+        getPhysics().setVelocity(direction.multiply(damage));
         getPhysics().setPosition(
                 sprite.getPhysics().getPosition().add(directionNorm.multiply(Main.TILE_WIDTH / 2)));
     }
@@ -108,7 +106,7 @@ public class Projectile extends GameObject implements Collideable {
         Player player = (Player) sprite;
         Vector2D direction = player.getDirection();
         PhysicsController physics = this.getPhysics();
-        physics.setVelocity(direction.multiply(damage * 2));
+        physics.setVelocity(direction.multiply(damage));
         physics.setPosition(
                 sprite.getPhysics().getPosition().add(direction.multiply(Main.TILE_WIDTH / 2)));
     }

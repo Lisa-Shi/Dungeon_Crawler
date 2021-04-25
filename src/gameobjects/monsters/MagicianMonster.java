@@ -14,11 +14,11 @@ public class MagicianMonster extends Monster {
         this.getCarryReward().put(new AttackPotion(), 1);
     }
     @Override
-    public void attack(Room room, Pane pane, Damageable other, Camera camera) {
+    public void attack(Room room, Pane pane, Damageable other) {
         Projectile bullet = new Projectile(this, room, pane);
         room.add(bullet);
         pane.getChildren().add(bullet.getGraphics().getSprite());
         bullet.launchTowardsPoint(other.getPhysics().getPosition(), Main.ENEMY_BULLET_SPEED);
-        bullet.update(camera);
+        //bullet.update(camera);
     }
 }

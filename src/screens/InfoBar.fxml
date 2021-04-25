@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.effect.ColorAdjust?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="650.0" spacing="20.0" style="-fx-background-color: rgb(61, 64, 91);" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="screens.InfoBarController">
+   <children>
+      <HBox alignment="CENTER_LEFT" prefHeight="0.0" prefWidth="67.0">
+         <children>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="\$:" wrappingWidth="18.21630859375">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Text>
+            <Label fx:id="moneyLabel" text="00" textFill="WHITE">
+               <font>
+                  <Font name="Avenir Medium" size="15.0" />
+               </font>
+            </Label>
+         </children>
+         <HBox.margin>
+            <Insets left="10.0" right="10.0" />
+         </HBox.margin>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="48.0" prefWidth="243.0">
+         <children>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="HEALTH:">
+               <font>
+                  <Font name="Avenir Medium" size="15.0" />
+               </font>
+            </Text>
+            <ProgressBar fx:id="health" prefHeight="20.0" prefWidth="192.0" progress="0.22">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding>
+               <effect>
+                  <ColorAdjust contrast="0.24" hue="-0.83" />
+               </effect>
+            </ProgressBar>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" prefHeight="34.0" prefWidth="291.0">
+         <children>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="PROGRESS:">
+               <font>
+                  <Font name="Avenir Medium" size="15.0" />
+               </font>
+            </Text>
+            <ProgressBar fx:id="progress" prefHeight="20.0" prefWidth="218.0" progress="0.61">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding>
+               <effect>
+                  <ColorAdjust hue="-0.04" />
+               </effect>
+            </ProgressBar>
+         </children>
+      </HBox>
+   </children>
+</HBox>

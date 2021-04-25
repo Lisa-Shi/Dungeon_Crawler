@@ -1,5 +1,4 @@
-package screens;//package screens;
-//
+package screens;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 //import javafx.fxml.FXMLLoader;
@@ -10,75 +9,9 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import main.Main;
-//import javafx.scene.layout.VBox;
-//import javafx.stage.Stage;
-//import main.Main;
-//
-//import java.net.URL;
-//
-//public class LoseScreen {
-//    private Scene scene;
-//    private boolean isWinner;
-//
-//    private int maxRoom;
-//    private int bullet;
-//    private int monster;
-//    private Button replay;
-//    private Button exit;
-//
-//    public LoseScreen(boolean isWinner, int maxRoom,
-//                           int bullet, int monster) {
-//        try {
-//            FXMLLoader loader = new FXMLLoader();
-//            URL xmlUrl = getClass().getResource("EndScene.fxml");
-//
-//            loader.setLocation(xmlUrl);
-//            Parent root = loader.load();
-//            //VBox vbox = loader.<VBox>load();
-//            //Parent root = FXMLLoader.load(getClass().getResource("EndScene.fxml"));
-//            this.scene = new Scene(root);
-//            this.maxRoom = maxRoom;
-//            this.bullet = bullet;
-//            this.monster = monster;
-//            this.isWinner = isWinner;
-//        } catch (Exception e) {
-//            System.out.println(e.getMessage());
-//            System.out.println(e.getCause());
-//            System.out.println(e.getStackTrace());
-//        }
-//
-//    }
-//
-//    public void start(Stage stage) throws Exception {
-//        Parent root = FXMLLoader.load(getClass().getResource("EndScene.fxml"));
-//
-//        Scene scene = new Scene(root, 300, 275);
-//
-//        stage.setTitle("FXML Welcome");
-//        stage.setScene(scene);
-//        stage.show();
-//    }
-//
-//    public Scene loadButton(Button replay, Button exit) {
-//        this.replay = replay;
-//        this.exit = exit;
-//        return scene;
-//    }
-//
-//    @FXML
-//    protected void handleReplay() {
-//        System.out.println("YES");
-//        //replay.getOnAction();
-//    }
-//
-//    @FXML
-//    protected void handleExit() {
-//        System.out.println("YES");
-//        //exit.getOnAction();
-//    }
-//}
 
-public class EndScreen {
+
+public class EndSceneController {
     private static Button replay;
     private static Button exit;
     private static String isWinner;
@@ -137,13 +70,7 @@ public class EndScreen {
             Image image = new Image(Main.class.
                     getResource("../screens/" + file).
                     toExternalForm());
-//            javafx.scene.image.ImageView imageView = new javafx.scene.image.ImageView(image);
-//            imageView.setFitHeight(188);
-//            imageView.setFitWidth(199);
-//            imageView.setPreserveRatio(true);
             return image;
-
-            //return imageView;
         } catch (Exception e) {
             System.out.println("Restart Image failed to print");
             return null;
@@ -161,7 +88,6 @@ public class EndScreen {
         win.setText(isWinner);
         winMessage.setText(message);
         imageDisplay.setImage(imageLoad);
-        //replayButtonStyle.getStyleClass().add(button);
 
     }
 

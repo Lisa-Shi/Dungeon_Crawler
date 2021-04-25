@@ -50,7 +50,11 @@ public abstract class ProjectileLauncher {
         this.tracking = tracking;
     }
 
-    public ProjectileLauncher(ProjectileLauncher pL) {
+    public ProjectileLauncher(Monster monster, SingularImageSheet image) {
+        this.range = Main.ENEMY_BULLET_BOUNCES_UNTIL_EXPIRATION;
+        this.damage = Main.ENEMY_BULLET_DAMAGE;
+        this.name = "monster";
+        this.image = image;
     }
 
 

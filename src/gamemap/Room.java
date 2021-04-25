@@ -95,6 +95,8 @@ public class Room implements Physical {
         if (!generatedMonster) {
             Monster monster = null;
             if (roomId == 999) {
+
+            } else if (roomId == 7) {
                 // Boss monster
                 monster = new BuzzMonster(this, width / 2, height / 2);
                 monster.evolution(7);

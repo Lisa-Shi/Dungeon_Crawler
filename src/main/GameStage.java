@@ -174,7 +174,7 @@ public class GameStage extends Stage {
     public void update() {
         if (player.getHealth() <= 0) {
             stop(false);
-        } else if (room.getMonsters().size() == 0 && room.getRoomId() == 999) {
+        } else if (room.getRoomId() == 999) {
             stop(true);
         } else {
             player.update(camera, room.getCollideables());

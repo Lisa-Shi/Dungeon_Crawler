@@ -76,13 +76,13 @@ public class ChallengeRoomNPC extends NPC {
             player.getInventory().put(new BulletPotion(), 5);
         }
         player.addChallenge();
-
     }
     private void setUpConversation(Player player, Pane pane, boolean complete){
         stackPane = new StackPane();
         stackPane.setPrefSize(Main.GAME_WIDTH, Main.GAME_HEIGHT);
         Button background = new Button();
         background.setPrefSize(Main.GAME_WIDTH, Main.GAME_HEIGHT);
+        background.setId("background");
         background.getStylesheets().add("inventoryStyleSheet.css");
         background.getStyleClass().add("Transparent");
         background.setOnAction(e-> {

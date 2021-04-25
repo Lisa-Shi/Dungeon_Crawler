@@ -1,0 +1,14 @@
+I wrote BossTest.java
+
+This class currently has two unit tests that check both the stats boost given to the boss monster as well as the drop
+that it gives the player after it is defeated
+
+1. testBossDrop():
+- In this test I created a player that spawns in the final room. Afterwards I check to see if the boss will drop the
+EndGameAttackPotion that the player should receive after it dies. The test will pass only if that is the item the boss
+drops.
+
+2. testBossStats():
+- This unit test is simple and is started the same way as the previous test. A player is spawned in the final room with
+the boss, and then the boss is checked to see if he has the proper health and attack damage he should. The test will
+only pass if he has 3500 health and does 350 damage.

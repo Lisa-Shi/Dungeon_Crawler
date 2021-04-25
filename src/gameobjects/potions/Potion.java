@@ -27,7 +27,7 @@ public abstract class Potion implements Consumable, Comparable {
      */
     public String getName() {
         return name;
-    };
+    }
 
     public void setValue(int value) {
         this.value = value;

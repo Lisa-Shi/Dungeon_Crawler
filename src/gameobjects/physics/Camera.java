@@ -30,11 +30,8 @@ public class Camera implements Physical {
     }
 
     // Methods
-    /*
-
-     */
     /**
-     * Update the camera's sprite position and gameobjects.physics.
+     * Update the camera's sprite position and physics.
      * @param camera camera that focuses on object
      */
     public void update(Camera camera) {

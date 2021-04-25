@@ -88,12 +88,12 @@ public class Main extends Application {
                     getImageFrom("../gameobjects/graphics/sprites/potionD.png"));
     private static final DirectionalImageSheet PLAYER_STANDING_SHEET =
             getDirectionalImageSheet(
-                    "../gameobjects/graphics/sprites/PlayerFace"
+                    "../gameobjects/graphics/sprites/player/PF"
                             + Main.REPLACE_DIRECTION_REGEX + ".png", 1
             );
     private static final DirectionalImageSheet PLAYER_WALKING_SHEET =
             getDirectionalImageSheet(
-                    "../gameobjects/graphics/sprites/PlayerWalking"
+                    "../gameobjects/graphics/sprites/player/PW"
                             + Main.REPLACE_DIRECTION_REGEX + ".png", 2
             );
     public static final DirectionalImageSheet BUZZ_STANDING_SHEET =

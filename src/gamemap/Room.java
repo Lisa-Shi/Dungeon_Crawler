@@ -1,5 +1,6 @@
 package gamemap;
 import gameobjects.*;
+import gameobjects.monsters.*;
 import gameobjects.npc.NPC;
 import gameobjects.npc.storeNPC;
 import gameobjects.potions.AttackPotion;
@@ -13,10 +14,6 @@ import gameobjects.physics.Camera;
 import gameobjects.physics.collisions.Collideable;
 import gameobjects.physics.collisions.DynamicCollisionBox;
 import javafx.scene.layout.Pane;
-import gameobjects.monsters.BuzzMonster;
-import gameobjects.monsters.MagicianMonster;
-import gameobjects.monsters.Monster;
-import gameobjects.monsters.SlimeMonster;
 import gameobjects.physics.collisions.Physical;
 import gameobjects.physics.PhysicsController;
 import gameobjects.graphics.functionality.Drawable;
@@ -96,7 +93,7 @@ public class Room implements Physical {
             Monster monster = null;
             if (roomId == 999) {
                 // Boss monster
-                monster = new BuzzMonster(this, width / 2, height / 2);
+                monster = new BossMonster(this, width / 2, height / 2);
                 monster.evolution(7);
                 add(monster);
             } else if (roomId != 0) {

@@ -10,6 +10,7 @@ import java.util.LinkedList;
 public class DynamicCollisionBox extends CollisionBox {
     // Variables
     private ArrayList<CollisionPoint> collisionPoints;
+    public static int numCollisionsConsidered = 0;
 
     // Constructors
     public DynamicCollisionBox(PhysicsController physics, PolygonWireframe wireframe) {
@@ -101,12 +102,19 @@ public class DynamicCollisionBox extends CollisionBox {
     }
 
     public void raytraceCollision(PhysicsController physics, LinkedList<Collideable> collideables) {
+
         int backtracks = 0;
         boolean hasCollidedWithSolid;
         Vector2D backtrackVel = new Vector2D(0, 0);
         LinkedList<Passable> boundaries = new LinkedList<>();
 
         do {
+            if (numCollisionsConsidered > 400) {
+                break;
+            } else {
+                numCollisionsConsidered++;
+            }
+
             hasCollidedWithSolid = false;
             // Test if there are any gameobjects.physics.collisions, and continue moving player back
             for (Collideable collideable : collideables) {
@@ -116,7 +124,7 @@ public class DynamicCollisionBox extends CollisionBox {
                     if (solid) {
                         backtrackVel = backtrackVel.add(
                                 calculateCollisionVector(
-                                        collideable.getCollisionBox()).multiply(0.001D));
+                                        collideable.getCollisionBox()).multiply(0.005D));
                         hasCollidedWithSolid = true;
                     }
                 }
@@ -128,15 +136,18 @@ public class DynamicCollisionBox extends CollisionBox {
                 physics.setPosition(physics.getPosition().add(backtrackVel));
                 backtracks++;
                 boundaries.clear();
+            } else {
+                break;
             }
 
             if (backtrackVel.len() < 0.001D) {
                 break;
             }
 
-            if (backtracks >= 100) {
+            if (backtracks >= 20) {
                 break;
             }
+
         } while (hasCollidedWithSolid);
 
         if (backtracks >= 1) {

@@ -268,6 +268,7 @@ public class Room implements Physical {
     @Override
     public void update(Camera camera) {
         // Room moves with the camera
+        DynamicCollisionBox.numCollisionsConsidered = 0;
         physics.update();
 
         for (Physical physical : physicals) {

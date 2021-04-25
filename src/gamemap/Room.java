@@ -1,7 +1,6 @@
 package gamemap;
 import gameobjects.*;
 import gameobjects.monsters.*;
-import gameobjects.npc.NPC;
 import gameobjects.npc.storeNPC;
 import gameobjects.potions.AttackPotion;
 import gameobjects.potions.HealthPotion;

@@ -11,7 +11,7 @@ import javafx.scene.layout.Pane;
 import java.util.Random;
 
 public class ChallengeRoom extends Room{
-    private boolean finish = true;
+    private boolean finish = false;
 
     public boolean isPrizeCollected() {
         return prizeCollected;
@@ -78,4 +78,7 @@ public class ChallengeRoom extends Room{
         return finish;
     }
 
+    public NPC getNpc() {
+        return npc;
+    }
 }

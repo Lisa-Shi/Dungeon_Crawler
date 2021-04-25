@@ -84,7 +84,7 @@ public class Inventory {
         System.out.println(LauncherInventory.getInstance());
         ListIterator<ProjectileLauncher> launcherIterator = player.getWeaponList().listIterator();
 
-        for (int i = 0; i < 18; i++) {
+        for (int i = 0; i < 16; i++) {
             Map.Entry<Potion, Integer> entry;
             if (col == 0 || col == 5) {
                 Text spaceHolder = new Text("      ");
@@ -117,7 +117,6 @@ public class Inventory {
                     itembutton.setText(text);
                 } else {
                     itembutton = new ItemButton();
-                    itembutton.getStyleClass().add("Transparent");
                 }
                 itembutton.setPrefSize(50, 45);
                 itembutton.setOnAction(event -> {
@@ -128,7 +127,7 @@ public class Inventory {
                             if (items.containsKey(consumable) && items.get(consumable) > 0) {
                                 itembutton.setText("        " + items.get(consumable));
                             } else {
-                                itembutton.getStyleClass().add("Transparent");
+                                itembutton.getStyleClass().remove(consumable.getName());
                                 itembutton.setPotion(null);
                                 itembutton.setText("");
                             }
@@ -141,7 +140,7 @@ public class Inventory {
                                 && launcher.getPrice() <= player.getMoney()) {
                             player.setMoney(player.getMoney() - launcher.getPrice());
                             player.obtainNewWeapon(launcher);
-                            itembutton.getStyleClass().add("Transparent");
+                            itembutton.getStyleClass().remove(launcher.getName());
                             itembutton.setLauncher(null);
                             itembutton.setText("");
                         }

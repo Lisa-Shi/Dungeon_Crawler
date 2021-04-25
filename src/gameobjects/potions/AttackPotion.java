@@ -7,8 +7,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * Attack potion for Dungeon Crawler. Can be held in inventory and when used, increases the damage of the weapon that
- * the player is wielding.
+ * Attack potion for Dungeon Crawler.
+ *
+ * Can be held in inventory and when used.
+ *
+ * Increases the damage of the weapon that the player is wielding.
  */
 public class AttackPotion extends Potion {
     private double duration;
@@ -17,7 +20,7 @@ public class AttackPotion extends Potion {
      * Constructor for Attack Potion.
      */
     public AttackPotion() {
-        super("AttackPotion",Main.ATTACK_POTION_AMP, Main.ATTACK_POTION);
+        super("AttackPotion", Main.ATTACK_POTION_AMP, Main.ATTACK_POTION);
     }
 
     @Override

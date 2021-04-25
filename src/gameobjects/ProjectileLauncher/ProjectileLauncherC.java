@@ -6,14 +6,12 @@ import main.Main;
 
 public class ProjectileLauncherC extends ProjectileLauncher {
     private static ProjectileLauncherC weapon;
-    private int money;
 
     private static final SingularImageSheet BULLET_IMG = new SingularImageSheet(
             Main.getImageFrom("../gameobjects/graphics/sprites/bulletImg/" + "bulletP.png"));
 
     public ProjectileLauncherC(Player player) {
         super(player, 1, 5, BULLET_IMG, "water");
-        money = 30;
     }
 
     public static ProjectileLauncherC getInstance(Player player) {
@@ -25,9 +23,5 @@ public class ProjectileLauncherC extends ProjectileLauncher {
             }
         }
         return weapon;
-    }
-
-    private int getMoney() {
-        return money;
     }
 }

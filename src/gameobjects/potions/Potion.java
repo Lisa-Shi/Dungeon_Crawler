@@ -2,9 +2,7 @@ package gameobjects.potions;
 
 import gameobjects.Consumable;
 import gameobjects.Player;
-import gameobjects.graphics.functionality.Drawable;
 import gameobjects.graphics.functionality.ImageSheet;
-import gameobjects.graphics.functionality.SpriteController;
 
 public abstract class Potion implements Consumable, Comparable {
 
@@ -18,8 +16,7 @@ public abstract class Potion implements Consumable, Comparable {
     }
     /**
      * Abstract implementation of consume from Consumable interface.
-     * Will be overridden by each of the other potion
-     * classes.
+     * Will be overridden by each of the other potion classes.
      * @param player player object that consumes the potion
      */
     public abstract void consume(Player player);
@@ -39,7 +36,7 @@ public abstract class Potion implements Consumable, Comparable {
     public int getValue() {
         return value;
     }
-    public ImageSheet getImage(){
+    public ImageSheet getImage() {
         return this.spriteSheet;
     }
     /**
@@ -57,7 +54,9 @@ public abstract class Potion implements Consumable, Comparable {
     }
 
     /**
-     * Overrides Object hashcode function by setting value equal to 11 * the parseInt of the potion name.
+     * Overrides Object hashcode function.
+     *
+     * Sets value equal to 11 * the parseInt of the potion name.
      * @return hash code for the potion
      */
     public int hashCode() {

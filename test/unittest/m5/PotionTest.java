@@ -22,8 +22,11 @@ public class PotionTest extends ApplicationTest {
     }
 
     /**
-     * Tests the health potion by reducing the players health and then allowing him to take the potion. If the player's
-     * health increases by 25, the test passes.
+     * Tests the health potion.
+     *
+     * Reduces the players health and then allowing him to take the potion.
+     *
+     * If the player's health increases by 25, the test passes.
      */
     @Test
     public void testHealthPotion() {
@@ -42,8 +45,8 @@ public class PotionTest extends ApplicationTest {
     }
 
     /**
-     * Tests the health potion by allowing him to take the potion at full health. If the player's health does not
-     * change, the test passes.
+     * Tests the health potion by allowing him to take the potion at full health.
+     * If the player's health does not change, the test passes.
      */
     @Test
     public void testHealthPotion2() {
@@ -62,8 +65,8 @@ public class PotionTest extends ApplicationTest {
 
 
     /**
-     * Tests the health potion by allowing him to take the potion at full health. If the player's health does not
-     * change, the test passes.
+     * Tests the health potion by allowing him to take the potion at full health.
+     * If the player's health does not change, the test passes.
      */
     @Test
     public void testHealthPotion3() {
@@ -82,8 +85,10 @@ public class PotionTest extends ApplicationTest {
     }
 
     /**
-     * Tests the attack potion by checking the damage that the currently equipped weapon would do, and then giving the
-     * player the potion. If the weapon does double damage after using the potion, the test passes.
+     * Tests the attack potion by checking the damage that the currently equipped weapon would do,
+     * and then giving the player the potion.
+     *
+     * If the weapon does double damage after using the potion, the test passes.
      */
     @Test
     public void testAttackPotion() {

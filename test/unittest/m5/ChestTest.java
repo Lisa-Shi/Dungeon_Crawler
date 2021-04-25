@@ -6,7 +6,6 @@ import gameobjects.Player;
 import gameobjects.potions.AttackPotion;
 import gameobjects.potions.Potion;
 import javafx.application.Platform;
-import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import main.GameStage;
 import main.Main;

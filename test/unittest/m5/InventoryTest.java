@@ -2,10 +2,6 @@ package unittest.m5;
 
 import gamemap.Room;
 import gameobjects.Player;
-import gameobjects.ProjectileLauncher.*;
-import gameobjects.physics.Vector2D;
-import gameobjects.physics.collisions.Physical;
-import gameobjects.potions.AttackPotion;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import main.GameStage;
@@ -27,39 +23,11 @@ public class InventoryTest extends ApplicationTest {
         stage = new GameStage(player, r);
         stage.start(new Stage());
     }
-
     @Test
-    public void buyFromNPC(){
-        int oldAmount = player.getInventory().get(new AttackPotion());
-        player.getPhysics().setPosition(((Physical)r.getOpenables().get(0)).getPhysics().getPosition().subtract(new Vector2D(64, 0)));
-        press(KeyCode.D);
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        release(KeyCode.D);
-        press(KeyCode.E);
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        release(KeyCode.D);
-        clickOn("#AttackPotion");
-        assertTrue(oldAmount+1 == player.getInventory().get(new AttackPotion()));
-    }
-    @Test
-    public void consumePotionTest(){
-        player.setHealth(player.getMaxHealth()-10);
+    public void consumePotionTest() {
+        press(KeyCode.Q).release(KeyCode.Q);
+        player.setHealth(player.getMaxHealth() - 10);
         int oldAmount = player.getHealth();
-        press(KeyCode.Q);
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        release(KeyCode.Q);
         clickOn("#HealthPotion");
         assertTrue(oldAmount != player.getHealth());
     }

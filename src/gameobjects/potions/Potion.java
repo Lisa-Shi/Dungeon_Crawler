@@ -6,18 +6,19 @@ import gameobjects.graphics.functionality.Drawable;
 import gameobjects.graphics.functionality.ImageSheet;
 import gameobjects.graphics.functionality.SpriteController;
 
-public abstract class Potion implements Consumable, Comparable{
+public abstract class Potion implements Consumable, Comparable {
 
     private ImageSheet spriteSheet;
     private String name;
     private int value;
-    public Potion(String name, int value, ImageSheet spriteSheet){
+    public Potion(String name, int value, ImageSheet spriteSheet) {
         this.spriteSheet = spriteSheet;
         this.name = name;
         this.value = value;
     }
     /**
-     * Abstract implementation of consume from Consumable interface. Will be overridden by each of the other potion
+     * Abstract implementation of consume from Consumable interface.
+     * Will be overridden by each of the other potion
      * classes.
      * @param player player object that consumes the potion
      */
@@ -27,9 +28,9 @@ public abstract class Potion implements Consumable, Comparable{
      * Abstract method to get the name of the potion.
      * @return name of the potion
      */
-    public String getName(){
+    public String getName() {
         return name;
-    };
+    }
 
     public void setValue(int value) {
         this.value = value;

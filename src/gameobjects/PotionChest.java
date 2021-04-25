@@ -37,7 +37,7 @@ public class PotionChest extends GameObject implements Collideable, Drawable, Op
         collisionBox.generate();
     }
 
-    public void open(Player player, Pane pane){
+    public void open(Player player, Pane pane) {
         takeMoney(player);
         Inventory inventory = Inventory.getInstance(this, pane, player);
         inventory.show();
@@ -48,11 +48,11 @@ public class PotionChest extends GameObject implements Collideable, Drawable, Op
         return treasure;
     }
 
-    public void loseItem(Potion potion){
-        if(treasure.containsKey(potion)){
+    public void loseItem(Potion potion) {
+        if(treasure.containsKey(potion)) {
             if(treasure.get(potion)-1 != 0) {
                 treasure.put(potion, treasure.get(potion) - 1);
-            }else{
+            } else {
                 treasure.remove(potion);
             }
         }
@@ -65,7 +65,7 @@ public class PotionChest extends GameObject implements Collideable, Drawable, Op
         if (treasure.keySet().isEmpty()) {
             isEmpty = true;
             this.getGraphics().setCurrentReel(Main.CHEST_EMPTY.getInitialReel());
-        } else{
+        } else {
             this.getGraphics().setCurrentReel(Main.CHEST_OPEN.getInitialReel());
         }
     }

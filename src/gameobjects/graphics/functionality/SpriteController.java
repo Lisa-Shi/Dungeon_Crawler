@@ -10,8 +10,6 @@ import java.util.TimerTask;
 
 public class SpriteController {
     // Variables
-    /**sprite is essentially an gameobjects.graphics.image with position
-     */
     private Sprite sprite;
     private ImageReel reel;
     private static Timer animationTimer = new Timer();

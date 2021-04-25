@@ -14,7 +14,7 @@
 }
 
 .label {
-   -fx-text-fill: teal;
+   -fx-text-fill: white;
    -fx-font-size: 20;
 }
 
@@ -25,5 +25,6 @@
 #title {
     -fx-font-size: 50;
     -fx-font-family: "Times New Roman";
+    -fx-text-fill: white;
 }
 

@@ -12,6 +12,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -19,6 +20,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -66,6 +68,8 @@ public class GameStage extends Stage {
     private StackPane inv;
     private ProgressBar pbar = new ProgressBar(0);
     private LinkedList<ProgressBar> monsterHP = new LinkedList<>();
+
+    private Background background;
     public GameMap getMap() {
         return map;
     }
@@ -88,7 +92,9 @@ public class GameStage extends Stage {
         winButton = new Button("finish");
         restartButton = new Button("restart");
         exitButton = new Button("exit");
-
+        Color gray = Color.rgb(64, 64, 64);
+        BackgroundFill backColor = new BackgroundFill(gray, CornerRadii.EMPTY, Insets.EMPTY);
+        background = new Background(backColor);
         Timeline timeline = new Timeline(new KeyFrame(
             Duration.millis(Main.MONSTER_ATTACK_TIME),
             ae -> moveMonsters()));
@@ -107,6 +113,7 @@ public class GameStage extends Stage {
 
         pane.getChildren().add(player.getGraphics().getSprite());
 
+        pane.setBackground(background);
         //creates info bar
         try {
             //loads fxml file
@@ -366,6 +373,7 @@ public class GameStage extends Stage {
     }
     public void enterRoom() {
         pane = new Pane();
+        pane.setBackground(background);
         pane.setPrefSize(Main.GAME_WIDTH, Main.GAME_HEIGHT);
         room.generateExits(map.getAdjRooms(room));
         room.finalize(pane);

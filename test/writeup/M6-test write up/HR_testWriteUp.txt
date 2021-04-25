@@ -5,7 +5,7 @@ that it gives the player after it is defeated
 
 1. testBossDrop():
 - In this test I created a player that spawns in the final room. Afterwards I check to see if the boss will drop the
-EndGameAtackPotion that the player should receive after it dies. The test will pass only if that is the item the boss
+EndGameAttackPotion that the player should receive after it dies. The test will pass only if that is the item the boss
 drops.
 
 2. testBossStats():

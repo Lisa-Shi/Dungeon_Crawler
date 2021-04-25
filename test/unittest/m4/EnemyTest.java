@@ -34,7 +34,7 @@ public class EnemyTest extends ApplicationTest {
     public void testSlimeInRange() {
         int playerHealthBack = player.getHealth();
         monster.getPhysics().setPosition(player.getPhysics().getPosition());
-        monster.attack(game.getRoom(), game.getPane(), player, null);
+        monster.attack(game.getRoom(), game.getPane(), player);
 
         assertTrue(player.getHealth() < playerHealthBack);
     }
@@ -45,7 +45,7 @@ public class EnemyTest extends ApplicationTest {
         Vector2D addVector = (new Vector2D(1, 1)).relen(100);
 
         monster.getPhysics().setPosition(player.getPhysics().getPosition().add(addVector));
-        monster.attack(game.getRoom(), game.getPane(), player, null);
+        monster.attack(game.getRoom(), game.getPane(), player);
 
         assertTrue(player.getHealth() == playerHealthBack);
     }

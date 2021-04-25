@@ -26,7 +26,7 @@ public class SlimeMonster extends Monster {
         return (radius < Main.SLIME_ATTACK_RADIUS);
     }
     @Override
-    public void attack(Room room, Pane pane, Damageable other, Camera camera) {
+    public void attack(Room room, Pane pane, Damageable other) {
         SpriteController graphics = getGraphics();
         CharacterImageSheet charImg = (CharacterImageSheet) getSpriteSheet();
         if (inRange(other)) {

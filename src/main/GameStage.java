@@ -12,7 +12,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -20,16 +19,15 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import javafx.scene.control.*;
 import javafx.util.Duration;
 import gameobjects.monsters.Monster;
 import gameobjects.physics.Camera;
-import screens.EndScreen;
+import screens.EndSceneController;
+import screens.InfoBarController;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -71,6 +69,8 @@ public class GameStage extends Stage {
     public GameMap getMap() {
         return map;
     }
+
+    private InfoBarController controller = new InfoBarController();
     /**
      * Constructs the Stage where the main game takes place
      * Adapted from https://www.youtube.com/watch?v=FVo1fm52hz0
@@ -107,27 +107,27 @@ public class GameStage extends Stage {
 
         pane.getChildren().add(player.getGraphics().getSprite());
 
-        text.setFont(new Font(20));
-        text.setText("$" + player.getMoney());
-        healthText.setText("HP: " + player.getHealth());
-        text.setX(0);
-        text.setY(20);
-        text.setTextAlignment(TextAlignment.LEFT);
+        //creates info bar
+        try {
+            //loads fxml file
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../screens/InfoBar.fxml"));
+            Parent root = loader.load();
 
+            //instantiates controller class
+            controller = (InfoBarController)loader.getController();
 
-        testingPurpose.setFont(new Font(20));
-        testingPurpose.setText("now in room " + room.getRoomId() + " \n");
-        testingPurpose.setX(0);
-        testingPurpose.setY(50);
-        testingPurpose.setTextAlignment(TextAlignment.LEFT);
-        infoBar.getChildren().add(testingPurpose);
+            //sets initial money
+            controller.setMoney(player.getMoney());
 
-        Insets insets = new Insets(6);
-
-        pbar.setPadding(insets);
-
-        infoBar.getChildren().addAll(text, healthText, pbar);
-        pane.getChildren().add(infoBar);
+            //adds to pane
+            infoBar = new HBox(root);
+            pane.getChildren().add(infoBar);
+        } catch (Exception e) {
+            System.out.println("ERROR");
+            System.out.println(e.getMessage());
+            System.out.println(e.getStackTrace());
+            e.printStackTrace();
+        }
 
         scene.setOnKeyPressed(keyPressed);
         scene.setOnKeyReleased(keyReleased);
@@ -146,6 +146,7 @@ public class GameStage extends Stage {
      */
     private Parent createContent() {
         pane.setPrefSize(Main.GAME_WIDTH, Main.GAME_HEIGHT);
+
         timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -187,7 +188,14 @@ public class GameStage extends Stage {
             room.update(camera);
             camera.update(null);
 
-            updateText();
+            //updates the info bar
+            try {
+                controller.update(player, room);
+            } catch (Exception e) {
+                System.out.println("Error");
+            }
+
+
         }
 
     }
@@ -205,10 +213,12 @@ public class GameStage extends Stage {
         timer.stop();
         room.restart();
         map.restartMap();
-        EndScreen.loadButton(restartButton, exitButton);
-        EndScreen.loadStats(isWinner, player.getMonsterKilled(), player.getChallengeRooms(),
+
+        EndSceneController.loadButton(restartButton, exitButton);
+        EndSceneController.loadStats(isWinner, player.getMonsterKilled(), player.getChallengeRooms(),
                 maxRoom, player.getPotionsConsumed(), player.getBulletShot());
 
+        //creates the end screen by loading fxml file
         try {
             Parent root = FXMLLoader.load(getClass().getResource("../screens/EndScene.fxml"));
             stage.setScene(new Scene(root, Main.GAME_WIDTH, Main.GAME_HEIGHT));
@@ -216,29 +226,12 @@ public class GameStage extends Stage {
         } catch (Exception e) {
             System.out.println(e.getMessage());
             System.out.println(e.getStackTrace());
+            e.printStackTrace();
 
         }
 
-
-//        LoseScreen loseScreen = new LoseScreen(isWinner, maxRoom,
-//                player.getBulletShot(), player.getMonsterKilled());
-//        Scene scene = loseScreen.loadButton(restartButton, exitButton);
-//        stage.setScene(scene);
-//        stage.show();
-
-        //LoseScreen.start(stage);
-
-//        EndScreen screen = new EndScreen(isWinner, maxRoom,
-//                player.getBulletShot(), player.getMonsterKilled());
-//        screen.createButton(exitButton, restartButton);
-//        screen.setStage(stage);
     }
 
-    private void updateText() {
-        text.setText("$" + player.getMoney());
-        healthText.setText("HP: " + player.getHealth());
-        testingPurpose.setText("now in room " + room.getRoomId() + " \n");
-    }
 
     private void switchPlayerGraphicsStateToStill() {
         double threshold = 0.1D;
@@ -282,8 +275,9 @@ public class GameStage extends Stage {
 
             if (!monster.isDead()) {
                 monster.face(player);
-                monster.attack(room, pane, player, camera);
                 monster.update(camera);
+                monster.attack(room, pane, player);
+
 
             } else {
                 player.getItem(monster.die());
@@ -375,14 +369,18 @@ public class GameStage extends Stage {
         pane.setPrefSize(Main.GAME_WIDTH, Main.GAME_HEIGHT);
         room.generateExits(map.getAdjRooms(room));
         room.finalize(pane);
-        pbar.setProgress(room.getRoomId() / 9.0);
+
+//        pbar.setProgress(room.getRoomId() / 9.0);
         monsterHP.clear();
         Scene scene = new Scene(pane);
 
-        text.setText("$" + player.getMoney());
-        testingPurpose.setText("now in room " + room.getRoomId() + " \n");
+//        text.setText("$" + player.getMoney());
+//        testingPurpose.setText("now in room " + room.getRoomId() + " \n");
         pane.getChildren().add(player.getGraphics().getSprite());
+
+        //infoBarController.update(player, room);
         pane.getChildren().add(infoBar);
+
         scene.setOnKeyPressed(keyPressed);
         scene.setOnKeyReleased(keyReleased);
         stage.setScene(scene);
@@ -428,7 +426,7 @@ public class GameStage extends Stage {
             }
             if (event.getCode() == KeyCode.ENTER && player.isMoveable()) {
                 Main.powerUpSpeed = 1;
-                player.launchProjectile(room, pane, camera, room.getMonsters());
+                player.launchProjectile(room, pane, camera);
             }
             if (event.getCode() == KeyCode.E && player.isMoveable()) {
                 //check if there is openable chest/npc in front of player;

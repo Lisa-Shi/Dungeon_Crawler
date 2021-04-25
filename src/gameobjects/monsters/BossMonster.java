@@ -31,7 +31,7 @@ public class BossMonster extends Monster {
      * @param other what to damage
      */
     @Override
-    public void attack(Room room, Pane pane, Damageable other, Camera camera) {
+    public void attack(Room room, Pane pane, Damageable other) {
         if (inRange(other)) {
             other.hurt(5);
         }

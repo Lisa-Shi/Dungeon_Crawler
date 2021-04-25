@@ -83,7 +83,7 @@ public class Main extends Application {
 
     public static final ImageSheet END_GAME_ATTACK_POTION =
             new SingularImageSheet(
-                    getImageFrom("../gameobjects/graphics/sprites/potionC.png"));
+                    getImageFrom("../gameobjects/graphics/sprites/potionD.png"));
     private static final DirectionalImageSheet PLAYER_STANDING_SHEET =
             getDirectionalImageSheet(
                     "../gameobjects/graphics/sprites/PlayerFace"

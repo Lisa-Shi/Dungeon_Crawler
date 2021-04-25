@@ -3,8 +3,10 @@ package gameobjects.ProjectileLauncher;
 import gamemap.Room;
 import gameobjects.Player;
 import gameobjects.graphics.functionality.SingularImageSheet;
+import gameobjects.monsters.Monster;
 import javafx.scene.layout.Pane;
 import gameobjects.physics.Camera;
+import main.Main;
 
 public abstract class ProjectileLauncher {
     private String name;
@@ -17,7 +19,17 @@ public abstract class ProjectileLauncher {
     private int range;
     private int price;
     private boolean isDropped;
+
+    public SingularImageSheet getImage() {
+        return image;
+    }
+
+    public void setImage(SingularImageSheet image) {
+        this.image = image;
+    }
+
     private SingularImageSheet image;
+    private boolean tracking;
     /**
      * Projectile Launcher constructor
      *
@@ -28,22 +40,39 @@ public abstract class ProjectileLauncher {
      * @param name of weapon
      */
     public ProjectileLauncher(Player player, int range, int damage,
-                              SingularImageSheet image, String name) {
+                              SingularImageSheet image, String name, boolean tracking) {
         this.player = player;
         this.range = range;
         this.damage = damage;
         this.name = name;
         this.image = image;
         this.price = (range % 3 + 1) * (damage % 3 + 1) * 5;
+        this.tracking = tracking;
+    }
+
+    public ProjectileLauncher(ProjectileLauncher pL) {
     }
 
 
     public void shoot(Room room, Pane pane, Camera camera) {
-        Projectile bullet = new Projectile(player, room, pane, range, damage, image);
-        room.add(bullet);
-        pane.getChildren().add(bullet.getGraphics().getSprite());
-        bullet.launch();
-        bullet.update(camera);
+        if (tracking) {
+            for (Monster m : room.getMonsters()) {
+                Projectile bullet = new Projectile(player, room, pane, range, damage, image);
+                player.addBullet();
+                room.add(bullet);
+                pane.getChildren().add(bullet.getGraphics().getSprite());
+                bullet.launchTowardsPoint(m.getPhysics().getPosition(), Main.ENEMY_BULLET_SPEED);
+                bullet.update(camera);
+            }
+
+        } else {
+            Projectile bullet = new Projectile(player, room, pane, range, damage, image);
+            player.addBullet();
+            room.add(bullet);
+            pane.getChildren().add(bullet.getGraphics().getSprite());
+            bullet.launch();
+            bullet.update(camera);
+        }
     }
     public void setDamage(int input) {
         this.damage = input;
@@ -58,6 +87,10 @@ public abstract class ProjectileLauncher {
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {

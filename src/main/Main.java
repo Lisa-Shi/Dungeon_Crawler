@@ -10,6 +10,7 @@ import gameobjects.graphics.functionality.ImageReel;
 import gameobjects.graphics.functionality.ImageSheet;
 import gameobjects.graphics.functionality.SingularImageSheet;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.control.Alert;
@@ -39,6 +40,7 @@ public class Main extends Application {
     public static final double DEFAULT_CAMERA_SLOWDOWN_FACTOR = 7; // similar to a frictional force
     public static final double DEFAULT_CONTROL_PLAYER_FORCE = 0.45D;
     public static final double MAX_PLAYER_SPEED = 13D;
+    public static double powerUpSpeed = 1;
 
     public static final double PLAYER_WIDTH = 40;
     public static final double PLAYER_HEIGHT = 40;
@@ -110,10 +112,6 @@ public class Main extends Application {
                     "../gameobjects/graphics/sprites/monster/slimeAttack"
                             + Main.REPLACE_DIRECTION_REGEX + ".png", 5
             );
-
-    public static final ImageSheet ALL_MONSTER_SHEET =
-            new SingularImageSheet(
-                    getImageFrom("../gameobjects/graphics/sprites/monster/monstersAll.png"));
 
     public static final ImageSheet MONSTER_BULLET_SHEET =
             new SingularImageSheet(
@@ -306,7 +304,8 @@ public class Main extends Application {
         }
         Button exit = r.getExitButton();
         exit.setOnAction(event -> {
-            goCongrat();
+            Platform.exit();
+            System.exit(0);
         });
 
         Button restart = r.getRestartButton();

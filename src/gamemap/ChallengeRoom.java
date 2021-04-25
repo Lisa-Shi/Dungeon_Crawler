@@ -12,6 +12,16 @@ import java.util.Random;
 
 public class ChallengeRoom extends Room{
     private boolean finish = true;
+
+    public boolean isPrizeCollected() {
+        return prizeCollected;
+    }
+
+    public void setPrizeCollected(boolean prizeCollected) {
+        this.prizeCollected = prizeCollected;
+    }
+
+    private boolean prizeCollected = false;
     private NPC npc;
     public ChallengeRoom(int width, int height){
         super(width, height);
@@ -29,6 +39,7 @@ public class ChallengeRoom extends Room{
         }
         setGeneratedMonster(true);
     }
+
     public void addNPC() {
         if (npc == null) {
             npc = new ChallengeRoomNPC(this, this.getWidth()/2 - 1, this.getHeight()/2);
@@ -37,14 +48,14 @@ public class ChallengeRoom extends Room{
     }
     public void update(Camera camera){
         super.update(camera);
-        if( this.getMonsters().size() == 0){
+        if (this.getMonsters().size() == 0) {
             this.finish = true;
         }
     }
     public void addRoomLayout() {
         this.setLayout(RoomLayout.design(this, true));
     }
-    public void setFinish(Boolean finish){
+    public void setFinish(Boolean finish) {
         this.finish = finish;
     }
     public void finalize(Pane pane) {
@@ -66,4 +77,5 @@ public class ChallengeRoom extends Room{
     public boolean isFinish() {
         return finish;
     }
+
 }

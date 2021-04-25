@@ -82,7 +82,7 @@ public class LoseScreenTest extends ApplicationTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        clickOn("restart");
+//        clickOn("restart");
     }
 
 }

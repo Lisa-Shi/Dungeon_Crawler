@@ -11,6 +11,7 @@ import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -19,7 +20,6 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -29,7 +29,7 @@ import javafx.scene.control.*;
 import javafx.util.Duration;
 import gameobjects.monsters.Monster;
 import gameobjects.physics.Camera;
-import screens.LoseScreen;
+import screens.EndScreen;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -39,6 +39,10 @@ public class GameStage extends Stage {
     private Pane pane = new Pane();
 
     private double t = 0;
+
+    //game stats
+    private int maxRoom = 0;
+    private int challengeRoom = 0;
 
     private boolean playerIsMovingLeft;
     private boolean playerIsMovingRight;
@@ -159,9 +163,19 @@ public class GameStage extends Stage {
      * etc.
      */
     private final List<Image> direction = new ArrayList<>();
+
+    /**
+     * If player health is 0, then lose.
+     *
+     * If end room, and final boss defeated, then win.
+     *
+     * else update
+     */
     public void update() {
         if (player.getHealth() <= 0) {
-            stop();
+            stop(false);
+        } else if (room.getMonsters().size() == 0 && room.getRoomId() == 999) {
+            stop(true);
         } else {
             player.update(camera, room.getCollideables());
 
@@ -184,14 +198,40 @@ public class GameStage extends Stage {
      * Clears the room so that all sprites will stop.
      * Restarts the map so that game restarts in room 0.
      * Creates the losing screen.
+     *
+     * @param isWinner true if player won; false if player lost
      */
-    private void stop() {
+    private void stop(boolean isWinner) {
         timer.stop();
         room.restart();
         map.restartMap();
-        LoseScreen screen = new LoseScreen();
-        screen.createButton(exitButton, restartButton);
-        screen.setStage(stage);
+        EndScreen.loadButton(restartButton, exitButton);
+        EndScreen.loadStats(isWinner, player.getMonsterKilled(), player.getChallengeRooms(),
+                maxRoom, player.getPotionsConsumed(), player.getBulletShot());
+
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("../screens/EndScene.fxml"));
+            stage.setScene(new Scene(root, Main.GAME_WIDTH, Main.GAME_HEIGHT));
+            stage.show();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println(e.getStackTrace());
+
+        }
+
+
+//        LoseScreen loseScreen = new LoseScreen(isWinner, maxRoom,
+//                player.getBulletShot(), player.getMonsterKilled());
+//        Scene scene = loseScreen.loadButton(restartButton, exitButton);
+//        stage.setScene(scene);
+//        stage.show();
+
+        //LoseScreen.start(stage);
+
+//        EndScreen screen = new EndScreen(isWinner, maxRoom,
+//                player.getBulletShot(), player.getMonsterKilled());
+//        screen.createButton(exitButton, restartButton);
+//        screen.setStage(stage);
     }
 
     private void updateText() {
@@ -199,6 +239,7 @@ public class GameStage extends Stage {
         healthText.setText("HP: " + player.getHealth());
         testingPurpose.setText("now in room " + room.getRoomId() + " \n");
     }
+
     private void switchPlayerGraphicsStateToStill() {
         double threshold = 0.1D;
         //if (Math.abs(player.getPhysics().getVelocity().getX())
@@ -222,16 +263,17 @@ public class GameStage extends Stage {
         }
     }
     private void movePlayer() {
+        double force = Main.powerUpSpeed * Main.DEFAULT_CONTROL_PLAYER_FORCE;
         if (playerIsMovingLeft) {
-            player.getPhysics().pushLeft(Main.DEFAULT_CONTROL_PLAYER_FORCE);
+            player.getPhysics().pushLeft(force);
         } else if (playerIsMovingRight) {
-            player.getPhysics().pushRight(Main.DEFAULT_CONTROL_PLAYER_FORCE);
+            player.getPhysics().pushRight(force);
         }
 
         if (playerIsMovingUp) {
-            player.getPhysics().pushUp(Main.DEFAULT_CONTROL_PLAYER_FORCE);
+            player.getPhysics().pushUp(force);
         } else if (playerIsMovingDown) {
-            player.getPhysics().pushDown(Main.DEFAULT_CONTROL_PLAYER_FORCE);
+            player.getPhysics().pushDown(force);
         }
     }
     private void moveMonsters() {
@@ -240,10 +282,12 @@ public class GameStage extends Stage {
 
             if (!monster.isDead()) {
                 monster.face(player);
+                monster.attack(room, pane, player, camera);
                 monster.update(camera);
-                monster.attack(room, pane, player);
+
             } else {
                 player.getItem(monster.die());
+                player.addMonsterKilled();
                 i--;
             }
         }
@@ -252,7 +296,6 @@ public class GameStage extends Stage {
         timeline.play();
     }
 
-
     private void teleportPlayerToEnteredRoom() {
         if (room != null && map != null && !GameMap.enterRoom().equals(room)) {
             prevRoom = room;
@@ -260,6 +303,10 @@ public class GameStage extends Stage {
             enterRoom();
             player.update(camera, room.getCollideables());
             matchPlayerExit(prevRoom);
+
+            if (maxRoom < room.getRoomId() && !(room instanceof ChallengeRoom)) {
+                maxRoom++;
+            }
 
             if (!room.getCollideables().contains(player)) {
                 room.getCollideables().add(player);
@@ -331,11 +378,7 @@ public class GameStage extends Stage {
         pbar.setProgress(room.getRoomId() / 9.0);
         monsterHP.clear();
         Scene scene = new Scene(pane);
-        if (room.getRoomId() == 999) {
-            infoBar.getChildren().add(winButton);
-        } else {
-            infoBar.getChildren().remove(winButton);
-        }
+
         text.setText("$" + player.getMoney());
         testingPurpose.setText("now in room " + room.getRoomId() + " \n");
         pane.getChildren().add(player.getGraphics().getSprite());
@@ -384,6 +427,7 @@ public class GameStage extends Stage {
                         player.getSpriteSheet().getWalkSheet().getDownImage());
             }
             if (event.getCode() == KeyCode.ENTER && player.isMoveable()) {
+                Main.powerUpSpeed = 1;
                 player.launchProjectile(room, pane, camera, room.getMonsters());
             }
             if (event.getCode() == KeyCode.E && player.isMoveable()) {
@@ -408,6 +452,7 @@ public class GameStage extends Stage {
                     pane.getChildren().remove(monster.getGraphics().getSprite());
                 }
                 room.getMonsters().clear();
+                player.setMoveability(true);
 
             }
         }
@@ -459,7 +504,7 @@ public class GameStage extends Stage {
     }
 
     public Button getExitButton() {
-        return winButton;
+        return exitButton;
     }
     public Camera getCamera() {
         return camera;

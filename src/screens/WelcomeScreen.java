@@ -50,22 +50,19 @@ public class WelcomeScreen {
 
     }
 
-    public static void createImage(BorderPane border, String file) {
+    /**
+     * Creates a background image for border pane passed in
+     * @param border border pane
+     * @param file name of image
+     */
+    private static void createImage(BorderPane border, String file) {
 
-        //Creating an image
+        //Creating a background image
         try {
-            StackPane stackPane = new StackPane();
-            Image image = new Image(Main.class.getResource("../screens/" + file).toExternalForm(), Main.GAME_WIDTH, Main.GAME_HEIGHT, true, true);
-            BackgroundImage backgroundImage = new BackgroundImage(image, NO_REPEAT, NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
-//            ImageView imageView = new ImageView(image);
-//            //setting the fit height and width of the image view
-//            imageView.setFitHeight(Main.GAME_HEIGHT * 3 / 4.0);
-//            imageView.setFitWidth(Main.GAME_WIDTH);
-//
-//            //Setting the preserve ratio of the image view
-//            imageView.setPreserveRatio(true);
-//
-//            border.setCenter(imageView);
+            Image image = new Image(Main.class.getResource("../screens/" + file).toExternalForm(),
+                    Main.GAME_WIDTH, Main.GAME_HEIGHT, true, true);
+            BackgroundImage backgroundImage = new BackgroundImage(image, NO_REPEAT, NO_REPEAT,
+                    BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
             border.setBackground(new Background(backgroundImage));
         } catch (Exception e) {
             e.printStackTrace();

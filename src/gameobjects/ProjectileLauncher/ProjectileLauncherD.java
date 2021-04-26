@@ -15,9 +15,9 @@ public class ProjectileLauncherD extends ProjectileLauncher {
     private int range;
     private int damage;
     private Player player;
+
+    //only weapon that has a discrete number of bullets
     private int bulletsLeft = 20;
-
-
 
     private boolean randomPowerUp = false;
 
@@ -28,6 +28,10 @@ public class ProjectileLauncherD extends ProjectileLauncher {
     private static final SingularImageSheet powerUp = new SingularImageSheet(
             Main.getImageFrom("../gameobjects/graphics/sprites/bulletImg/" + "light.png"));
 
+    /**
+     * Private constructor with properties of projectile launcher
+     * @param player who has projectile launcher
+     */
     private ProjectileLauncherD(Player player) {
         super(player, 5, 10, BULLET_IMG, "trackB", true);
         this.player = player;
@@ -35,6 +39,11 @@ public class ProjectileLauncherD extends ProjectileLauncher {
         this.damage = 10;
     }
 
+    /**
+     * Singleton design principle.
+     * @param player that can have projectile launcher
+     * @return instance of projectile launcher
+     */
     public static ProjectileLauncherD getInstance(Player player) {
         if (weapon == null) {
             synchronized (ProjectileLauncherD.class) {
@@ -46,23 +55,39 @@ public class ProjectileLauncherD extends ProjectileLauncher {
         return weapon;
     }
 
+    /**
+     * Increases the power of projectile launcher.
+     *
+     * Will randomly shoot a "lucky" bullet
+     */
     public void increasePower() {
+        //luck / 100 = probability of getting lucky bullet
         int luck = 20;
         if (randomPowerUp) {
-            int seed = 100;
             Random rand = new Random();
-            int ranInt = rand.nextInt(seed);
+            int ranInt = rand.nextInt(100);
             if (ranInt < luck) {
                 BULLET_IMG = powerUp;
             }
         }
     }
 
+    /**
+     * Overrides shoot method in parent
+     * @param room that player is in
+     * @param pane of the stage
+     * @param camera
+     */
     public void shoot(Room room, Pane pane, Camera camera) {
+        //checks to see if should power up
         if (randomPowerUp) {
             increasePower();
         }
+
+        //finds the monsters in the room and directly shoots at them
         for (Monster m : room.getMonsters()) {
+
+            //will only shoot if bullets are left
             if (bulletsLeft > 0) {
                 System.out.println("shooting");
                 Projectile bullet = new Projectile(player, room, pane, range * 2, damage * 2, BULLET_IMG);
@@ -75,7 +100,6 @@ public class ProjectileLauncherD extends ProjectileLauncher {
             } else {
                 player.equipWeapon(player.getWeaponList().get(0));
             }
-
         }
         BULLET_IMG = defaultImg;
     }
@@ -87,6 +111,12 @@ public class ProjectileLauncherD extends ProjectileLauncher {
         bulletsLeft += 10;
     }
 
+    /**
+     * Changes the name of the projectile when can shoot lucky bullets
+     *
+     * Allows for css image change in inventory
+     * @param b
+     */
     public void setRandomPowerUp(boolean b) {
         if (b) {
             this.setName("trackB2");

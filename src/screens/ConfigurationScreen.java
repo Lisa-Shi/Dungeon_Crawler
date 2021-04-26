@@ -48,20 +48,18 @@ public class ConfigurationScreen {
         Color blue = Color.rgb(78, 105, 127);
         BackgroundFill backColor = new BackgroundFill(blue, CornerRadii.EMPTY, Insets.EMPTY);
         Background background = new Background(backColor);
+
+        //creates border pane
         BorderPane border = new BorderPane();
         border.setBackground(background);
 
         Scene configScene = new Scene(border, width, height);
         configScene.getStylesheets().add("stylesheet.css");
 
-        //BorderPane border = new BorderPane();
         HBox nameIn = nameField();
         TilePane diffIn = difficultyField();
-        //diffIn.setMinWidth(width/2);
         TilePane weapIn = weaponField();
-        //weapIn.setMinWidth(width/2);
 
-        //Creating a BorderPane layout
         border.setTop(nameIn);
         border.setRight(diffIn);
         border.setLeft(weapIn);

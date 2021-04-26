@@ -20,6 +20,8 @@ public class BulletPotion extends Potion {
 
     /**
      * Constructor for the Bullet Potion.
+     *
+     * Gives the player more bullets for projectile launcher acquired in challenge room
      */
     public BulletPotion() {
         super("BulletPotion", 1, BULLET_POTION);

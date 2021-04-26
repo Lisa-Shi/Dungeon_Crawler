@@ -6,3 +6,10 @@ Test: finishGameTest
 
     The test does so by starting up the game, then moving the player to the last room.
     Afterwards the room's monster's are cleared, and the victory screen buttons of "restart" and "exit" are checked.
+
+
+Test: statTest
+    Verifies that the statistics displayed on end screen is accurate.
+
+    The test checks that the number of bullets are correctly counted, that the monsters killed are correctly counted,
+    and that the number of challenge rooms are counted based off if the player completes them.

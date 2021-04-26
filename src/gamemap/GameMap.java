@@ -1,5 +1,7 @@
 package gamemap;
 
+import main.Main;
+
 import java.util.*;
 
 /**
@@ -43,7 +45,7 @@ public class GameMap {
     }
 
     private void addRooms() {
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < Main.ROOMS_UNTIL_BOSS; i++) {
             rooms.add(new Room(20, 20));
         }
     }

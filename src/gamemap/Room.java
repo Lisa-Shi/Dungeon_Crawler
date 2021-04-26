@@ -92,7 +92,7 @@ public class Room implements Physical {
             Monster monster = null;
             if (roomId == 999) {
 
-            } else if (roomId == 7) {
+            } else if (roomId == Main.ROOMS_UNTIL_BOSS) {
                 // Boss monster
                 monster = new BossMonster(this, width / 2, height / 2);
                 monster.evolution(7);

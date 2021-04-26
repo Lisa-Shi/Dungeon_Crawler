@@ -166,8 +166,8 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
 
         updateSprite(camera);
 
-        if (getPhysics().getVelocity().len() > Main.MAX_PLAYER_SPEED * Main.powerUpSpeed) {
-            Vector2D relenVel = getPhysics().getVelocity().relen(Main.MAX_PLAYER_SPEED * Main.powerUpSpeed);
+        if (getPhysics().getVelocity().len() > Main.MAX_PLAYER_SPEED) {
+            Vector2D relenVel = getPhysics().getVelocity().relen(Main.MAX_PLAYER_SPEED);
             getPhysics().setVelocity(relenVel);
         }
     }

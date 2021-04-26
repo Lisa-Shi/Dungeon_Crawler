@@ -19,7 +19,12 @@ public class EndSceneController {
     private static Image imageLoad;
 
 
-
+    /**
+     * Gets the button for restart and exit.
+     *
+     * @param restartButton to restart game
+     * @param exitButton to exit game
+     */
     public static void loadButton(Button restartButton, Button exitButton) {
         replay = restartButton;
         exit = exitButton;
@@ -45,7 +50,19 @@ public class EndSceneController {
     @FXML
     private ImageView imageDisplay;
 
+
     private static int[] stats = new int[5];
+
+    /**
+     * Gets the value for the game stats that are displayed
+     *
+     * @param win if the player won
+     * @param monsterS monsters defeated
+     * @param challengeS challenges completed with prize collected
+     * @param roomsS rooms to boss that have been passed
+     * @param potionS that have been consumed
+     * @param bulletsS that have been shot
+     */
     public static void loadStats(boolean win, int monsterS, int challengeS, int roomsS, int potionS, int bulletsS) {
         //could probably design this better for sure
         stats[0] = monsterS;
@@ -65,6 +82,11 @@ public class EndSceneController {
         message = message.toUpperCase();
     }
 
+    /**
+     * Creates the image displayed in the end screen
+     * @param file name of image
+     * @return Image created
+     */
     private static Image createImage(String file) {
         try {
             Image image = new Image(Main.class.
@@ -78,6 +100,9 @@ public class EndSceneController {
     }
 
 
+    /**
+     * Initializes screen with statistic values
+     */
     @FXML
     public void initialize() {
         monster.setText(stats[0] + "");

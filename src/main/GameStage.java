@@ -89,12 +89,16 @@ public class GameStage extends Stage {
         room = firstRoom;
         map = new GameMap(room);
 
+        //creates buttons
         winButton = new Button("finish");
         restartButton = new Button("restart");
         exitButton = new Button("exit");
+
+        //set background color
         Color gray = Color.rgb(64, 64, 64);
         BackgroundFill backColor = new BackgroundFill(gray, CornerRadii.EMPTY, Insets.EMPTY);
         background = new Background(backColor);
+
         Timeline timeline = new Timeline(new KeyFrame(
             Duration.millis(Main.MONSTER_ATTACK_TIME),
             ae -> moveMonsters()));
@@ -263,7 +267,7 @@ public class GameStage extends Stage {
         }
     }
     private void movePlayer() {
-        double force = Main.powerUpSpeed * Main.DEFAULT_CONTROL_PLAYER_FORCE;
+        double force = Main.DEFAULT_CONTROL_PLAYER_FORCE;
         if (playerIsMovingLeft) {
             player.getPhysics().pushLeft(force);
         } else if (playerIsMovingRight) {
@@ -378,15 +382,11 @@ public class GameStage extends Stage {
         room.generateExits(map.getAdjRooms(room));
         room.finalize(pane);
 
-//        pbar.setProgress(room.getRoomId() / 9.0);
         monsterHP.clear();
         Scene scene = new Scene(pane);
 
-//        text.setText("$" + player.getMoney());
-//        testingPurpose.setText("now in room " + room.getRoomId() + " \n");
         pane.getChildren().add(player.getGraphics().getSprite());
 
-        //infoBarController.update(player, room);
         pane.getChildren().add(infoBar);
 
         scene.setOnKeyPressed(keyPressed);
@@ -433,7 +433,6 @@ public class GameStage extends Stage {
                         player.getSpriteSheet().getWalkSheet().getDownImage());
             }
             if (event.getCode() == KeyCode.ENTER && player.isMoveable()) {
-                Main.powerUpSpeed = 1;
                 player.launchProjectile(room, pane, camera);
             }
             if (event.getCode() == KeyCode.E && player.isMoveable()) {

@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
+import main.Main;
 
 public class InfoBarController {
     @FXML
@@ -21,35 +22,43 @@ public class InfoBarController {
     public InfoBarController() {
     }
 
+    /**
+     * Update the money, health and progress
+     * @param player
+     * @param room
+     */
     public void update(Player player, Room room) {
+        //Calculates health percentage
         double healthVal = (double) player.getHealth() / player.getMaxHealth();
         health.setProgress(healthVal);
 
-        int moneyVal = player.getMoney();
-        moneyLabel.setText(moneyVal + "");
+        //Sets money
+        moneyLabel.setText(player.getMoney() + "");
 
+        //Calculates room until boss room
+        //does not include challenge room when counting
         if (!(room instanceof ChallengeRoom)) {
-            double progressVal = room.getRoomId() / 7.0;
+            double progressVal = ((double) room.getRoomId()) / Main.ROOMS_UNTIL_BOSS;
             progress.setProgress(progressVal);
         }
     }
 
-//    public static void updateHealth(double healthVal) {
-//        health.setProgress(healthVal);
-//    }
-//
+    /**
+     * Sets the money value for info bar
+     * @param moneyVal that player has
+     */
     public void setMoney(double moneyVal) {
         moneyLabel.setText(moneyVal + "");
     }
-//
-//    public static void updateProgress(double progressVal) {
-//        progress.setProgress(progressVal);
-//    }
 
     @FXML
     public void initialize() {
-        moneyLabel.setText(moneyVal + "100");
+        moneyLabel.setText(moneyVal + "");
+
+        //sets full health
         health.setProgress(1);
+
+        //sets starting room
         progress.setProgress(0);
     }
 }

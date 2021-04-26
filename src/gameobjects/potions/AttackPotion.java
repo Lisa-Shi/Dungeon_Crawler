@@ -25,6 +25,7 @@ public class AttackPotion extends Potion {
 
     @Override
     public void consume(Player player) {
+        player.addPotionConsumed();
         ProjectileLauncher playerWeapon = player.getHoldingWeapon();
         playerWeapon.setDamage(playerWeapon.getDamage() * getValue());
         Timer timer = new Timer();

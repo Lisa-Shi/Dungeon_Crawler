@@ -144,7 +144,9 @@ public abstract class Monster extends GameObject implements Damageable, Collidea
         getGraphics().setCurrentReel(
                 new SingularImageSheet(Main.TRANSPARENT_IMAGE).getInitialReel());
         collisionBox.setSolid(false);
-        getHPBar().expire();
+        if (getHPBar() != null) {
+            getHPBar().expire();
+        }
         room.getCollideables().remove(this);
         room.getHealthbars().remove(getHPBar());
         room.getMonsters().remove(this);

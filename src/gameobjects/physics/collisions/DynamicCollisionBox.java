@@ -109,7 +109,7 @@ public class DynamicCollisionBox extends CollisionBox {
         LinkedList<Passable> boundaries = new LinkedList<>();
 
         do {
-            if (numCollisionsConsidered > 400) {
+            if (numCollisionsConsidered > 200) {
                 break;
             } else {
                 numCollisionsConsidered++;

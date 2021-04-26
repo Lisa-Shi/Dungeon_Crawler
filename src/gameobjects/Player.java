@@ -94,7 +94,6 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
 
     @Override
     public void buttonAction(Player player, Potion potion) {
-        potionsConsumed++;
         potion.consume(player);
         loseItem(potion);
     }
@@ -209,6 +208,10 @@ public class Player extends GameObject implements Damageable, Collideable, Drawa
 
     public int getMonsterKilled() {
         return monsterKilled;
+    }
+
+    public void addPotionConsumed() {
+        potionsConsumed++;
     }
 
      /**

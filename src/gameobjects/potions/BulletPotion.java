@@ -27,6 +27,7 @@ public class BulletPotion extends Potion {
 
     @Override
     public void consume(Player player) {
+        player.addPotionConsumed();
         ProjectileLauncherD projectileLauncherD = ProjectileLauncherD.getInstance(player);
         projectileLauncherD.addBullets();
     }

@@ -15,7 +15,7 @@
     -fx-background-radius: 2;
 }
 .AttackPotion {
-    -fx-background-image: url("../../../DungeonCrawler/src/gameobjects/graphics/sprites/potionA.png");
+    -fx-background-image: url("../../../src/gameobjects/graphics/sprites/potionA.png");
     -fx-background-size: 30px;
     -fx-background-repeat: no-repeat;
     -fx-background-position: 20%;
@@ -25,7 +25,7 @@
     -fx-wrap-text: true;
 }
 .HealthPotion {
-    -fx-background-image: url("../../../DungeonCrawler/src/gameobjects/graphics/sprites/potionB.png");
+    -fx-background-image: url("../../../src/gameobjects/graphics/sprites/potionB.png");
     -fx-background-size: 30px;
     -fx-background-repeat: no-repeat;
     -fx-background-position: 20%;
@@ -35,7 +35,7 @@
     -fx-wrap-text: true;
 }
 .BulletPotion {
-    -fx-background-image: url("../../../DungeonCrawler/src/gameobjects/graphics/sprites/potionC.png");
+    -fx-background-image: url("../../../src/gameobjects/graphics/sprites/potionC.png");
     -fx-background-size: 30px;
     -fx-background-repeat: no-repeat;
     -fx-background-position: 20%;
@@ -45,7 +45,7 @@
     -fx-wrap-text: true;
 }
 .fireball {
-    -fx-background-image: url("../../../DungeonCrawler/src/gameobjects/graphics/sprites/bulletImg/fire.png");
+    -fx-background-image: url("../../../src/gameobjects/graphics/sprites/bulletImg/fire.png");
     -fx-background-size: 40px;
     -fx-background-repeat: no-repeat;
     -fx-background-position: 20%;
@@ -55,7 +55,7 @@
     -fx-wrap-text: true;
 }
 .trackB {
-    -fx-background-image: url("../../../DungeonCrawler/src/gameobjects/graphics/sprites/bulletImg/trackB.png");
+    -fx-background-image: url("../../../src/gameobjects/graphics/sprites/bulletImg/trackB.png");
     -fx-background-size: 40px;
     -fx-background-repeat: no-repeat;
     -fx-background-position: 20%;
@@ -65,7 +65,7 @@
     -fx-wrap-text: true;
 }
 .trackB2 {
-    -fx-background-image: url("../../../DungeonCrawler/src/gameobjects/graphics/sprites/bulletImg/trackB2.png");
+    -fx-background-image: url("../../../src/gameobjects/graphics/sprites/bulletImg/trackB2.png");
     -fx-background-size: 40px;
     -fx-background-repeat: no-repeat;
     -fx-background-position: 20%;
@@ -75,7 +75,7 @@
     -fx-wrap-text: true;
 }
 .donut {
-    -fx-background-image: url("../../../DungeonCrawler/src/gameobjects/graphics/sprites/bulletImg/donutBox.png");
+    -fx-background-image: url("../../../src/gameobjects/graphics/sprites/bulletImg/donutBox.png");
     -fx-background-size: 40px;
     -fx-background-repeat: no-repeat;
     -fx-background-position: 20%;
@@ -85,7 +85,7 @@
     -fx-wrap-text: true;
 }
 .water {
-    -fx-background-image: url("../../../DungeonCrawler/src/gameobjects/graphics/sprites/bulletImg/waterBox1.png");
+    -fx-background-image: url("../../../src/gameobjects/graphics/sprites/bulletImg/waterBox1.png");
     -fx-background-size: 40px;
     -fx-background-repeat: no-repeat;
     -fx-background-position: 20%;
@@ -95,7 +95,7 @@
     -fx-wrap-text: true;
 }
 .Transparent {
-    -fx-background-image: url("../../../DungeonCrawler/src/gameobjects/graphics/sprites/transparent.png");
+    -fx-background-image: url("../../../src/gameobjects/graphics/sprites/transparent.png");
     -fx-background-color: transparent;
     -fx-background-size: 1000px;
     -fx-background-repeat: no-repeat;

@@ -22,6 +22,7 @@ public class HealthPotion extends Potion {
 
     @Override
     public void consume(Player player) {
+        player.addPotionConsumed();
         if (player.getHealth() + this.getValue() > player.getMaxHealth()) {
             player.setHealth(player.getMaxHealth());
         } else {

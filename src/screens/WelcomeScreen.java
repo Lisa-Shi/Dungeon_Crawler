@@ -3,10 +3,15 @@ package screens;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import main.Main;
+
+import java.io.FileInputStream;
+
+import static javafx.scene.layout.BackgroundRepeat.NO_REPEAT;
 
 public class WelcomeScreen {
 
@@ -39,8 +44,32 @@ public class WelcomeScreen {
         bottom.setPadding(new Insets(10));
         border.setBottom(bottom);
 
+        createImage(border, "dungeon.png");
+
         return border;
 
+    }
+
+    public static void createImage(BorderPane border, String file) {
+
+        //Creating an image
+        try {
+            StackPane stackPane = new StackPane();
+            Image image = new Image(Main.class.getResource("../screens/" + file).toExternalForm(), Main.GAME_WIDTH, Main.GAME_HEIGHT, true, true);
+            BackgroundImage backgroundImage = new BackgroundImage(image, NO_REPEAT, NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+//            ImageView imageView = new ImageView(image);
+//            //setting the fit height and width of the image view
+//            imageView.setFitHeight(Main.GAME_HEIGHT * 3 / 4.0);
+//            imageView.setFitWidth(Main.GAME_WIDTH);
+//
+//            //Setting the preserve ratio of the image view
+//            imageView.setPreserveRatio(true);
+//
+//            border.setCenter(imageView);
+            border.setBackground(new Background(backgroundImage));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**

@@ -45,8 +45,8 @@ public class ConfigurationScreen {
      */
     public Scene getScene() {
         //sets background color
-        Color tan = Color.rgb(242, 204, 143);
-        BackgroundFill backColor = new BackgroundFill(tan, CornerRadii.EMPTY, Insets.EMPTY);
+        Color blue = Color.rgb(78, 105, 127);
+        BackgroundFill backColor = new BackgroundFill(blue, CornerRadii.EMPTY, Insets.EMPTY);
         Background background = new Background(backColor);
         BorderPane border = new BorderPane();
         border.setBackground(background);
@@ -120,9 +120,9 @@ public class ConfigurationScreen {
      */
     private TilePane weaponField() {
         String[] wOptions = new String[3];
-        wOptions[0] = "1: weapon";
-        wOptions[1] = "2: weapon";
-        wOptions[2] = "3: weapon";
+        wOptions[0] = "1: fire fury";
+        wOptions[1] = "2: donut doom";
+        wOptions[2] = "3: water weapon";
         TilePane wHb = new TilePane(Orientation.VERTICAL);
         Label groupLabel = new Label("Select weapon: ");
         wHb.getChildren().add(groupLabel);
